@@ -8,7 +8,7 @@ import requests
 from notify import send
 
 title = '华住签到'
-tokenName = 'huazhu-cookies'
+tokenName = 'huazhu_cookies'
 
 '''
 new Env("华住签到")
