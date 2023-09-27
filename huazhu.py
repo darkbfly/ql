@@ -1,3 +1,9 @@
+"""
+new Env("华住签到")
+cron 0 7 * * *
+环境变量名称 huazhu_cookies
+"""
+
 import datetime
 import json
 import os
@@ -10,10 +16,6 @@ from notify import send
 title = '华住签到'
 tokenName = 'huazhu_cookies'
 
-'''
-new Env("华住签到")
-cron 0 7 * * *
-'''
 
 class huazhu():
     def __init__(self, data):
