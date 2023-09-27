@@ -9,6 +9,12 @@ from notify import send
 
 title = '华住签到'
 tokenName = 'huazhu-cookies'
+
+'''
+new Env("华住签到")
+cron 0 7 * * *
+'''
+
 class huazhu():
     def __init__(self, data):
         self.headers = {
