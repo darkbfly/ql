@@ -6,11 +6,8 @@ cron 0 7 * * *
 
 import datetime
 import json
-import os
 import traceback
-
 import requests
-
 import mytool
 from notify import send
 

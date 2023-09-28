@@ -4,9 +4,7 @@ cron 0 7 * * *
 环境变量名称 tyklxq_cookies
 """
 
-import datetime
 import json
-import os
 import traceback
 import requests
 import mytool
