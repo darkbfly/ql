@@ -165,7 +165,6 @@ class wyyx_wxapp():
 
 
 if __name__ == '__main__':
-    os.environ[f'{tokenName}'] = '89d31cf6f05d406cc1d2179fb31116cd'
     if mytool.getlistCk(f'{tokenName}') is None:
         print(f'请检查你的变量名称 {tokenName} 是否填写正确')
         exit(0)
