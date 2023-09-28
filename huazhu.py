@@ -11,6 +11,7 @@ import traceback
 
 import requests
 
+import mytool
 from notify import send
 
 title = '华住签到'
@@ -64,8 +65,9 @@ class huazhu():
 
 
 if __name__ == "__main__":
-    if os.getenv(f'{tokenName}') == None:
+    if mytool.getlistCk(f'{tokenName}') == None:
         print(f'请检查你的变量名称 {tokenName} 是否填写正确')
         exit(0)
     else :
-        huazhu(os.getenv(f'{tokenName}')).login()
+        for i in mytool.getlistCk(f'{tokenName}'):
+            huazhu(i).login()
