@@ -95,7 +95,7 @@ class wyyx_wxapp():
         try:
             rj = self.sec.get('https://miniapp.you.163.com/orchard/game/water/drop.json').json()
             if rj['code'] == 200 and rj['result']['success']:
-                msg = f"浇水 成功\n获得{rj['result']['water']}水滴"
+                msg = f"浇水 成功\n"
             else:
                 msg = f"浇水 失败\n" + json.loads(rj)
             print(msg)
@@ -149,21 +149,17 @@ class wyyx_wxapp():
                 pass
     def GET_TASK(self):
         try:
-            rj = self.sec.get('https://miniapp.you.163.com/orchard/task/list.json?taskIdList=%%5B%%22FRIEND_HELP%%22'
-                              '%%2C%%22VISIT_ITEM%%22%%2C%%22PAY_ITEM%%22%%2C%%22GET_EVERYDAY_RANDOM%%22%%2C'
-                              '%%22NOTIFY_TOMORROW%%22%%2C%%22GET_EVERYDAY_FREE%%22%%2C%%22PAY_SUPER_MC%%22%%2C'
-                              '%%22FINISH_PIN%%22%%2C%%22DROP_WATER_CONTINUOUS%%22%%2C%%22VISIT_PAGE%%22%%2C'
-                              '%%22GARDEN_CHECK_IN_MUTUAL_GUIDE%%22%%5D').json()
+            rj = self.sec.get('https://miniapp.you.163.com/orchard/task/list.json?taskIdList=["FRIEND_HELP","VISIT_ITEM","PAY_ITEM","GET_EVERYDAY_RANDOM","NOTIFY_TOMORROW","GET_EVERYDAY_FREE","PAY_SUPER_MC","FINISH_PIN","DROP_WATER_CONTINUOUS","VISIT_PAGE","GARDEN_CHECK_IN_MUTUAL_GUIDE"]').json()
             if rj['code'] == 200:
                 msg = f"获取任务列表 成功\n"
-                if rj['data']['GET_EVERYDAY_FREE']['maxCount'] != rj['data']['GET_EVERYDAY_FREE']['count']:
+                if rj['result']['GET_EVERYDAY_FREE']['maxCount'] != rj['result']['GET_EVERYDAY_FREE']['count']:
                     self.GET_EVERYDAY_FREE()
-                if rj['data']['VISIT_ITEM']['status'] != 3:
+                if rj['result']['VISIT_ITEM']['status'] != 3:
                     self.getVisitItemList()
                 else:
                     return
             else:
-                msg = f"获取商品列表 失败\n" + json.loads(rj)
+                msg = f"获取任务列表 失败\n" + json.loads(rj)
         except:
             traceback.print_exc()
 
