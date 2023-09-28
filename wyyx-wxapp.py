@@ -20,7 +20,7 @@ tokenName = 'wyyx_wxcookies'
 
 class wyyx_wxapp():
     def __init__(self, data):
-        self.headers =  {
+        self.headers = {
             'Host': 'miniapp.you.163.com',
             'Connection': 'keep-alive',
             'version': '20.10.9',
@@ -65,12 +65,15 @@ class wyyx_wxapp():
             traceback.print_exc()
             pass
         pass
+
     def GET_EVERYDAY_RANDOM(self):
         """
         desc=每日7-9点，12-14点，18-21点随机掉落水滴
         """
         # 如果时间在北京时间7到9点,12到14点,18到21点则运行下面语句
-        if mytool.gettime().hour in range(7, 9) or mytool.gettime().hour in range(12, 14) or mytool.gettime().hour in range(18, 21):
+        if mytool.gettime().hour in range(7, 9) or mytool.gettime().hour in range(12,
+                                                                                  14) or mytool.gettime().hour in range(
+                18, 21):
             params = {
                 'taskId': 'GET_EVERYDAY_RANDOM',
                 'taskRecordId': '',
@@ -87,6 +90,7 @@ class wyyx_wxapp():
             except:
                 traceback.print_exc()
                 pass
+
     def drop(self):
         try:
             rj = self.sec.get('https://miniapp.you.163.com/orchard/game/water/drop.json').json()
@@ -109,34 +113,60 @@ class wyyx_wxapp():
             rj = self.sec.get('https://miniapp.you.163.com/orchard/task/visitItem.json', params=params).json()
             if rj['code'] == 200 and rj['result'] == 1:
                 msg = f"浏览商品 成功\n"
+                return True
             else:
                 msg = f"浏览商品 失败\n" + json.loads(rj)
+                return False
             print(msg)
             # send(title, msg)
         except:
             traceback.print_exc()
             pass
+
     def getVisitItemList(self):
-        params = {
-            'scene': '1',
-            'type': '0',
-            'size': '20',
-            'lastItemId': '0',
-        }
+        if mytool.gettime().hour in range(7, 9):
+            params = {
+                'scene': '1',
+                'type': '0',
+                'size': '20',
+                'lastItemId': '0',
+            }
+            count = 5
+            try:
+                rj = self.sec.get('https://miniapp.you.163.com/xhr/rcmd/indexV2.json', params=params).json()
+                if rj['code'] == 200:
+                    msg = f"获取商品列表 成功\n"
+                    for i in rj['data']['rcmdItemList']:
+                        if i['categoryItem'] is not None and count > 0:
+                            print(i['categoryItem']['id'])
+                            if self.visitItem(i['categoryItem']['id']):
+                                count -= 1
+                            mytool.sleep(3, 5)
+                else:
+                    msg = f"获取商品列表 失败\n" + json.loads(rj)
+            except:
+                traceback.print_exc()
+                pass
+    def GET_TASK(self):
         try:
-            rj = self.sec.get('https://miniapp.you.163.com/xhr/rcmd/indexV2.json', params=params).json()
+            rj = self.sec.get('https://miniapp.you.163.com/orchard/task/list.json?taskIdList=%%5B%%22FRIEND_HELP%%22'
+                              '%%2C%%22VISIT_ITEM%%22%%2C%%22PAY_ITEM%%22%%2C%%22GET_EVERYDAY_RANDOM%%22%%2C'
+                              '%%22NOTIFY_TOMORROW%%22%%2C%%22GET_EVERYDAY_FREE%%22%%2C%%22PAY_SUPER_MC%%22%%2C'
+                              '%%22FINISH_PIN%%22%%2C%%22DROP_WATER_CONTINUOUS%%22%%2C%%22VISIT_PAGE%%22%%2C'
+                              '%%22GARDEN_CHECK_IN_MUTUAL_GUIDE%%22%%5D').json()
             if rj['code'] == 200:
-                msg = f"获取商品列表 成功\n"
-                for i in rj['data']['rcmdItemList']:
-                    if i['categoryItem'] is not None:
-                        print(i['categoryItem']['id'])
-                        self.visitItem(i['categoryItem']['id'])
-                        mytool.sleep(3, 5)
+                msg = f"获取任务列表 成功\n"
+                if rj['data']['GET_EVERYDAY_FREE']['maxCount'] != rj['data']['GET_EVERYDAY_FREE']['count']:
+                    self.GET_EVERYDAY_FREE()
+                if rj['data']['VISIT_ITEM']['status'] != 3:
+                    self.getVisitItemList()
+                else:
+                    return
             else:
                 msg = f"获取商品列表 失败\n" + json.loads(rj)
         except:
             traceback.print_exc()
-            pass
+
 
 if __name__ == '__main__':
     os.environ[f'{tokenName}'] = '89d31cf6f05d406cc1d2179fb31116cd'
@@ -145,7 +175,8 @@ if __name__ == '__main__':
         exit(0)
     else:
         for i in mytool.getlistCk(f'{tokenName}'):
-            wyyx_wxapp(i).GET_EVERYDAY_FREE()
+            wyyx_wxapp(i).GET_TASK()
+            # wyyx_wxapp(i).GET_EVERYDAY_FREE()
             wyyx_wxapp(i).GET_EVERYDAY_RANDOM()
             wyyx_wxapp(i).drop()
-            wyyx_wxapp(i).getVisitItemList()
+            # wyyx_wxapp(i).getVisitItemList()
