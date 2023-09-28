@@ -1,8 +1,11 @@
+
 """
 0 7 * * * tyklxq.py
 new Env("统一快乐星球")
-环境变量名称 tyklxq_cookies
+env add tyklxq_cookies
 """
+#!/usr/bin/env python3
+# coding: utf-8
 
 import json
 import traceback
