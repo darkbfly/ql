@@ -1,6 +1,6 @@
 """
+0 7 * * * tyklxq.py
 new Env("统一快乐星球")
-cron: 0 7 * * *
 环境变量名称 tyklxq_cookies
 """
 
