@@ -1,2 +1,4 @@
 *.pkl
 .idea/
+__pycache__/
+debug.py

@@ -13,6 +13,8 @@ import traceback
 import requests
 import mytool
 from notify import send
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 title = '网易严选微信小程序'
 tokenName = 'wyyx_wxcookies'
@@ -165,6 +167,12 @@ class wyyx_wxapp():
 
 
 if __name__ == '__main__':
+    # DEBUG
+    # 文件存在则执行
+    # if os.path.exists('debug.py'):
+    #     import debug
+    #     debug.setDebugEnv()
+
     if mytool.getlistCk(f'{tokenName}') is None:
         print(f'请检查你的变量名称 {tokenName} 是否填写正确')
         exit(0)
