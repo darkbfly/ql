@@ -51,7 +51,7 @@ class huazhu():
                 msg = f"签到成功, 获得{rj['content']['point']}积分!"
             else:
                 # json内容到msg
-                msg = f"签到失败\n" + json.loads(rj)
+                msg = f"签到失败\n" + json.dumps(rj)
             print(msg)
             send(title, msg)
         except:
