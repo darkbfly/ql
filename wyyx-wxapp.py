@@ -168,7 +168,6 @@ class wyyx_wxapp():
 
 if __name__ == '__main__':
     # DEBUG
-    # 文件存在则执行
     # if os.path.exists('debug.py'):
     #     import debug
     #     debug.setDebugEnv()

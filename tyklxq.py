@@ -8,11 +8,13 @@ env add tyklxq_cookies
 # coding: utf-8
 
 import json
+import os
 import traceback
 import requests
 import mytool
 from notify import send
-
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 title = '统一快乐星球'
 tokenName = 'tyklxq_cookies'
 
@@ -55,7 +57,7 @@ class klxq():
                 msg = f"签到成功\n获得{rj['data']['fixedReward']['point']} + {rj['data']['extraReward']['points']}积分!\n" \
                       f"获得{rj['data']['fixedReward']['growth']} + {rj['data']['extraReward']['growth']}成长值!"
             else:
-                msg = f"签到失败\n" + json.loads(rj)
+                msg = f"签到失败\n" + json.dumps(rj)
             print(msg)
             send(title, msg)
         except:
@@ -65,6 +67,11 @@ class klxq():
 
 
 if __name__ == '__main__':
+    # DEBUG
+    if os.path.exists('debug.py'):
+        import debug
+        debug.setDebugEnv()
+
     if mytool.getlistCk(f'{tokenName}') is None:
         print(f'请检查你的变量名称 {tokenName} 是否填写正确')
         exit(0)
