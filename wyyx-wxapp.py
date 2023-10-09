@@ -43,7 +43,7 @@ class wyyx_wxapp():
         }
         self.sec = requests.session()
         self.sec.headers = self.headers
-        self.sec.verify = False;
+        self.sec.verify = False
         pass
 
     def GET_EVERYDAY_FREE(self):
@@ -60,7 +60,7 @@ class wyyx_wxapp():
             if rj['code'] == 200 and rj['result']['result'] == 1:
                 msg = f"每日免费领水滴 成功\n获得{rj['result']['water']}水滴"
             else:
-                msg = f"每日免费领水滴 失败\n" + json.loads(rj)
+                msg = f"每日免费领水滴 失败\n" + json.dumps(rj, ensure_ascii=False)
             print(msg)
             send(title, msg)
         except:
@@ -86,7 +86,7 @@ class wyyx_wxapp():
                 if rj['code'] == 200 and rj['result']['result'] == 1:
                     msg = f"随机掉落水滴 成功\n获得{rj['result']['water']}水滴"
                 else:
-                    msg = f"随机掉落水滴 失败\n" + json.loads(rj)
+                    msg = f"随机掉落水滴 失败\n" + json.dumps(rj, ensure_ascii=False)
                 print(msg)
                 send(title, msg)
             except:
@@ -99,7 +99,7 @@ class wyyx_wxapp():
             if rj['code'] == 200 and rj['result']['success']:
                 msg = f"浇水 成功\n"
             else:
-                msg = f"浇水 失败\n" + json.loads(rj)
+                msg = f"浇水 失败\n" + json.dumps(rj, ensure_ascii=False)
             print(msg)
             send(title, msg)
         except:
@@ -117,7 +117,7 @@ class wyyx_wxapp():
                 msg = f"浏览商品 成功\n"
                 return True
             else:
-                msg = f"浏览商品 失败\n" + json.loads(rj)
+                msg = f"浏览商品 失败\n" + json.dumps(rj, ensure_ascii=False)
                 return False
             print(msg)
             # send(title, msg)
@@ -136,7 +136,7 @@ class wyyx_wxapp():
             count = 5
             try:
                 rj = self.sec.get('https://miniapp.you.163.com/xhr/rcmd/indexV2.json', params=params).json()
-                if rj['code'] == 200:
+                if rj['code'] == '200':
                     msg = f"获取商品列表 成功\n"
                     for i in rj['data']['rcmdItemList']:
                         if i['categoryItem'] is not None and count > 0:
@@ -145,7 +145,7 @@ class wyyx_wxapp():
                                 count -= 1
                             mytool.sleep(3, 5)
                 else:
-                    msg = f"获取商品列表 失败\n" + json.loads(rj)
+                    msg = f"获取商品列表 失败\n" + json.dumps(rj, ensure_ascii=False)
             except:
                 traceback.print_exc()
                 pass
@@ -161,16 +161,31 @@ class wyyx_wxapp():
                 else:
                     return
             else:
-                msg = f"获取任务列表 失败\n" + json.loads(rj)
+                msg = f"获取任务列表 失败\n" + json.dumps(rj, ensure_ascii=False)
+        except:
+            traceback.print_exc()
+    def DROP_WATER_CONTINUOUS(self):
+        try:
+            rj = self.sec.get('https://miniapp.you.163.com/orchard/task/list.json?taskIdList=["FRIEND_HELP","VISIT_ITEM","PAY_ITEM","GET_EVERYDAY_RANDOM","NOTIFY_TOMORROW","GET_EVERYDAY_FREE","PAY_SUPER_MC","FINISH_PIN","DROP_WATER_CONTINUOUS","VISIT_PAGE","GARDEN_CHECK_IN_MUTUAL_GUIDE"]').json()
+            if rj['code'] == 200:
+                msg = f"获取任务列表 成功\n"
+                if rj['result']['GET_EVERYDAY_FREE']['maxCount'] != rj['result']['GET_EVERYDAY_FREE']['count']:
+                    self.GET_EVERYDAY_FREE()
+                if rj['result']['VISIT_ITEM']['status'] != 3:
+                    self.getVisitItemList()
+                else:
+                    return
+            else:
+                msg = f"获取任务列表 失败\n" + json.dumps(rj, ensure_ascii=False)
         except:
             traceback.print_exc()
 
 
 if __name__ == '__main__':
     # DEBUG
-    # if os.path.exists('debug.py'):
-    #     import debug
-    #     debug.setDebugEnv()
+    if os.path.exists('debug.py'):
+        import debug
+        debug.setDebugEnv()
 
     if mytool.getlistCk(f'{tokenName}') is None:
         print(f'请检查你的变量名称 {tokenName} 是否填写正确')
