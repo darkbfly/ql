@@ -57,8 +57,8 @@ class tpyqc():
                 if response.status_code == 200:
                     rj = response.json()
                     print(json.dumps(rj))
-                    if rj['code'] == 0:
-                        msg = f"签到成功\n获得{rj['results']}积分！"
+                    if rj['code'] == 200:
+                        msg = f"签到成功"
                     else:
                         msg = f"签到失败\n" + json.dumps(rj, ensure_ascii=False)
                 else:

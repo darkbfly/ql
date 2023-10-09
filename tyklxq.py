@@ -57,7 +57,7 @@ class klxq():
                 msg = f"签到成功\n获得{rj['data']['fixedReward']['point']} + {rj['data']['extraReward']['points']}积分!\n" \
                       f"获得{rj['data']['fixedReward']['growth']} + {rj['data']['extraReward']['growth']}成长值!"
             else:
-                msg = f"签到失败\n" + json.dumps(rj)
+                msg = f"签到失败\n" + json.dumps(rj, ensure_ascii=False)
             print(msg)
             send(title, msg)
         except:
