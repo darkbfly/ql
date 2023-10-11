@@ -24,13 +24,8 @@ class yljf():
             'Host': 'msmarket.msx.digitalyili.com',
             'Connection': 'keep-alive',
             'access-token': data,
-            # Already added when you pass json=
-            # 'Content-Type': 'application/json',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF XWEB/8447',
-            'tenant-id': '1678248156573593602',
-            'Accept': '*/*',
             'Referer': 'https://servicewechat.com/wx1fb666a33da7ac88/13/page-frame.html',
-            # 'Accept-Encoding': 'gzip, deflate, br',
             'Accept-Language': 'zh-CN,zh;q=0.9',
         }
         self.sec = requests.session()

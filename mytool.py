@@ -12,9 +12,21 @@ def getlistCk(ckname):
     # 字符串用回车或@符号分开为list
     return re.split(r'\n|@', os.getenv(ckname))
 
+
 # 获取北京时间 带时区
 def gettime():
     return datetime.now(tz=ZoneInfo('Asia/Shanghai'))
+
+def getSecTimestamp():
+    return int(time.time())
+def getMSecTimestamp():
+    return int(time.time() * 1000)
+
+
 # 随机休眠几秒 随机数为float
 def sleep(x, y):
     time.sleep(random.uniform(x, y))
+
+
+if __name__ == '__main__':
+    print(getMSecTimestamp())
