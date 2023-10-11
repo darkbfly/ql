@@ -113,7 +113,7 @@ class wyyx_wxapp():
         try:
             rj = self.sec.get('https://miniapp.you.163.com/orchard/task/visitItem.json', params=params).json()
             if rj['code'] == 200 and rj['result'] == 1:
-                msg = f"浏览商品 成功\n"
+                msg = f"浏览商品 成功"
                 print(msg)
                 return True
             else:
@@ -125,6 +125,7 @@ class wyyx_wxapp():
             pass
 
     def getVisitItemList(self):
+        msg = ""
         if mytool.gettime().hour in range(7, 9):
             params = {
                 'scene': '1',
@@ -136,7 +137,7 @@ class wyyx_wxapp():
             try:
                 rj = self.sec.get('https://miniapp.you.163.com/xhr/rcmd/indexV2.json', params=params).json()
                 if rj['code'] == '200':
-                    msg = f"获取商品列表 成功\n"
+                    msg = f"获取商品列表 成功"
                     for i in rj['data']['rcmdItemList']:
                         if i['categoryItem'] is not None and count > 0:
                             print(i['categoryItem']['id'])
@@ -158,6 +159,7 @@ class wyyx_wxapp():
             except:
                 traceback.print_exc()
                 pass
+        print(msg)
 
     def GET_TASK(self):
         try:
@@ -176,32 +178,46 @@ class wyyx_wxapp():
         except:
             traceback.print_exc()
 
-    def DROP_WATER_CONTINUOUS(self):
+    def REWARD_TOMORROW(self):
+        if mytool.gettime().hour in range(18, 21):
+            taskRecordId = self.getTaskRecordId()
+            if taskRecordId == '':
+                print('未找到 taskRecordId')
+                return
+            params = {
+                'taskId': 'REWARD_TOMORROW',
+                'taskRecordId': taskRecordId,
+            }
+            try:
+                rj = self.sec.get('https://miniapp.you.163.com/orchard/task/water/get.json', params=params).json()
+                if rj['code'] == 200:
+                    msg = f"REWARD_TOMORROW 成功\n"
+                else:
+                    msg = f"REWARD_TOMORROW 失败\n" + json.dumps(rj, ensure_ascii=False)
+
+                print(msg)
+            except:
+                traceback.print_exc()
+
+    def getTaskRecordId(self):
         params = {
-            'taskId': 'REWARD_TOMORROW',
-            'taskRecordId': '14491131',
+            'taskIdList': '["REWARD_TOMORROW"]',
         }
         try:
-            rj = self.sec.get('https://miniapp.you.163.com/orchard/task/water/get.json', params=params).json()
+            rj = self.sec.get('https://miniapp.you.163.com/orchard/task/list.json', params=params).json()
             if rj['code'] == 200:
-                msg = f"获取任务列表 成功\n"
-                if rj['result']['GET_EVERYDAY_FREE']['maxCount'] != rj['result']['GET_EVERYDAY_FREE']['count']:
-                    self.GET_EVERYDAY_FREE()
-                if rj['result']['VISIT_ITEM']['status'] != 3:
-                    self.getVisitItemList()
-                else:
-                    return
+                return rj['result']['REWARD_TOMORROW']['taskRecords'][0]['taskRecordId']
             else:
-                msg = f"获取任务列表 失败\n" + json.dumps(rj, ensure_ascii=False)
+                print(json.dumps(rj, ensure_ascii=False))
+                return ''
         except:
             traceback.print_exc()
-
+            pass
 
 if __name__ == '__main__':
     # DEBUG
     if os.path.exists('debug.py'):
         import debug
-
         debug.setDebugEnv()
 
     if mytool.getlistCk(f'{tokenName}') is None:
@@ -212,3 +228,4 @@ if __name__ == '__main__':
             wyyx_wxapp(i).GET_TASK()
             wyyx_wxapp(i).GET_EVERYDAY_RANDOM()
             wyyx_wxapp(i).drop()
+            wyyx_wxapp(i).REWARD_TOMORROW()
