@@ -54,7 +54,7 @@ class klxq():
         try:
             rj = self.sec.post('https://xapi.weimob.com/api3/onecrm/mactivity/sign/misc/sign/activity/core/c/sign', headers=self.headers, json=data).json()
             if rj['errcode'] == "0":
-                msg = f"签到成功\n获得{rj['data']['fixedReward']['point']} + {rj['data']['extraReward']['points']}积分!\n" \
+                msg = f"签到成功\n获得{rj['data']['fixedReward']['points']} + {rj['data']['extraReward']['points']}积分!\n" \
                       f"获得{rj['data']['fixedReward']['growth']} + {rj['data']['extraReward']['growth']}成长值!"
             else:
                 msg = f"签到失败\n" + json.dumps(rj, ensure_ascii=False)

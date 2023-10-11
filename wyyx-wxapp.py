@@ -14,6 +14,7 @@ import requests
 import mytool
 from notify import send
 import urllib3
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 title = '网易严选微信小程序'
@@ -73,9 +74,7 @@ class wyyx_wxapp():
         desc=每日7-9点，12-14点，18-21点随机掉落水滴
         """
         # 如果时间在北京时间7到9点,12到14点,18到21点则运行下面语句
-        if mytool.gettime().hour in range(7, 9) or mytool.gettime().hour in range(12,
-                                                                                  14) or mytool.gettime().hour in range(
-                18, 21):
+        if mytool.gettime().hour in range(7, 9) or mytool.gettime().hour in range(12, 14) or mytool.gettime().hour in range(18, 21):
             params = {
                 'taskId': 'GET_EVERYDAY_RANDOM',
                 'taskRecordId': '',
@@ -115,12 +114,12 @@ class wyyx_wxapp():
             rj = self.sec.get('https://miniapp.you.163.com/orchard/task/visitItem.json', params=params).json()
             if rj['code'] == 200 and rj['result'] == 1:
                 msg = f"浏览商品 成功\n"
+                print(msg)
                 return True
             else:
                 msg = f"浏览商品 失败\n" + json.dumps(rj, ensure_ascii=False)
+                print(msg)
                 return False
-            print(msg)
-            # send(title, msg)
         except:
             traceback.print_exc()
             pass
@@ -144,14 +143,26 @@ class wyyx_wxapp():
                             if self.visitItem(i['categoryItem']['id']):
                                 count -= 1
                             mytool.sleep(3, 5)
+
+                    rj = self.sec.get('https://miniapp.you.163.com/orchard/task/finish.json',
+                                      params={
+                                          'taskId': 'VISIT_ITEM',
+                                          'taskRecordId': '0',
+                                      }).json()
+                    if rj['code'] == '200':
+                        msg += f"浏览商品结束 成功\n"
+                    else:
+                        msg += f"浏览商品结束 失败\n" + json.dumps(rj, ensure_ascii=False)
                 else:
                     msg = f"获取商品列表 失败\n" + json.dumps(rj, ensure_ascii=False)
             except:
                 traceback.print_exc()
                 pass
+
     def GET_TASK(self):
         try:
-            rj = self.sec.get('https://miniapp.you.163.com/orchard/task/list.json?taskIdList=["FRIEND_HELP","VISIT_ITEM","PAY_ITEM","GET_EVERYDAY_RANDOM","NOTIFY_TOMORROW","GET_EVERYDAY_FREE","PAY_SUPER_MC","FINISH_PIN","DROP_WATER_CONTINUOUS","VISIT_PAGE","GARDEN_CHECK_IN_MUTUAL_GUIDE"]').json()
+            rj = self.sec.get(
+                'https://miniapp.you.163.com/orchard/task/list.json?taskIdList=["FRIEND_HELP","VISIT_ITEM","PAY_ITEM","GET_EVERYDAY_RANDOM","NOTIFY_TOMORROW","GET_EVERYDAY_FREE","PAY_SUPER_MC","FINISH_PIN","DROP_WATER_CONTINUOUS","VISIT_PAGE","GARDEN_CHECK_IN_MUTUAL_GUIDE"]').json()
             if rj['code'] == 200:
                 msg = f"获取任务列表 成功\n"
                 if rj['result']['GET_EVERYDAY_FREE']['maxCount'] != rj['result']['GET_EVERYDAY_FREE']['count']:
@@ -164,9 +175,14 @@ class wyyx_wxapp():
                 msg = f"获取任务列表 失败\n" + json.dumps(rj, ensure_ascii=False)
         except:
             traceback.print_exc()
+
     def DROP_WATER_CONTINUOUS(self):
+        params = {
+            'taskId': 'REWARD_TOMORROW',
+            'taskRecordId': '14491131',
+        }
         try:
-            rj = self.sec.get('https://miniapp.you.163.com/orchard/task/list.json?taskIdList=["FRIEND_HELP","VISIT_ITEM","PAY_ITEM","GET_EVERYDAY_RANDOM","NOTIFY_TOMORROW","GET_EVERYDAY_FREE","PAY_SUPER_MC","FINISH_PIN","DROP_WATER_CONTINUOUS","VISIT_PAGE","GARDEN_CHECK_IN_MUTUAL_GUIDE"]').json()
+            rj = self.sec.get('https://miniapp.you.163.com/orchard/task/water/get.json', params=params).json()
             if rj['code'] == 200:
                 msg = f"获取任务列表 成功\n"
                 if rj['result']['GET_EVERYDAY_FREE']['maxCount'] != rj['result']['GET_EVERYDAY_FREE']['count']:
@@ -185,6 +201,7 @@ if __name__ == '__main__':
     # DEBUG
     if os.path.exists('debug.py'):
         import debug
+
         debug.setDebugEnv()
 
     if mytool.getlistCk(f'{tokenName}') is None:
@@ -193,7 +210,5 @@ if __name__ == '__main__':
     else:
         for i in mytool.getlistCk(f'{tokenName}'):
             wyyx_wxapp(i).GET_TASK()
-            # wyyx_wxapp(i).GET_EVERYDAY_FREE()
             wyyx_wxapp(i).GET_EVERYDAY_RANDOM()
             wyyx_wxapp(i).drop()
-            # wyyx_wxapp(i).getVisitItemList()
