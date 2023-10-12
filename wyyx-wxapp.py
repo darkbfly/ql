@@ -150,7 +150,7 @@ class wyyx_wxapp():
                                           'taskId': 'VISIT_ITEM',
                                           'taskRecordId': '0',
                                       }).json()
-                    if rj['code'] == '200':
+                    if rj['code'] == 200:
                         msg += f"浏览商品结束 成功\n"
                     else:
                         msg += f"浏览商品结束 失败\n" + json.dumps(rj, ensure_ascii=False)
