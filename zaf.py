@@ -1,7 +1,7 @@
 """
-0 7 * * * yljf.py
-new Env("微信小程序-伊利积分")
-env add yljf_token
+0 7 * * * mncjhy.py
+new Env("微信小程序-甄爱粉俱乐部")
+env add zaf_auth
 """
 # !/usr/bin/env python3
 # coding: utf-8
@@ -13,41 +13,41 @@ from notify import send
 import json
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-title = '微信小程序-伊利积分'
-tokenName = 'yljf_token'
+title = '微信小程序-甄爱粉俱乐部'
+tokenName = 'zaf_auth'
 msg = ''
 
-
-class yljf():
+class zaf():
     def __init__(self, data):
-        self.headers = {
-            'Host': 'msmarket.msx.digitalyili.com',
+        self.sec = requests.session()
+        self.sec.headers = {
+            'Host': 'ucode-openapi.aax6.cn',
             'Connection': 'keep-alive',
-            'access-token': data,
+            'serialId': '0b7d9e70-1092-45dd-a67e-e1bc77377f70',
+            'appId': 'wx888d2a452f4a2a58',
+            'Authorization': data,
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF XWEB/8447',
-            'Referer': 'https://servicewechat.com/wx1fb666a33da7ac88/13/page-frame.html',
+            'Referer': 'https://servicewechat.com/wx888d2a452f4a2a58/155/page-frame.html',
             'Accept-Language': 'zh-CN,zh;q=0.9',
         }
-        self.sec = requests.session()
-        self.sec.headers = self.headers
-        pass
 
     def login(self):
-        global msg
-        rj = self.sec.post('https://msmarket.msx.digitalyili.com/gateway/api/member/daily/sign', json={}).json()
-        if rj['status'] == True:
-            msg = f"登录成功\n获得积分：{rj['data']['dailySign']['bonusPoint']}"
+        json_data = {
+            'promotionId': 1001681,
+            'promotionCode': 'CRM-QD',
+            'pointRecordRemark': '连续签到',
+        }
+        rj = self.sec.post('https://ucode-openapi.aax6.cn/lottery/checkIn', json=json_data).json()
+        if rj['isHit'] == True:
+            msg = f"签到成功, 获得:{rj['award']['name']}"
         else:
-            msg = f"登录失败\n" + json.dumps(rj, ensure_ascii=False)
+            msg = f"签到失败\n" + json.dumps(rj, ensure_ascii=False)
         print(msg)
         send(title, msg)
 
-
 if __name__ == '__main__':
-    # DEBUG
     if os.path.exists('debug.py'):
         import debug
-
         debug.setDebugEnv()
 
     if mytool.getlistCk(f'{tokenName}') is None:
@@ -55,4 +55,4 @@ if __name__ == '__main__':
         exit(0)
     else:
         for i in mytool.getlistCk(f'{tokenName}'):
-            yljf(i).login()
+            zaf(i).login()

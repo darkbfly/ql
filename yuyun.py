@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 # @Time: 2023年04月06日14时26分
+"""
+0 7 * * * yljf.py
+new Env("WEB-雨云")
+env add yljf_token
+"""
 import os
 
 import requests

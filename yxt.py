@@ -1,6 +1,6 @@
 """
 0 7 * * * yxt.py
-new Env("一心堂")
+new Env("微信小程序-一心堂")
 env add yxtGUid
 """
 # !/usr/bin/env python3
@@ -15,7 +15,7 @@ from notify import send
 import urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-title = '一心堂'
+title = '微信小程序-一心堂'
 tokenName = 'yxtGUid'
 msg = ''
 

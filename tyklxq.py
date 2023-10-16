@@ -1,7 +1,7 @@
 
 """
 0 7 * * * tyklxq.py
-new Env("统一快乐星球")
+new Env("微信小程序-统一快乐星球")
 env add tyklxq_cookies
 """
 #!/usr/bin/env python3
@@ -15,7 +15,7 @@ import mytool
 from notify import send
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-title = '统一快乐星球'
+title = '微信小程序-统一快乐星球'
 tokenName = 'tyklxq_cookies'
 
 

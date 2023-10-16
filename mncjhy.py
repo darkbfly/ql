@@ -1,6 +1,6 @@
 """
 0 7 * * * mncjhy.py
-new Env("蒙牛超级会员")
+new Env("微信小程序-蒙牛超级会员")
 env add mncjhy_token
 """
 # !/usr/bin/env python3
@@ -13,7 +13,7 @@ from notify import send
 import json
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-title = '蒙牛超级会员'
+title = '微信小程序-蒙牛超级会员'
 tokenName = 'mncjhy_token'
 msg = ''
 

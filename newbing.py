@@ -1,6 +1,6 @@
 """
 0 5 * * * newbing.py
-new Env("必应")
+new Env("WEB-必应")
 
 Edge必应自动搜索赚积分
 使用Edge浏览器打开必应 https://rewards.bing.com/ F12抓取Cookie即可  正确的CK格式是以MUID=xxxxxxx开头的

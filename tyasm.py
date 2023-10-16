@@ -1,6 +1,6 @@
 """
 0 7 * * * tyasm.py
-new Env("统一阿萨姆")
+new Env("微信小程序-统一阿萨姆")
 env add tyasm_cookies = X-WX-Token#auth-token#cookies下的rprm_cuid
 """
 import json
@@ -13,7 +13,7 @@ import urllib3
 import mytool
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-title = '统一阿萨姆'
+title = '微信小程序-统一阿萨姆'
 tokenName = 'tyasm_cookies'
 msg = ''
 

@@ -1,5 +1,5 @@
 """
-new Env("华住签到")
+new Env("微信小程序-华住签到")
 cron 0 7 * * *
 环境变量名称 huazhu_cookies
 """
@@ -11,7 +11,7 @@ import requests
 import mytool
 from notify import send
 
-title = '华住签到'
+title = '微信小程序-华住签到'
 tokenName = 'huazhu_cookies'
 
 

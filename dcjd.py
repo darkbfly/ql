@@ -1,7 +1,7 @@
 
 """
 30 7 * * * dcjd.py
-new Env("东呈酒店")
+new Env("微信小程序-东呈酒店")
 env add tyklxq_cookies
 """
 #!/usr/bin/env python3
@@ -14,7 +14,7 @@ import mytool
 from notify import send
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-title = '东呈酒店'
+title = '微信小程序-东呈酒店'
 tokenName = 'dcjd_data'
 
 class dcjd():

@@ -1,7 +1,7 @@
 
 """
 30 7 * * * tpyqc.py
-new Env("太平洋汽车")
+new Env("ANDROID-太平洋汽车")
 env add tpyqc_common_session_id
 """
 #!/usr/bin/env python3
@@ -15,7 +15,7 @@ import mytool
 from notify import send
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-title = '太平洋汽车'
+title = 'ANDROID-太平洋汽车'
 tokenName = 'tpyqc_common_session_id'
 
 class tpyqc():

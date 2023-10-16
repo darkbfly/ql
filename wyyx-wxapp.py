@@ -1,6 +1,6 @@
 """
 0 5, 6, 7, 13, 18 * * * wyyx-wxapp.py
-new Env("网易严选微信小程序")
+new Env("微信小程序-网易严选微信小程序")
 env add wyyx_wxcookies
 """
 import datetime
@@ -17,7 +17,7 @@ import urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-title = '网易严选微信小程序'
+title = '微信小程序-网易严选微信小程序'
 tokenName = 'wyyx_wxcookies'
 
 

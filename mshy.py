@@ -1,5 +1,5 @@
 """
-new Env("慕思会员")
+new Env("微信小程序-慕思会员")
 cron 0 7 * * *
 环境变量名称 musi_data
 """
@@ -11,7 +11,7 @@ import requests
 import mytool
 from notify import send
 
-title = '慕思会员'
+title = '微信小程序-慕思会员'
 tokenName = 'musi_data'
 
 class mshy():
