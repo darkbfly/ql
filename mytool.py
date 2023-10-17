@@ -5,8 +5,6 @@ import time
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-import pyautogui
-import pyperclip
 
 
 def getlistCk(ckname):
@@ -33,17 +31,21 @@ def sleep(x, y):
 
 
 def 输入中文(text):
+    import pyautogui
+    import pyperclip
     pyperclip.copy(text)
     pyautogui.hotkey("ctrl", "v")
 
 
 def 点击图片中心(path, png, timeout=3):
+    import pyautogui
     print(f"开始执行{png}")
     if 寻找是否存在(path, png, timeout):
         pyautogui.click(pyautogui.center(pyautogui.locateOnScreen(os.getcwd() + f'\\{path}\\{png}', confidence=0.8)))
 
 
 def 寻找是否存在(path, png, timeout=3):
+    import pyautogui
     while timeout > 0:
         if pyautogui.locateOnScreen(os.getcwd() + f'\\{path}\\{png}', confidence=0.8) is None:
             timeout -= 1
