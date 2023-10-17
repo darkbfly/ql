@@ -4,6 +4,8 @@ import json
 import time, sys  # re 用于正规则处理,os可能要用于文件路径读取与判断
 import requests as req
 import multiprocessing as mp
+
+import mytool
 from costtime import time_counts  # 用来统计时间
 import sendNotify  # 发通知
 #################################
@@ -113,9 +115,12 @@ def change_param_value_tofile (OO0O0O000O0O00O0O ,OO000OOOOO0O00O0O ):#line:59
 def getcookies (OO00000000O00O0O0 ):#line:99
     O000OOO0000O0000O =[]#line:100
     OO0O00000O000OOOO =''#line:101
-    O00O0O000OO0O0000 =configdict [OO00000000O00O0O0 ]#line:102
-    O00O0O000OO0O0000 =str (O00O0O000OO0O0000 ).strip ().split ('@')#line:103
-    return O00O0O000OO0O0000 #line:104
+    if mytool.getlistCk(OO00000000O00O0O0) is None:
+        O00O0O000OO0O0000 =configdict [OO00000000O00O0O0 ]#line:102
+        O00O0O000OO0O0000 =str (O00O0O000OO0O0000 ).strip ().split ('@')#line:103
+        return O00O0O000OO0O0000 #line:104
+    else :
+        return mytool.getlistCk(OO00000000O00O0O0)
 def dict_to_str (OO0000O000O0000O0 ):#line:106
     O0OOO0OOO0OOO00O0 =''#line:107
     if OO0000O000O0000O0 :#line:108
