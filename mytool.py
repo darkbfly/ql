@@ -6,7 +6,6 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 
-
 def getlistCk(ckname):
     if os.getenv(ckname) is None:
         return None
@@ -18,8 +17,11 @@ def getlistCk(ckname):
 def gettime():
     return datetime.now(tz=ZoneInfo('Asia/Shanghai'))
 
+
 def getSecTimestamp():
     return int(time.time())
+
+
 def getMSecTimestamp():
     return int(time.time() * 1000)
 
@@ -29,22 +31,23 @@ def sleep(x, y):
     time.sleep(random.uniform(x, y))
 
 
-
 def 输入中文(text):
     import pyautogui
     import pyperclip
+    time.sleep(1)
     pyperclip.copy(text)
     pyautogui.hotkey("ctrl", "v")
 
 
-def 点击图片中心(path, png, timeout=3):
+def 点击图片中心(path="", png="", timeout=3):
     import pyautogui
-    print(f"开始执行{png}")
+    time.sleep(1)
     if 寻找是否存在(path, png, timeout):
+        print(f"找到{png}, 开始执行")
         pyautogui.click(pyautogui.center(pyautogui.locateOnScreen(os.getcwd() + f'\\{path}\\{png}', confidence=0.8)))
 
 
-def 寻找是否存在(path, png, timeout=3):
+def 寻找是否存在(path="", png="", timeout=3):
     import pyautogui
     while timeout > 0:
         if pyautogui.locateOnScreen(os.getcwd() + f'\\{path}\\{png}', confidence=0.8) is None:
@@ -54,6 +57,7 @@ def 寻找是否存在(path, png, timeout=3):
         else:
             return True
     return False
+
 
 if __name__ == '__main__':
     print(getMSecTimestamp())

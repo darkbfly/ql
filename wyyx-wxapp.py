@@ -1,5 +1,5 @@
 """
-0 5, 6, 7, 13, 18 * * * wyyx-wxapp.py
+0 5,6,7,13,18 * * * wyyx-wxapp.py
 new Env("微信小程序-网易严选")
 env add wyyx_wxcookies
 """
