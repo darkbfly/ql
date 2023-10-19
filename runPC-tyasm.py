@@ -14,6 +14,7 @@ def 打开微信():
         输入中文('统一快乐星球')
         点击图片中心("pc-asm", "3.png")
         点击图片中心("pc-asm", "4.png", 5)
+    点击图片中心("pc-asm", "skip.png", 5)
     点击图片中心("pc-asm", "close2.png", 5)
     if 寻找是否存在("pc-asm", "5.png", 10) is False:
         raise Exception("未找到阿萨姆入口")
