@@ -18,6 +18,12 @@ def time_counts(fn):
     return mesasure_time
 
 
+def login_file():
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+    return login_ql(config['client_id'], config['client_secret'])
+
+
 def login_ql(client_id, client_secret):
     url = f"http://120.77.63.151:3041/open/auth/token?client_id={client_id}&client_secret={client_secret}"
     headers = {
@@ -77,4 +83,5 @@ def updateEnvByid(id, name, value, remark=''):
 
 
 if __name__ == '__main__':
+    print(login_file())
     pass
