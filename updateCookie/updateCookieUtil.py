@@ -77,5 +77,4 @@ def updateEnvByid(id, name, value, remark=''):
 
 
 if __name__ == '__main__':
-    token = 'Bearer 9db45c82-7e29-46c2-b51b-1957fc11456a'
-    updateEnvByid(0, name='jrtt_data', value='jrtt_data', remark='测试使用')
+    pass
