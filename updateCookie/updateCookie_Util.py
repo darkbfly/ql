@@ -21,7 +21,20 @@ def time_counts(fn):
 def login_file():
     with open('config.json', 'r') as f:
         config = json.load(f)
-    return login_ql(config['client_id'], config['client_secret'])
+    token = login_ql(config['client_id'], config['client_secret'])
+    config['token'] = token
+    with open('config.json', 'w') as f:
+        f.write(json.dumps(config, ensure_ascii=False))
+    return token
+
+
+def getToken():
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+    if config['token'] == '':
+        return login_file()
+    else:
+        return config['token']
 
 
 def login_ql(client_id, client_secret):
@@ -58,6 +71,12 @@ def searchEnvs(token, name):
 
 
 def updateEnvByid(token, id, name, value, remark=''):
+    deleteEnv(token, id)
+    postEnv(token, name, value, remark)
+    pass
+
+
+def deleteEnv(token, id):
     if token is None:
         raise Exception("token为空, 检查参数")
     url = f"http://120.77.63.151:3041/open/envs"
@@ -68,20 +87,30 @@ def updateEnvByid(token, id, name, value, remark=''):
     rj = requests.request("DELETE", url, headers=headers, data=json.dumps([id], ensure_ascii=False)).json()
     if rj['code'] == 200:
         print("删除环境变量成功")
+        return True
     else:
         print("删除环境变量失败\n" + json.dumps(rj, ensure_ascii=False))
-        return None
+        return False
+
+
+def postEnv(token, name, value, remark=''):
+    if token is None:
+        raise Exception("token为空, 检查参数")
+    url = f"http://120.77.63.151:3041/open/envs"
+    headers = {
+        'Authorization': token,
+        'Content-Type': 'application/json'
+    }
     rj = requests.request("POST", url, headers=headers,
                           data=json.dumps([{'value': value, 'name': name, 'remarks': remark}])).json()
     if rj['code'] == 200:
         print("新增环境变量成功")
+        return True
     else:
         print("新增环境变量失败\n" + json.dumps(rj, ensure_ascii=False))
-        return None
-
-    pass
+        return False
 
 
 if __name__ == '__main__':
-    print(login_file())
+    print(getToken())
     pass
