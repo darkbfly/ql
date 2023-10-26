@@ -80,14 +80,8 @@ def 罗技粉丝俱乐部(data: Buffer):
 
 @app.post("/web.meituan.com")
 def 美团(data: Buffer):
-    updateFile("web.meituan.com.txt", 'bd_mttoken', data.headers['token'])
+    updateFile(f"{data.headers['Host']}.txt", 'bd_mttoken', data.headers['token'])
     return data.headers['token']
-
-@app.post("/1234")
-async def test(msg: Request):
-    data = await msg.json()
-    pprint.pprint(data['headers']['Host'])
-    return "1"
 
 def 隐藏cmd对话框():
     whnd = ctypes.windll.kernel32.GetConsoleWindow()
