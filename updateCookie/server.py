@@ -2,12 +2,10 @@ import ctypes
 import json
 import os
 import pprint
-import time
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from pydantic import BaseModel
-from listDialog import runDialog
 
 app = FastAPI()
 目前电话 = ''
@@ -34,7 +32,7 @@ def updateFile(file_path, name, value):
                 f.write(json.dumps(content, ensure_ascii=False))
 
 
-class Request(BaseModel):
+class Buffer(BaseModel):
     url: str
     method: str
     host: str
@@ -46,33 +44,50 @@ class Request(BaseModel):
 
 
 @app.post("/xapi.weimob.com")
-def 统一快乐星球(data: Request):
-    updateFile("xapi.weimob.com.txt", 'tyklxq_cookies', data.headers['X-WX-Token'])
-    return data.headers['X-WX-Token']
+def 统一快乐星球(data: Buffer):
+    name = 'X-WX-Token'
+    updateFile(f"{data.headers['Host']}.txt", 'tyklxq_cookies', data.headers[name])
+    return data.headers[name]
 
 @app.post("/ucode-openapi.aax6.cn")
-def 甄爱粉俱乐部(data: Request):
-    updateFile("ucode-openapi.aax6.cn.txt", 'zaf_auth', data.headers['Authorization'])
-    return data.headers['Authorization']
+def 甄爱粉俱乐部(data: Buffer):
+    name = 'Authorization'
+    updateFile(f"{data.headers['Host']}.txt", 'zaf_auth', data.headers[name])
+    return data.headers[name]
 
 @app.post("/m.jissbon.com")
-def 杰士邦安心福利社(data: Request):
-    updateFile("m.jissbon.com.txt", 'jsbaxfls', data.headers['Access-Token'])
-    return data.headers['Access-Token']
+def 杰士邦安心福利社(data: Buffer):
+    name = 'Access-Token'
+    updateFile(f"{data.headers['Host']}.txt", 'jsbaxfls', data.headers[name])
+    return data.headers[name]
 
 @app.post("/www.kozbs.com")
-def 植白说(data: Request):
-    updateFile("www.kozbs.com.txt", 'zbsxcx', data.headers['X-Dts-Token'])
-    return data.headers['X-Dts-Token']
+def 植白说(data: Buffer):
+    name = 'X-Dts-Token'
+    updateFile(f"{data.headers['Host']}.txt", 'zbsxcx', data.headers[name])
+    return data.headers[name]
 @app.post("/kraftheinzcrm.kraftheinz.net.cn")
-def 卡夫亨(data: Request):
-    updateFile("kraftheinzcrm.kraftheinz.net.cn.txt", 'kfw_data', data.headers['token'])
-    return data.headers['token']
+def 卡夫亨(data: Buffer):
+    name = 'token'
+    updateFile(f"{data.headers['Host']}.txt", 'kfw_data', data.headers[name])
+    return data.headers[name]
 
 @app.post("/api.wincheers.net")
-def 罗技粉丝俱乐部(data: Request):
-    updateFile("api.wincheers.net.txt", 'ljfsjlbCookie', data.headers['Authorization'])
-    return data.headers['Authorization']
+def 罗技粉丝俱乐部(data: Buffer):
+    name = 'Authorization'
+    updateFile(f"{data.headers['Host']}.txt", 'ljfsjlbCookie', data.headers[name])
+    return data.headers[name]
+
+@app.post("/web.meituan.com")
+def 美团(data: Buffer):
+    updateFile("web.meituan.com.txt", 'bd_mttoken', data.headers['token'])
+    return data.headers['token']
+
+@app.post("/1234")
+async def test(msg: Request):
+    data = await msg.json()
+    pprint.pprint(data['headers']['Host'])
+    return "1"
 
 def 隐藏cmd对话框():
     whnd = ctypes.windll.kernel32.GetConsoleWindow()
@@ -92,6 +107,8 @@ def get_list_item_by_index(data_list):
         raise Exception("索引超出范围")
 
     return (data_list[index])
+
+
 
 if __name__ == '__main__':
     电话号码列表 = [
