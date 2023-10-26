@@ -1,6 +1,6 @@
 
 """
-30 8 * * * tpyqc.py
+cron: 30 8 * * * tpyqc.py
 new Env("微信小程序-雀巢专业餐饮大厨精英荟")
 env add qczy_token
 """
