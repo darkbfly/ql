@@ -51,13 +51,11 @@ def login_ql(client_id, client_secret):
 
 
 @time_counts
-def searchEnvs(token, name):
+def searchEnvs(name):
     data = []
-    if token is None:
-        raise Exception("token为空, 检查参数")
     url = f"http://120.77.63.151:3041/open/envs"
     headers = {
-        'Authorization': token,
+        'Authorization': getToken(),
         'Content-Type': 'application/json'
     }
     rj = requests.request("GET", url, headers=headers).json()
@@ -70,18 +68,16 @@ def searchEnvs(token, name):
         return None
 
 
-def updateEnvByid(token, id, name, value, remark=''):
-    deleteEnv(token, id)
-    postEnv(token, name, value, remark)
+def updateEnvByid(id, name, value, remark=''):
+    deleteEnv(id)
+    postEnv(name, value, remark)
     pass
 
 
-def deleteEnv(token, id):
-    if token is None:
-        raise Exception("token为空, 检查参数")
+def deleteEnv(id):
     url = f"http://120.77.63.151:3041/open/envs"
     headers = {
-        'Authorization': token,
+        'Authorization': getToken(),
         'Content-Type': 'application/json'
     }
     rj = requests.request("DELETE", url, headers=headers, data=json.dumps([id], ensure_ascii=False)).json()
@@ -93,12 +89,10 @@ def deleteEnv(token, id):
         return False
 
 
-def postEnv(token, name, value, remark=''):
-    if token is None:
-        raise Exception("token为空, 检查参数")
+def postEnv(name, value, remark=''):
     url = f"http://120.77.63.151:3041/open/envs"
     headers = {
-        'Authorization': token,
+        'Authorization': getToken(),
         'Content-Type': 'application/json'
     }
     rj = requests.request("POST", url, headers=headers,
