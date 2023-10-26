@@ -39,8 +39,9 @@ if __name__ == '__main__':
                 updateFlag = False
 
         if updateFlag:
-            for y in data:
-                deleteEnv(y['id'])
             if json_data['remark'] == '':
                 json_data['remark'] = 电话号码列表[runDialog(dialogMsg)]
+            for y in data:
+                if json_data['remark'] == y['remarks']:
+                    deleteEnv(y['id'])
             postEnv(json_data['name'], json_data['value'], json_data['remark'])
