@@ -57,9 +57,22 @@ def 甄爱粉俱乐部(data: Request):
 
 @app.post("/m.jissbon.com")
 def 杰士邦安心福利社(data: Request):
-    pprint.pprint(data)
     updateFile("m.jissbon.com.txt", 'jsbaxfls', data.headers['Access-Token'])
     return data.headers['Access-Token']
+
+@app.post("/www.kozbs.com")
+def 植白说(data: Request):
+    updateFile("www.kozbs.com.txt", 'zbsxcx', data.headers['X-Dts-Token'])
+    return data.headers['X-Dts-Token']
+@app.post("/kraftheinzcrm.kraftheinz.net.cn")
+def 卡夫亨(data: Request):
+    updateFile("kraftheinzcrm.kraftheinz.net.cn.txt", 'kfw_data', data.headers['token'])
+    return data.headers['token']
+
+@app.post("/api.wincheers.net")
+def 罗技粉丝俱乐部(data: Request):
+    updateFile("api.wincheers.net.txt", 'ljfsjlbCookie', data.headers['Authorization'])
+    return data.headers['Authorization']
 
 def 隐藏cmd对话框():
     whnd = ctypes.windll.kernel32.GetConsoleWindow()
