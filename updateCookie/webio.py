@@ -38,11 +38,11 @@ def 饿了么ck更新():
                        ]
                        )
     value = info['val']
-    USERID = re.search(r"USERID=(\d+);", value)
+    USERID = re.search(r"USERID=(.*);", value)
     if USERID:
         USERID = USERID.group(1)
     for i in searchEnvs(name=ckname):
-        USERID2 = re.search(r"USERID=(\d+);", i['value'])
+        USERID2 = re.search(r"USERID=(.*);", i['value'])
         if USERID2:
             USERID2 = USERID2.group(1)
         if USERID2 == USERID:
@@ -77,22 +77,23 @@ def 京东ck更新():
     ckname = 'JD_COOKIE'
     for x in 电话号码列表:
         value = 京东登录(x)
-        USERID = re.search(r"pt_pin=(\d+);", value)
+        USERID = re.search(r"pt_pin=(.*);", value)
         if USERID:
             USERID = USERID.group(1)
         for i in searchEnvs(name=ckname):
-            USERID2 = re.search(r"pt_pin=(\d+);", i['value'])
+            USERID2 = re.search(r"pt_pin=(.*);", i['value'])
             if USERID2:
                 USERID2 = USERID2.group(1)
             if USERID2 == USERID:
+                put_text(f'已经存在 {i["id"]} {USERID}')
                 deleteEnv(i['id'])
         if postEnv(ckname, value, x):
             put_text(x + ' 更新成功')
         else:
             put_text(x + '更新失败')
 
-    time.sleep(5)
-    go_app('京东ck更新', new_window=False)
+    # time.sleep(5)
+    # go_app('京东ck更新', new_window=False)
 
 
 if __name__ == '__main__':
