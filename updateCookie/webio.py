@@ -69,6 +69,8 @@ def 京东登录(x):
     put_text(f'运行结束 {x} {pyperclip.paste()}')
     if len(pyperclip.paste()) != 0:
         return pyperclip.paste()
+    else:
+        return None
     pass
 
 
@@ -77,19 +79,20 @@ def 京东ck更新():
     ckname = 'JD_COOKIE'
     for x in 电话号码列表:
         value = 京东登录(x)
-        USERID = re.search(r"pt_pin=(\d+);", value)
-        if USERID:
-            USERID = USERID.group(1)
-        for i in searchEnvs(name=ckname):
-            USERID2 = re.search(r"pt_pin=(\d+);", i['value'])
-            if USERID2:
-                USERID2 = USERID2.group(1)
-            if USERID2 == USERID:
-                deleteEnv(i['id'])
-        if postEnv(ckname, value, x):
-            put_text(x + ' 更新成功')
-        else:
-            put_text(x + '更新失败')
+        if value is not None:
+            USERID = re.search(r"pt_pin=(\d+);", value)
+            if USERID:
+                USERID = USERID.group(1)
+            for i in searchEnvs(name=ckname):
+                USERID2 = re.search(r"pt_pin=(\d+);", i['value'])
+                if USERID2:
+                    USERID2 = USERID2.group(1)
+                if USERID2 == USERID:
+                    deleteEnv(i['id'])
+            if postEnv(ckname, value, x):
+                put_text(x + ' 更新成功')
+            else:
+                put_text(x + '更新失败')
 
     time.sleep(5)
     go_app('京东ck更新', new_window=False)
