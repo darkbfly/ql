@@ -3,3 +3,5 @@
 __pycache__/
 debug.py
 test.py
+/updateCookie/config.json
+/updateCookie/*.txt

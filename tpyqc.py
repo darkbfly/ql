@@ -34,8 +34,8 @@ class tpyqc():
         self.sec.headers = self.headers
         self.sec.verify = False
         # self.common_session_id = data
-        self.username = data.split('&')[0]
-        self.password = data.split('&')[1]
+        self.username = data.split('#')[0]
+        self.password = data.split('#')[1]
 
     def login(self):
 

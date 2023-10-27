@@ -10,7 +10,7 @@ def getlistCk(ckname):
     if os.getenv(ckname) is None:
         return None
     # 字符串用回车或@符号分开为list
-    return re.split(r'\n|@', os.getenv(ckname))
+    return re.split(r'\n|@|&', os.getenv(ckname))
 
 
 # 获取北京时间 带时区
