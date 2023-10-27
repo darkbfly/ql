@@ -8,7 +8,7 @@ from pywebio.input import *
 from pywebio.output import *
 from pywebio.session import *
 
-from updateCookie.updateCookie_Util import *
+from updateCookie_Util import *
 
 电话号码列表 = [
     '13055789923',
