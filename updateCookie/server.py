@@ -90,6 +90,12 @@ def 元气森林(data: Buffer):
     updateFile(f"{data.headers['Host']}.txt", 'yqsl', data.headers[name].replace('Bearer ', ''))
     return data.headers[name]
 
+@app.post("/apichuanti.scleader.cn")
+def 引体向上(data: Buffer):
+    name = 'Authorization'
+    updateFile(f"{data.headers['Host']}.txt", 'ytxs', data.headers[name].replace('Bearer ', ''))
+    return data.headers[name]
+
 def 隐藏cmd对话框():
     whnd = ctypes.windll.kernel32.GetConsoleWindow()
     if whnd != 0:
