@@ -2,7 +2,7 @@ import subprocess
 import pyautogui
 from mytool import *
 
-微信路径 = "D:\Program Files (x86)\Tencent\WeChat\WeChat.exe"
+微信路径 = getJsonConfig("wechatPath")
 
 
 def 打开微信():

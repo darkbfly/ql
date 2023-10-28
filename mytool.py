@@ -44,19 +44,27 @@ def 点击图片中心(path="", png="", timeout=3):
     time.sleep(1)
     if 寻找是否存在(path, png, timeout):
         print(f"找到{png}, 开始执行")
-        pyautogui.click(pyautogui.center(pyautogui.locateOnScreen(os.path.dirname(os.path.abspath(__file__)) + f'\\{path}\\{png}', confidence=0.8)))
+        pyautogui.click(pyautogui.center(
+            pyautogui.locateOnScreen(os.path.dirname(os.path.abspath(__file__)) + f'\\{path}\\{png}', confidence=0.8)))
 
 
 def 寻找是否存在(path="", png="", timeout=3):
     import pyautogui
     while timeout > 0:
-        if pyautogui.locateOnScreen(os.path.dirname(os.path.abspath(__file__)) + f'\\{path}\\{png}', confidence=0.8) is None:
+        if pyautogui.locateOnScreen(os.path.dirname(os.path.abspath(__file__)) + f'\\{path}\\{png}',
+                                    confidence=0.8) is None:
             timeout -= 1
             time.sleep(1)
             continue
         else:
             return True
     return False
+
+
+def getJsonConfig(name):
+    import json
+    with open(os.path.dirname(os.path.abspath(__file__)) + f'\\config.json', 'r') as f:
+        return json.load(f)[name]
 
 
 if __name__ == '__main__':
