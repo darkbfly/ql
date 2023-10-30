@@ -3,7 +3,7 @@ import traceback
 
 from mytool import *
 
-微信路径 = "D:\Program Files (x86)\Tencent\WeChat\WeChat.exe"
+微信路径 = getJsonConfig("wechatPath")
 
 try:
     subprocess.run(微信路径)
