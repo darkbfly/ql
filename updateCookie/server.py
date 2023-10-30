@@ -90,6 +90,11 @@ def 元气森林(data: Buffer):
     updateFile(f"{data.headers['Host']}.txt", 'yqsl', data.headers[name].replace('Bearer ', ''))
     return data.headers[name]
 
+@app.post("/consumer-api.quncrm.com")
+def 雀巢专业餐饮大厨精英荟(data: Buffer):
+    updateFile(f"{data.headers['Host']}.txt", 'qczy_token', f"{data.headers['X-Access-Token']}#{data.headers['X-Account-Id']}")
+    return ""
+
 def 隐藏cmd对话框():
     whnd = ctypes.windll.kernel32.GetConsoleWindow()
     if whnd != 0:

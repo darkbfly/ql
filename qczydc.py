@@ -52,7 +52,7 @@ class qczy():
         )
         if response.status_code == 200:
             rj = response.json()
-            msg = f'登录成功\n获得成长值:{rj["rewardGroup"][0]["growth"]} 积分{rj["rewardGroup"][1]["score"]}'
+            msg = f'登录成功\n获得{rj["rewardGroup"][0]["growth"]}成长值, {rj["rewardGroup"][1]["score"]}积分'
         else:
             msg = f"登录失败\n" + json.dumps(response.json(), ensure_ascii=False)
 
