@@ -10,6 +10,7 @@ from pydantic import BaseModel
 app = FastAPI()
 目前电话 = ''
 
+
 def updateFile(file_path, name, value):
     global 目前电话
     文件路径 = os.path.dirname(os.path.abspath(__file__)) + "\\" + 目前电话 + '-' + file_path
@@ -49,11 +50,13 @@ def 统一快乐星球(data: Buffer):
     updateFile(f"{data.headers['Host']}.txt", 'tyklxq_cookies', data.headers[name])
     return data.headers[name]
 
+
 @app.post("/ucode-openapi.aax6.cn")
 def 甄爱粉俱乐部(data: Buffer):
     name = 'Authorization'
     updateFile(f"{data.headers['Host']}.txt", 'zaf_auth', data.headers[name])
     return data.headers[name]
+
 
 @app.post("/m.jissbon.com")
 def 杰士邦安心福利社(data: Buffer):
@@ -61,16 +64,20 @@ def 杰士邦安心福利社(data: Buffer):
     updateFile(f"{data.headers['Host']}.txt", 'jsbaxfls', data.headers[name])
     return data.headers[name]
 
+
 @app.post("/www.kozbs.com")
 def 植白说(data: Buffer):
     name = 'X-Dts-Token'
     updateFile(f"{data.headers['Host']}.txt", 'zbsxcx', data.headers[name])
     return data.headers[name]
+
+
 @app.post("/kraftheinzcrm.kraftheinz.net.cn")
 def 卡夫亨(data: Buffer):
     name = 'token'
     updateFile(f"{data.headers['Host']}.txt", 'kfw_data', data.headers[name])
     return data.headers[name]
+
 
 @app.post("/api.wincheers.net")
 def 罗技粉丝俱乐部(data: Buffer):
@@ -78,11 +85,13 @@ def 罗技粉丝俱乐部(data: Buffer):
     updateFile(f"{data.headers['Host']}.txt", 'ljfsjlbCookie', data.headers[name])
     return data.headers[name]
 
+
 @app.post("/web.meituan.com")
 def 美团(data: Buffer):
     name = 'token'
     updateFile(f"{data.headers['Host']}.txt", 'bd_mttoken', data.headers[name])
     return data.headers[name]
+
 
 @app.post("/api.yqslmall.com")
 def 元气森林(data: Buffer):
@@ -90,15 +99,18 @@ def 元气森林(data: Buffer):
     updateFile(f"{data.headers['Host']}.txt", 'yqsl', data.headers[name].replace('Bearer ', ''))
     return data.headers[name]
 
+
 @app.post("/apichuanti.scleader.cn")
 def 引体向上(data: Buffer):
     name = 'Authorization'
     updateFile(f"{data.headers['Host']}.txt", 'ytxs', data.headers[name].replace('Bearer ', ''))
     return data.headers[name]
 
+
 @app.post("/consumer-api.quncrm.com")
 def 雀巢专业餐饮大厨精英荟(data: Buffer):
-    updateFile(f"{data.headers['Host']}.txt", 'qczy_token', f"{data.headers['X-Access-Token']}#{data.headers['X-Account-Id']}")
+    updateFile(f"{data.headers['Host']}.txt", 'qczy_token',
+               f"{data.headers['X-Access-Token']}#{data.headers['X-Account-Id']}")
     return ""
 
 
@@ -120,7 +132,6 @@ def get_list_item_by_index(data_list):
         raise Exception("索引超出范围")
 
     return (data_list[index])
-
 
 
 if __name__ == '__main__':
