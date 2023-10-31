@@ -12,7 +12,6 @@ import os
 import traceback
 import requests
 import mytool
-from notify import send
 import urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -63,7 +62,6 @@ class wyyx_wxapp():
             else:
                 msg = f"每日免费领水滴 失败\n" + json.dumps(rj, ensure_ascii=False)
             print(msg)
-            send(title, msg)
         except:
             traceback.print_exc()
             pass
@@ -87,23 +85,37 @@ class wyyx_wxapp():
                 else:
                     msg = f"随机掉落水滴 失败\n" + json.dumps(rj, ensure_ascii=False)
                 print(msg)
-                send(title, msg)
             except:
                 traceback.print_exc()
                 pass
 
-    def drop(self):
-        try:
-            rj = self.sec.get('https://miniapp.you.163.com/orchard/game/water/drop.json').json()
-            if rj['code'] == 200 and rj['result']['success']:
-                msg = f"浇水 成功\n"
+    def getleftNumber(self):
+
+        try :
+            rj = self.sec.get('https://miniapp.you.163.com/orchard/game/water/index.json', params={'channelId': '0'}).json()
+            if rj['code'] == 200:
+                return rj['result']['leftNumber'] - 10
             else:
-                msg = f"浇水 失败\n" + json.dumps(rj, ensure_ascii=False)
-            print(msg)
-            send(title, msg)
+                print(json.dumps(rj, ensure_ascii=False))
+                return 1
         except:
             traceback.print_exc()
-            pass
+            return 1
+    def drop(self):
+        count = self.getleftNumber()
+        while count > 0:
+            mytool.sleep(3, 5)
+            count -= 1
+            try:
+                rj = self.sec.get('https://miniapp.you.163.com/orchard/game/water/drop.json').json()
+                if rj['code'] == 200 and rj['result']['success']:
+                    msg = f"浇水 成功\n"
+                else:
+                    msg = f"浇水 失败\n" + json.dumps(rj, ensure_ascii=False)
+                print(msg)
+            except:
+                traceback.print_exc()
+                pass
 
     def visitItem(self, itemId):
         params = {

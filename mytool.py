@@ -28,7 +28,9 @@ def getMSecTimestamp():
 
 # 随机休眠几秒 随机数为float
 def sleep(x, y):
-    time.sleep(random.uniform(x, y))
+    a = random.uniform(x, y)
+    print(f"随机休眠 {a} 秒")
+    time.sleep(a)
 
 
 def 输入中文(text):
