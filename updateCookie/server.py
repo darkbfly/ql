@@ -119,6 +119,13 @@ def meiyang会员积分(data: Buffer):
                data.headers['Authorization'])
     return ""
 
+@app.post('/app.fjxzj.com')
+def 康佰家(data: Buffer):
+    updateFile(f"{data.headers['Host']}.txt", 'kbj_token',
+               data.headers['token'])
+    return ""
+
+
 def 隐藏cmd对话框():
     whnd = ctypes.windll.kernel32.GetConsoleWindow()
     if whnd != 0:
