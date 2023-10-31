@@ -1,6 +1,6 @@
 
 """
-30 7 * * * dcjd.py
+cron: 30 7 * * * dcjd.py
 new Env("微信小程序-东呈酒店")
 env add tyklxq_cookies
 """

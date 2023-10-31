@@ -1,5 +1,5 @@
 """
-0 7 * * * yljf.py
+cron: 0 7 * * * yljf.py
 new Env("微信小程序-伊利积分")
 env add yljf_token
 """

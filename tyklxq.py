@@ -1,6 +1,6 @@
 
 """
-0 7 * * * tyklxq.py
+cron: 0 7 * * * tyklxq.py
 new Env("微信小程序-统一快乐星球")
 env add tyklxq_cookies
 """

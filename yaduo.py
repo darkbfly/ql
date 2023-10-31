@@ -1,5 +1,5 @@
 """
-0 5,6,7,13,18 * * * wyyx-wxapp.py
+cron: 0 6,18 * * * wyyx-wxapp.py
 new Env("微信小程序-亚朵")
 env add yd_wxcookies
 """

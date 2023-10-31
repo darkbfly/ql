@@ -1,6 +1,6 @@
 
 """
-30 7 * * * tpyqc.py
+cron: 30 7 * * * tpyqc.py
 new Env("ANDROID-太平洋汽车")
 env add tpyqc_common_session_id
 """

@@ -1,5 +1,5 @@
 """
-0 6,18 * * * kbj.py
+cron: 0 6,18 * * * kbj.py
 new Env("微信小程序-康佰家")
 env add kbj_token
 """

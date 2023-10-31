@@ -1,5 +1,5 @@
 """
-0 7 * * * mncjhy.py
+cron: 0 7 * * * mncjhy.py
 new Env("微信小程序-蒙牛超级会员")
 env add mncjhy_token
 """

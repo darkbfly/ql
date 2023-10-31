@@ -1,5 +1,5 @@
 """
-0 7 * * * yxt.py
+cron: 0 7 * * * yxt.py
 new Env("微信小程序-一心堂")
 env add yxtGUid
 """

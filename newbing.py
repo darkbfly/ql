@@ -1,5 +1,5 @@
 """
-0 5 * * * newbing.py
+cron: 0 5 * * * newbing.py
 new Env("WEB-必应")
 
 Edge必应自动搜索赚积分

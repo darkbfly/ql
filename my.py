@@ -1,5 +1,5 @@
 """
-0 6,18 * * * my.py
+cron: 0 6,18 * * * my.py
 new Env("微信小程序-meiyang会员积分")
 env add wyyx_wxcookies
 """

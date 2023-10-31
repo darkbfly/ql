@@ -1,5 +1,5 @@
 """
-0 7 * * * mncjhy.py
+cron: 0 7 * * * mncjhy.py
 new Env("微信小程序-甄爱粉俱乐部")
 env add zaf_auth
 """
