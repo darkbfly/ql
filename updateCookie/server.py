@@ -113,6 +113,11 @@ def 雀巢专业餐饮大厨精英荟(data: Buffer):
                f"{data.headers['X-Access-Token']}#{data.headers['X-Account-Id']}")
     return ""
 
+@app.post("/smp-api.iyouke.com")
+def meiyang会员积分(data: Buffer):
+    updateFile(f"{data.headers['Host']}.txt", 'my_auth',
+               data.headers['Authorization'])
+    return ""
 
 def 隐藏cmd对话框():
     whnd = ctypes.windll.kernel32.GetConsoleWindow()
