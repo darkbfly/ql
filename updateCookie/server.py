@@ -113,16 +113,26 @@ def 雀巢专业餐饮大厨精英荟(data: Buffer):
                f"{data.headers['X-Access-Token']}#{data.headers['X-Account-Id']}")
     return ""
 
+
 @app.post("/smp-api.iyouke.com")
 def meiyang会员积分(data: Buffer):
     updateFile(f"{data.headers['Host']}.txt", 'my_auth',
                data.headers['Authorization'])
     return ""
 
+
 @app.post('/app.fjxzj.com')
 def 康佰家(data: Buffer):
     updateFile(f"{data.headers['Host']}.txt", 'kbj_token',
                data.headers['token'])
+    return ""
+
+
+@app.post('/api.gaojihealth.cn')
+def 高济健康(data: Buffer):
+    if 'userId' in data.queries:
+        updateFile(f"{data.headers['Host']}.txt", 'wx_gjjkpro_data',
+                   f"{data.queries['userId']}&{data.headers['Authorization']}")
     return ""
 
 
