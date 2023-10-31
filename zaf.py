@@ -38,10 +38,15 @@ class zaf():
             'pointRecordRemark': '连续签到',
         }
         rj = self.sec.post('https://ucode-openapi.aax6.cn/lottery/checkIn', json=json_data).json()
-        if rj['isHit'] == True:
-            msg = f"签到成功, 获得:{rj['award']['name']}"
-        else:
-            msg = f"签到失败\n" + json.dumps(rj, ensure_ascii=False)
+        print(json.dumps(rj, ensure_ascii=False))
+        try:
+            if rj['isHit']:
+                msg = f"签到成功, 获得:{rj['award']['name']}"
+            else:
+                msg = f"签到失败\n" + json.dumps(rj, ensure_ascii=False)
+        except:
+            msg = f"签到异常\n" + json.dumps(rj, ensure_ascii=False)
+
         print(msg)
         send(title, msg)
 
