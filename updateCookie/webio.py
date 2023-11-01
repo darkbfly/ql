@@ -38,14 +38,11 @@ def 饿了么ck更新():
                        ]
                        )
     value = info['val']
-    USERID = re.search(r"USERID=(.*);", value)
-    if USERID:
-        USERID = USERID.group(1)
+    USERID = value.split('USERID=')[1].split(";")[0]
     for i in searchEnvs(name=ckname):
-        USERID2 = re.search(r"USERID=(.*);", i['value'])
-        if USERID2:
-            USERID2 = USERID2.group(1)
+        USERID2 = i['value'].split('USERID=')[1].split(";")[0]
         if USERID2 == USERID:
+            put_text(f'已经存在 {i["id"]} {USERID}')
             deleteEnv(i['id'])
     if postEnv(ckname, value, info['remark']):
         put_text('更新成功')
@@ -77,13 +74,9 @@ def 京东ck更新():
     ckname = 'JD_COOKIE'
     for x in 电话号码列表:
         value = 京东登录(x)
-        USERID = re.search(r"pt_pin=(.*);", value)
-        if USERID:
-            USERID = USERID.group(1)
+        USERID = value
         for i in searchEnvs(name=ckname):
-            USERID2 = re.search(r"pt_pin=(.*);", i['value'])
-            if USERID2:
-                USERID2 = USERID2.group(1)
+            USERID2 = i['value'].split('pt_pin=')[1].split(";")
             if USERID2 == USERID:
                 put_text(f'已经存在 {i["id"]} {USERID}')
                 deleteEnv(i['id'])
