@@ -35,6 +35,7 @@ def get_list_item_by_index(data_list):
 
 def addEnv(file_path, name, value):
     global 目前电话
+    print(f'addEnv {目前电话}')
     文件路径 = os.path.dirname(os.path.abspath(__file__)) + "\\" + 目前电话 + '-' + file_path
     if not os.path.exists(文件路径):
         # 文件不存在,创建文件并写入内容
@@ -184,6 +185,11 @@ def 卡夫亨(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'kfh_data', data.headers['token'])
     return ""
 
+@app.post('/clubwx.hm.liby.com.cn')
+def 立白小白白会员(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'lbvip', f"{data.headers['unionId']}#{data.headers['X-wxde54fd27cb59db51-Token']}")
+    return ""
+
 if __name__ == '__main__':
     电话号码列表 = [
         '13055789923',
@@ -194,4 +200,4 @@ if __name__ == '__main__':
     ]
     目前电话 = get_list_item_by_index(电话号码列表)
     隐藏cmd对话框()
-    uvicorn.run("server:app", host="0.0.0.0", port=8989, reload=True)
+    uvicorn.run(app, host="0.0.0.0", port=8989)
