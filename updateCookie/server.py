@@ -2,13 +2,35 @@ import ctypes
 import json
 import os
 import pprint
-
 import uvicorn
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from pydantic import BaseModel
+from loguru import logger
 
 app = FastAPI()
 目前电话 = ''
+
+logger.add("app.log", rotation="10 MB")
+
+
+def 隐藏cmd对话框():
+    whnd = ctypes.windll.kernel32.GetConsoleWindow()
+    if whnd != 0:
+        ctypes.windll.user32.ShowWindow(whnd, 0)
+        ctypes.windll.kernel32.CloseHandle(whnd)
+
+
+def get_list_item_by_index(data_list):
+    """根据索引获取列表项"""
+    cnt = 0
+    for x in data_list:
+        print(f'{cnt} -- {x}')
+        cnt += 1
+    index = int(input("请输入要获取的列表项索引:"))
+    if index < 0 or index >= len(data_list):
+        raise Exception("索引超出范围")
+
+    return (data_list[index])
 
 
 def updateFile(file_path, name, value):
@@ -32,7 +54,6 @@ def updateFile(file_path, name, value):
             with open(文件路径, 'w') as f:
                 f.write(json.dumps(content, ensure_ascii=False))
 
-
 class Buffer(BaseModel):
     url: str
     method: str
@@ -43,6 +64,9 @@ class Buffer(BaseModel):
     queries: dict
     context: dict
 
+
+def logData(data: Buffer):
+    logger.info(f"URL: {data.url}\nPath: {data.path}\nBody: {data.body}\nHeaders: {data.headers}\nQueries: {data.queries}\nContext: {data.context}")
 
 @app.post("/xapi.weimob.com")
 def 统一快乐星球(data: Buffer):
@@ -128,6 +152,15 @@ def 康佰家(data: Buffer):
     return ""
 
 
+@app.post("/uic.youzan.com")
+def 朵茜情调生活馆(data: Buffer):
+    if 'Extra-Data' in data.headers:
+        extra = json.loads(data.headers['Extra-Data'])
+        updateFile(f"{data.headers['Host']}.txt", 'dqqdshgck',
+                   f"{data.queries['access_token']}#{extra['sid']}#{extra['sid']}")
+    return ""
+
+
 @app.post('/api.gaojihealth.cn')
 def 高济健康(data: Buffer):
     if 'userId' in data.queries:
@@ -136,24 +169,10 @@ def 高济健康(data: Buffer):
     return ""
 
 
-def 隐藏cmd对话框():
-    whnd = ctypes.windll.kernel32.GetConsoleWindow()
-    if whnd != 0:
-        ctypes.windll.user32.ShowWindow(whnd, 0)
-        ctypes.windll.kernel32.CloseHandle(whnd)
-
-
-def get_list_item_by_index(data_list):
-    """根据索引获取列表项"""
-    cnt = 0
-    for x in data_list:
-        print(f'{cnt} -- {x}')
-        cnt += 1
-    index = int(input("请输入要获取的列表项索引:"))
-    if index < 0 or index >= len(data_list):
-        raise Exception("索引超出范围")
-
-    return (data_list[index])
+@app.post('/channel.cheryfs.cn')
+def 好奇车生活(data: Buffer):
+    updateFile(f"{data.headers['Host']}.txt", 'hqcshck', data.headers['accountId'])
+    return data
 
 
 if __name__ == '__main__':

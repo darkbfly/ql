@@ -1,8 +1,11 @@
+import datetime
 import json
 import os
 
 from listDialog import runDialog
 from updateCookie_Util import *
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 电话号码列表 = [
     '13055789923',
@@ -22,26 +25,47 @@ def find_txt(path):
     return data
 
 
+class MyHandler(FileSystemEventHandler):
+    def on_modified(self, event):
+        if not event.is_directory and event.src_path.endswith(".txt"):
+            print(f'文件 {event.src_path} 已经被修改')
+            updateFlag = True
+            with open(event.src_path, 'r') as f:
+                json_data = json.load(f)
+            data = searchEnvs(json_data['name'])
+            for y in data:
+                if y['value'] == json_data['value']:
+                    updateFlag = False
+
+            if updateFlag:
+                if json_data['remark'] == '':
+                    json_data['remark'] = 电话号码列表[runDialog(dialogMsg)]
+                for y in data:
+                    if json_data['remark'] == y['remarks']:
+                        deleteEnv(y['id'])
+                postEnv(json_data['name'], json_data['value'], json_data['remark'])
+
+
 if __name__ == '__main__':
     dialogMsg = {}
     count = 0
     for x in 电话号码列表:
         dialogMsg[x] = count
         count += 1
+    path_to_watch = os.path.dirname(os.path.abspath(__file__))
+    event_handler = MyHandler()
+    observer = Observer()
+    observer.schedule(event_handler, path_to_watch, recursive=False)
 
-    for x in find_txt(os.path.dirname(os.path.abspath(__file__))):
-        updateFlag = True
-        with open(x, 'r') as f:
-            json_data = json.load(f)
-        data = searchEnvs(json_data['name'])
-        for y in data:
-            if y['value'] == json_data['value']:
-                updateFlag = False
+    print(f"开始监听 {path_to_watch}...")
+    observer.start()
 
-        if updateFlag:
-            if json_data['remark'] == '':
-                json_data['remark'] = 电话号码列表[runDialog(dialogMsg)]
-            for y in data:
-                if json_data['remark'] == y['remarks']:
-                    deleteEnv(y['id'])
-            postEnv(json_data['name'], json_data['value'], json_data['remark'])
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
+
+    observer.join()
+    # for x in find_txt():
+    #     print(f"{x} : {datetime.datetime.fromtimestamp(os.path.getmtime(x))}")

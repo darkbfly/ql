@@ -54,7 +54,7 @@ def 饿了么ck更新():
 
 
 def 京东登录(x):
-    cmd = 'C:\\Python310\\python.exe JDLogin.py --account ' + x
+    cmd = 'python.exe JDLogin.py --account ' + x
     st = subprocess.STARTUPINFO()
     st.dwFlags |= subprocess.STARTF_USESHOWWINDOW
     st.wShowWindow = subprocess.SW_HIDE
@@ -74,7 +74,7 @@ def 京东ck更新():
     ckname = 'JD_COOKIE'
     for x in 电话号码列表:
         value = 京东登录(x)
-        USERID = value
+        USERID = value.split('pt_pin=')[1].split(";")
         for i in searchEnvs(name=ckname):
             USERID2 = i['value'].split('pt_pin=')[1].split(";")
             if USERID2 == USERID:
@@ -98,6 +98,6 @@ if __name__ == '__main__':
             饿了么ck更新,
             京东ck更新
         ],
-        port=8989,
+        port=28989,
         debug=True,
     )

@@ -6,3 +6,4 @@ test.py
 /updateCookie/config.json
 /updateCookie/*.txt
 config.json
+*.log
