@@ -3,16 +3,17 @@ cron: 0 5,6,7,13,18 * * * wyyx-wxapp.py
 new Env("微信小程序-网易严选")
 env add wyyx_wxcookies
 """
-import datetime
 # !/usr/bin/env python3
 # coding: utf-8
 
 import json
 import os
 import traceback
+
 import requests
-import mytool
 import urllib3
+
+import mytool
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
