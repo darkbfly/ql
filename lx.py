@@ -25,7 +25,7 @@ class lx():
             'Connection': 'keep-alive',
             # 'Content-Length': '2',
             'accessToken': data[0],
-            'serviceToken': f'Bearer {data[1]}',
+            'serviceToken': data[1],
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309071d)XWEB/8461',
             'tenantId': '25',
             # Already added when you pass json=

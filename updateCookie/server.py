@@ -190,6 +190,12 @@ def 立白小白白会员(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'lbvip', f"{data.headers['unionId']}#{data.headers['X-wxde54fd27cb59db51-Token']}")
     return ""
 
+@app.post('/mmembership.lenovo.com.cn')
+def 联想(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'lx_data',
+           f"{data.headers['accessToken']}#{data.headers['serviceToken']}#{data.headers['SERVICE-AUTHENTICATION']}#{data.headers['lenovoId']}")
+    return ""
+
 if __name__ == '__main__':
     with open('config.json', 'r') as f:
         config = json.load(f)
