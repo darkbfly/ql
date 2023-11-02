@@ -13,12 +13,7 @@ from pywebio.session import *
 
 from updateCookie_Util import *
 
-电话号码列表 = [
-    '13055789923',
-    '13107644225',
-    '13107631307',
-    '13255991819'
-]
+电话号码列表 = config['phoneList']
 
 
 def 隐藏cmd对话框():

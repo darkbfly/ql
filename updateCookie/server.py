@@ -191,13 +191,8 @@ def 立白小白白会员(data: Buffer):
     return ""
 
 if __name__ == '__main__':
-    电话号码列表 = [
-        '13055789923',
-        '13107644225',
-        '13107631307',
-        '13255991819',
-        '空数据'
-    ]
-    目前电话 = get_list_item_by_index(电话号码列表)
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+    目前电话 = get_list_item_by_index(config['phoneList'])
     隐藏cmd对话框()
     uvicorn.run(app, host="0.0.0.0", port=8989)

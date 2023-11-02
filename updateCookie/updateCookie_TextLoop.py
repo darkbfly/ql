@@ -7,14 +7,9 @@ from updateCookie_Util import *
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-电话号码列表 = [
-    '13055789923',
-    '13107644225',
-    '13107631307',
-    '13255991819',
-    '空数据'
-]
-
+with open('config.json', 'r') as f:
+    config = json.load(f)
+电话号码列表 = config['phoneList']
 
 def find_txt(path):
     data = []
