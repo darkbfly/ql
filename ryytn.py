@@ -35,10 +35,7 @@ class lx():
         }
 
     def login(self):
-        response = self.sec.post(
-            'https://mmembership.lenovo.com.cn/member-hp-task-center/v1/task/checkIn',
-        ).json()
-
+        response = self.sec.post('https://www.milkcard.mall.ryytngroup.com/mall/xhr/task/checkin/save', json={}).json()
         print(response)
 
 if __name__ == '__main__':
