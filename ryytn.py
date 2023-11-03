@@ -22,15 +22,11 @@ class lx():
         self.sec.headers = {
             'Host': 'www.milkcard.mall.ryytngroup.com',
             'Connection': 'keep-alive',
-            # 'Content-Length': '2',
             'xweb_xhr': '1',
             'X-Auth-Token': data,
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309071d)XWEB/8461',
-            # Already added when you pass json=
-            # 'Content-Type': 'application/json',
             'Accept': '*/*',
             'Referer': 'https://servicewechat.com/wx0408f3f20d769a2f/234/page-frame.html',
-            # 'Accept-Encoding': 'gzip, deflate, br',
             'Accept-Language': 'zh-CN,zh;q=0.9',
         }
 
