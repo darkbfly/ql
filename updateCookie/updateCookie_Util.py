@@ -1,3 +1,4 @@
+import ctypes
 import json
 import pprint
 import time
@@ -104,6 +105,11 @@ def postEnv(name, value, remark=''):
         print("新增环境变量失败\n" + json.dumps(rj, ensure_ascii=False))
         return False
 
+def 隐藏cmd对话框():
+    whnd = ctypes.windll.kernel32.GetConsoleWindow()
+    if whnd != 0:
+        ctypes.windll.user32.ShowWindow(whnd, 0)
+        ctypes.windll.kernel32.CloseHandle(whnd)
 
 if __name__ == '__main__':
     print(getToken())

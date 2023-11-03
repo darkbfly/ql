@@ -42,6 +42,7 @@ class MyHandler(FileSystemEventHandler):
 
 
 if __name__ == '__main__':
+    隐藏cmd对话框()
     dialogMsg = {}
     count = 0
     for x in 电话号码列表:

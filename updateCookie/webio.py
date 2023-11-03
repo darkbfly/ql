@@ -1,11 +1,8 @@
 import asyncio
-import ctypes
-import os, re
+import os
 import subprocess
-import time
 
 import pyperclip
-from playwright.sync_api import sync_playwright
 from pywebio import start_server, config
 from pywebio.input import *
 from pywebio.output import *
@@ -14,14 +11,6 @@ from pywebio.session import *
 from updateCookie_Util import *
 
 电话号码列表 = []
-
-
-def 隐藏cmd对话框():
-    whnd = ctypes.windll.kernel32.GetConsoleWindow()
-    if whnd != 0:
-        ctypes.windll.user32.ShowWindow(whnd, 0)
-        ctypes.windll.kernel32.CloseHandle(whnd)
-
 
 @config(title='饿了么ck更新')
 def 饿了么ck更新():
