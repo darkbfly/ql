@@ -5,16 +5,10 @@ import pprint
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
+from updateCookie_Util import *
 
 app = FastAPI()
 目前电话 = ''
-
-
-def 隐藏cmd对话框():
-    whnd = ctypes.windll.kernel32.GetConsoleWindow()
-    if whnd != 0:
-        ctypes.windll.user32.ShowWindow(whnd, 0)
-        ctypes.windll.kernel32.CloseHandle(whnd)
 
 
 def get_list_item_by_index(data_list):
