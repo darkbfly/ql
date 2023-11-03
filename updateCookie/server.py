@@ -5,12 +5,9 @@ import pprint
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
-from loguru import logger
 
 app = FastAPI()
 目前电话 = ''
-
-logger.add("app.log", rotation="10 MB")
 
 
 def 隐藏cmd对话框():
@@ -63,10 +60,6 @@ class Buffer(BaseModel):
     headers: dict
     queries: dict
     context: dict
-
-
-def logData(data: Buffer):
-    logger.info(f"URL: {data.url}\nPath: {data.path}\nBody: {data.body}\nHeaders: {data.headers}\nQueries: {data.queries}\nContext: {data.context}")
 
 @app.post("/xapi.weimob.com")
 def 统一快乐星球(data: Buffer):
