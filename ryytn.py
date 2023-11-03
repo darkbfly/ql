@@ -1,5 +1,5 @@
 """
-cron: 0 7 * * * lx.py
+cron: 0 7 * * * ryytn.py
 new Env("微信小程序-认养一头牛商城")
 env add lx_data
 """

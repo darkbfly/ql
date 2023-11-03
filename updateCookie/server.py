@@ -35,7 +35,6 @@ def get_list_item_by_index(data_list):
 
 def addEnv(file_path, name, value):
     global 目前电话
-    print(f'addEnv {目前电话}')
     文件路径 = os.path.dirname(os.path.abspath(__file__)) + "\\" + 目前电话 + '-' + file_path
     if not os.path.exists(文件路径):
         # 文件不存在,创建文件并写入内容
@@ -194,6 +193,11 @@ def 立白小白白会员(data: Buffer):
 def 联想(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'lx_data',
            f"{data.headers['accessToken']}#{data.headers['serviceToken']}#{data.headers['SERVICE-AUTHENTICATION']}#{data.headers['lenovoId']}")
+    return ""
+
+@app.post('/www.milkcard.mall.ryytngroup.com')
+def 认养一头牛(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'ryytn_data', data.headers['X-Auth-Token'])
     return ""
 
 if __name__ == '__main__':

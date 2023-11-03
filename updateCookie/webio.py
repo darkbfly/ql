@@ -13,7 +13,7 @@ from pywebio.session import *
 
 from updateCookie_Util import *
 
-电话号码列表 = config['phoneList']
+电话号码列表 = []
 
 
 def 隐藏cmd对话框():
@@ -85,6 +85,10 @@ def 京东ck更新():
 
 
 if __name__ == '__main__':
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+        电话号码列表 = config['phoneList']
+
     os.environ['PYWEBIO_THEME'] = 'dark'
     隐藏cmd对话框()
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
