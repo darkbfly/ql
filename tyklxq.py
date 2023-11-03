@@ -11,6 +11,8 @@ import json
 import os
 import traceback
 import requests
+
+import ApiRequest
 import mytool
 from notify import send
 import urllib3
@@ -19,9 +21,10 @@ title = '微信小程序-统一快乐星球'
 tokenName = 'tyklxq_cookies'
 
 
-class klxq():
+class klxq(ApiRequest.ApiRequest):
     def __init__(self, data):
-        self.headers = {
+        super().__init__()
+        self.sec.headers = {
             'Host': 'xapi.weimob.com',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF XWEB/8391',
             'Content-Type': 'application/json',
@@ -31,9 +34,6 @@ class klxq():
             'Accept-Language': 'zh-CN,zh',
             'X-WX-Token': data
         }
-        self.sec = requests.session()
-        self.sec.headers = self.headers
-        pass
 
     def login(self):
         data = {"appid": "wx532ecb3bdaaf92f9",
@@ -52,7 +52,7 @@ class klxq():
                 "customInfo": {"source": 0, "wid": 10752782095}, "tracePromotionId": "100006218",
                 "tracepromotionid": "100006218"}
         try:
-            rj = self.sec.post('https://xapi.weimob.com/api3/onecrm/mactivity/sign/misc/sign/activity/core/c/sign', headers=self.headers, json=data).json()
+            rj = self.sec.post('https://xapi.weimob.com/api3/onecrm/mactivity/sign/misc/sign/activity/core/c/sign', json=data).json()
             if rj['errcode'] == "0":
                 msg = f"签到成功\n获得{rj['data']['fixedReward']['points']} + {rj['data']['extraReward']['points']}积分!\n" \
                       f"获得{rj['data']['fixedReward']['growth']} + {rj['data']['extraReward']['growth']}成长值!"

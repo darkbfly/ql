@@ -1,25 +1,27 @@
-
 """
 cron: 30 7 * * * dcjd.py
 new Env("微信小程序-东呈酒店")
-env add tyklxq_cookies
+env add dcjd_data
 """
-#!/usr/bin/env python3
-# coding: utf-8
 import json
 import os
 import traceback
 import requests
+
+import ApiRequest
 import mytool
 from notify import send
 import urllib3
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 title = '微信小程序-东呈酒店'
 tokenName = 'dcjd_data'
 
-class dcjd():
+
+class dcjd(ApiRequest.ApiRequest):
     def __init__(self, data):
-        self.headers = {
+        super().__init__()
+        self.sec.headers = {
             'Host': 'campaignapi.dossen.com',
             'Connection': 'keep-alive',
             'Dossen-Platform': 'WxMiniApp',
@@ -30,8 +32,6 @@ class dcjd():
             'Referer': 'https://servicewechat.com/wxa4b8c0bda7f71cfc/255/page-frame.html',
             'Accept-Language': 'zh-CN,zh',
         }
-        self.sec = requests.session()
-        self.sec.headers = self.headers
 
     def login(self):
         params = {
@@ -50,10 +50,12 @@ class dcjd():
         print(msg)
         send(title, msg)
 
+
 if __name__ == '__main__':
     # DEBUG
     if os.path.exists('debug.py'):
         import debug
+
         debug.setDebugEnv()
 
     if mytool.getlistCk(f'{tokenName}') is None:

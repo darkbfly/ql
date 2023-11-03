@@ -9,6 +9,8 @@ import os
 import traceback
 import requests
 import urllib3
+
+import ApiRequest
 import mytool
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -16,9 +18,10 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 title = '微信小程序-认养一头牛商城'
 tokenName = 'ryytn_data'
 
-class lx():
+
+class lx(ApiRequest.ApiRequest):
     def __init__(self, data):
-        self.sec = requests.session()
+        super().__init__()
         self.sec.headers = {
             'Host': 'www.milkcard.mall.ryytngroup.com',
             'Connection': 'keep-alive',
@@ -34,10 +37,12 @@ class lx():
         response = self.sec.post('https://www.milkcard.mall.ryytngroup.com/mall/xhr/task/checkin/save', json={}).json()
         print(response)
 
+
 if __name__ == '__main__':
     # DEBUG
     if os.path.exists('debug.py'):
         import debug
+
         debug.setDebugEnv()
 
     if mytool.getlistCk(f'{tokenName}') is None:

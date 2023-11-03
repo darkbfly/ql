@@ -13,6 +13,7 @@ import traceback
 import requests
 import urllib3
 
+import ApiRequest
 import mytool
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -21,9 +22,9 @@ title = '微信小程序-网易严选'
 tokenName = 'wyyx_wxcookies'
 
 
-class wyyx_wxapp():
+class wyyx_wxapp(ApiRequest.ApiRequest):
     def __init__(self, data):
-        self.headers = {
+        self.sec.headers = {
             'Host': 'miniapp.you.163.com',
             'Connection': 'keep-alive',
             'version': '20.10.9',
@@ -36,15 +37,9 @@ class wyyx_wxapp():
             'WX-PIN-SESSION': data,
             'yx-aui': 'lhIECRWpVi3Yeut8hLKB05esg1zoBsPd',
             'Accept': '*/*',
-            'Sec-Fetch-Site': 'cross-site',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Dest': 'empty',
             'Referer': 'https://servicewechat.com/wx5b768b801d27f022/517/page-frame.html',
             'Accept-Language': 'zh-CN,zh',
         }
-        self.sec = requests.session()
-        self.sec.headers = self.headers
-        self.sec.verify = False
         pass
 
     def GET_EVERYDAY_FREE(self):
@@ -73,7 +68,9 @@ class wyyx_wxapp():
         desc=每日7-9点，12-14点，18-21点随机掉落水滴
         """
         # 如果时间在北京时间7到9点,12到14点,18到21点则运行下面语句
-        if mytool.gettime().hour in range(7, 9) or mytool.gettime().hour in range(12, 14) or mytool.gettime().hour in range(18, 21):
+        if mytool.gettime().hour in range(7, 9) or mytool.gettime().hour in range(12,
+                                                                                  14) or mytool.gettime().hour in range(
+                18, 21):
             params = {
                 'taskId': 'GET_EVERYDAY_RANDOM',
                 'taskRecordId': '',
@@ -92,8 +89,9 @@ class wyyx_wxapp():
 
     def getleftNumber(self):
 
-        try :
-            rj = self.sec.get('https://miniapp.you.163.com/orchard/game/water/index.json', params={'channelId': '0'}).json()
+        try:
+            rj = self.sec.get('https://miniapp.you.163.com/orchard/game/water/index.json',
+                              params={'channelId': '0'}).json()
             if rj['code'] == 200:
                 return rj['result']['leftNumber'] - 10
             else:
@@ -102,6 +100,7 @@ class wyyx_wxapp():
         except:
             traceback.print_exc()
             return 1
+
     def drop(self):
         count = self.getleftNumber()
         while count > 0:
@@ -227,10 +226,12 @@ class wyyx_wxapp():
             traceback.print_exc()
             pass
 
+
 if __name__ == '__main__':
     # DEBUG
     if os.path.exists('debug.py'):
         import debug
+
         debug.setDebugEnv()
 
     if mytool.getlistCk(f'{tokenName}') is None:

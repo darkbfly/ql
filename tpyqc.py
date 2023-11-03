@@ -11,6 +11,8 @@ import os
 import time
 import traceback
 import requests
+
+import ApiRequest
 import mytool
 from notify import send
 import urllib3
@@ -18,9 +20,10 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 title = 'ANDROID-太平洋汽车'
 tokenName = 'tpyqc_common_session_id'
 
-class tpyqc():
+class tpyqc(ApiRequest.ApiRequest):
     def __init__(self, data):
-        self.headers = {
+        super().__init__()
+        self.sec.headers = {
             'Host': 'app-server.pcauto.com.cn',
             'Connection': 'keep-alive',
             'Accept': 'application/json, text/plain, */*',
@@ -30,10 +33,6 @@ class tpyqc():
             'Referer': 'https://www1.pcauto.com.cn/auto-c/front-end-projects/app-h5/index.html',
             'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
         }
-        self.sec = requests.session()
-        self.sec.headers = self.headers
-        self.sec.verify = False
-        # self.common_session_id = data
         self.username = data.split('#')[0]
         self.password = data.split('#')[1]
 

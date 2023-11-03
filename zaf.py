@@ -8,6 +8,8 @@ env add zaf_auth
 import os
 import requests
 import urllib3
+
+import ApiRequest
 import mytool
 from notify import send
 import json
@@ -17,9 +19,9 @@ title = '微信小程序-甄爱粉俱乐部'
 tokenName = 'zaf_auth'
 msg = ''
 
-class zaf():
+class zaf(ApiRequest.ApiRequest):
     def __init__(self, data):
-        self.sec = requests.session()
+        super().__init__()
         self.sec.headers = {
             'Host': 'ucode-openapi.aax6.cn',
             'Connection': 'keep-alive',

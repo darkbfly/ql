@@ -8,6 +8,8 @@ import datetime
 import json
 import traceback
 import requests
+
+import ApiRequest
 import mytool
 from notify import send
 
@@ -15,9 +17,10 @@ title = '微信小程序-华住签到'
 tokenName = 'huazhu_cookies'
 
 
-class huazhu():
+class huazhu(ApiRequest.ApiRequest):
     def __init__(self, data):
-        self.headers = {
+        super().__init__()
+        self.sec.headers = {
             'Accept': 'application/json, text/plain, */*',
             'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
             'Client-Platform': 'WEB-APP',
@@ -26,9 +29,6 @@ class huazhu():
             'DNT': '1',
             'Origin': 'https://campaign.huazhu.com',
             'Referer': 'https://campaign.huazhu.com/',
-            'Sec-Fetch-Dest': 'empty',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Site': 'same-site',
             'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Mobile Safari/537.36 Edg/114.0.1823.67',
             'User-Token': 'null',
             'sec-ch-ua': '"Not.A/Brand";v="8", "Chromium";v="114", "Microsoft Edge";v="114"',
@@ -36,9 +36,6 @@ class huazhu():
             'sec-ch-ua-platform': '"Android"',
             'Cookie': data,
         }
-        self.sec = requests.session()
-        self.sec.headers = self.headers
-        pass
 
     def login(self):
         data = {
@@ -58,8 +55,6 @@ class huazhu():
             traceback.print_exc()
             pass
         pass
-
-
 
 if __name__ == "__main__":
     if mytool.getlistCk(f'{tokenName}') == None:

@@ -10,6 +10,8 @@ import json
 import os
 import traceback
 import requests
+
+import ApiRequest
 import mytool
 from notify import send
 import urllib3
@@ -20,9 +22,10 @@ tokenName = 'yxtGUid'
 msg = ''
 
 
-class yxt():
+class yxt(ApiRequest.ApiRequest):
     def __init__(self, data):
-        self.headers = {
+        super().__init__()
+        self.sec.headers = {
             'Host': 'shopapi.yxtmart.cn',
             'Connection': 'keep-alive',
             'xweb_xhr': '1',
@@ -32,10 +35,7 @@ class yxt():
             'Referer': 'https://servicewechat.com/wx0730cf00e5f0de87/18/page-frame.html',
             'Accept-Language': 'zh-CN,zh;q=0.9',
         }
-        self.sec = requests.session()
-        self.sec.headers = self.headers
         self.UserGuid = data
-        pass
 
     def login(self):
         data = {

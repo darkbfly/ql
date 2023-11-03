@@ -8,6 +8,8 @@ env add yljf_token
 import os
 import requests
 import urllib3
+
+import ApiRequest
 import mytool
 from notify import send
 import json
@@ -18,9 +20,10 @@ tokenName = 'yljf_token'
 msg = ''
 
 
-class yljf():
+class yljf(ApiRequest.ApiRequest):
     def __init__(self, data):
-        self.headers = {
+        super().__init__()
+        self.sec.headers = {
             'Host': 'msmarket.msx.digitalyili.com',
             'Connection': 'keep-alive',
             'access-token': data,
@@ -28,14 +31,11 @@ class yljf():
             'Referer': 'https://servicewechat.com/wx1fb666a33da7ac88/13/page-frame.html',
             'Accept-Language': 'zh-CN,zh;q=0.9',
         }
-        self.sec = requests.session()
-        self.sec.headers = self.headers
-        pass
 
     def login(self):
         global msg
         rj = self.sec.post('https://msmarket.msx.digitalyili.com/gateway/api/member/daily/sign', json={}).json()
-        if rj['status'] == True:
+        if rj['status']:
             msg = f"登录成功\n获得积分：{rj['data']['dailySign']['bonusPoint']}"
         else:
             msg = f"登录失败\n" + json.dumps(rj, ensure_ascii=False)

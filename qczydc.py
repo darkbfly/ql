@@ -1,26 +1,23 @@
-
 """
 cron: 30 8 * * * tpyqc.py
 new Env("微信小程序-雀巢专业餐饮大厨精英荟")
 env add qczy_token
 """
-#!/usr/bin/env python3
-# coding: utf-8
 import json
 import os
-import time
-import traceback
-import requests
+import urllib3
+import ApiRequest
 import mytool
 from notify import send
-import urllib3
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 title = '微信小程序-雀巢专业餐饮大厨精英荟'
 tokenName = 'qczy_token'
 
-class qczy():
+
+class qczy(ApiRequest.ApiRequest):
     def __init__(self, data):
-        self.sec = requests.session()
+        super().__init__()
         self.sec.headers = {
             'Host': 'consumer-api.quncrm.com',
             'Connection': 'keep-alive',
@@ -33,7 +30,6 @@ class qczy():
             'Referer': 'https://servicewechat.com/wx48d4ccf2ec281bf5/48/page-frame.html',
             'Accept-Language': 'zh-CN,zh;q=0.9',
         }
-        self.sec.verify = False
 
     def login(self):
         params = {
@@ -64,6 +60,7 @@ if __name__ == '__main__':
     # DEBUG
     if os.path.exists('debug.py'):
         import debug
+
         debug.setDebugEnv()
 
     if mytool.getlistCk(f'{tokenName}') is None:

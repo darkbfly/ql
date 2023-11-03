@@ -11,6 +11,8 @@ import json
 import os
 import traceback
 import requests
+
+import ApiRequest
 import mytool
 import urllib3
 
@@ -19,9 +21,10 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 title = '微信小程序-meiyang会员积分'
 tokenName = 'my_auth'
 
-class my():
+
+class my(ApiRequest.ApiRequest):
     def __init__(self, data):
-        self.sec = requests.session()
+        super().__init__()
         self.sec.headers = {
             "Host": "smp-api.iyouke.com",
             "Connection": "keep-alive",
@@ -46,10 +49,12 @@ class my():
         response = self.sec.get(full_url)
         print(response.text)
 
+
 if __name__ == '__main__':
     # DEBUG
     if os.path.exists('debug.py'):
         import debug
+
         debug.setDebugEnv()
 
     if mytool.getlistCk(f'{tokenName}') is None:

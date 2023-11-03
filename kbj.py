@@ -11,6 +11,8 @@ import json
 import os
 import traceback
 import requests
+
+import ApiRequest
 import mytool
 import urllib3
 
@@ -19,9 +21,10 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 title = '微信小程序-康佰家'
 tokenName = 'kbj_token'
 
-class kbj():
+
+class kbj(ApiRequest.ApiRequest):
     def __init__(self, data):
-        self.sec = requests.session()
+        super().__init__()
         self.sec.headers = {
             'Host': 'app.fjxzj.com',
             'Connection': 'keep-alive',
@@ -36,6 +39,7 @@ class kbj():
             # 'Accept-Encoding': 'gzip, deflate, br',
             'Accept-Language': 'zh-CN,zh;q=0.9',
         }
+
     def login(self):
         params = {
             'api': 'signin',

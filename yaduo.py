@@ -11,6 +11,8 @@ import json
 import os
 import traceback
 import requests
+
+import ApiRequest
 import mytool
 from notify import send
 import urllib3
@@ -21,9 +23,9 @@ title = '微信小程序-亚朵'
 tokenName = 'yd_wxcookies'
 
 
-class yd():
+class yd(ApiRequest.ApiRequest):
     def __init__(self, data):
-        self.sec = requests.session()
+        super().__init__()
         self.sec.headers = {
             'Host': 'miniapp.yaduo.com',
             'Connection': 'keep-alive',
@@ -37,10 +39,6 @@ class yd():
             'Accept-Language': 'zh-CN,zh;q=0.9',
         }
         self.cookies = {
-            # 'acw_tc': '276077c016976761535341226e832e12a3b609a2c061b200e108d301b57b44',
-            # 'c': 'mcdJLxGZ-1697676201038-e94ee67dcbf832055963359',
-            # '_fmdata': 'H6P1VW6TZA0PP5U36gZJI94EeDYO%2BsrFYQLW0aYoZ265CnG3Dqom372%2BZXR0kq5rdbRfGFUsLgqRfbyxeyZJ7Q%3D%3D',
-            # '_xid': 'yjOvdKUTjjaFeKIpIav2xYr2PU4D3OQAmXwNMPT%2Fcho%3D',
             'user-valid': data[0],
         }
         self.token = data[1]
