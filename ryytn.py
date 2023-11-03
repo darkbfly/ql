@@ -49,4 +49,4 @@ if __name__ == '__main__':
         exit(0)
     else:
         for i in mytool.getlistCk(f'{tokenName}'):
-            lx(i.split('#')).login()
+            lx(i).login()
