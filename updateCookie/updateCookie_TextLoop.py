@@ -27,7 +27,7 @@ class MyHandler(FileSystemEventHandler):
             updateFlag = True
             with open(event.src_path, 'r') as f:
                 json_data = json.load(f)
-            if json_data['value'] is not '':
+            if json_data['value'] != '':
                 data = searchEnvs(json_data['name'])
                 for y in data:
                     if y['value'] == json_data['value']:
