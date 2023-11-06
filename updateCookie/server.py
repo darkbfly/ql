@@ -45,6 +45,7 @@ def addEnv(file_path, name, value):
             with open(文件路径, 'w') as f:
                 f.write(json.dumps(content, ensure_ascii=False))
 
+
 class Buffer(BaseModel):
     url: str
     method: str
@@ -190,6 +191,33 @@ def 认养一头牛(data: Buffer):
 @app.post('/apis.folidaymall.com')
 def 托迈酷客(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'tmkk', data.headers['Authorization'].replace('Bearer ', ''))
+    return ""
+
+@app.post('/fwdt.shengongshe.org')
+def 申工社(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'sgs', data.headers['Token'])
+    return ""
+
+@app.post('/qualcomm.growthideadata.com')
+def 骁龙骁友会(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'wx_xlxyh_data',
+           f"{data.headers['sessionKey']}&{data.headers['userId']}")
+    return ""
+
+@app.post('/customer.yueyequan.cn')
+def 悦野圈(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'yyq_data', f"{data.headers['cookie']}&{data.headers['cookie'].split('userid=')[1].split(';')[0]}")
+    return ""
+
+@app.post('/mystore-01api.watsonsvip.com.cn')
+def 屈臣氏(data: Buffer):
+    addEnv(f"{data.headers['Host']}1.txt", 'qcsAuthorization', data.headers['Authorization'])
+    addEnv(f"{data.headers['Host']}2.txt", 'qcsunionId', data.headers['unionId'])
+    return ""
+
+@app.post('/wx-fulishe.msx.digitalyili.com')
+def 伊利会员福利社(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'ylhyencryptsessionid', data.queries['encryptsessionid'])
     return ""
 
 if __name__ == '__main__':

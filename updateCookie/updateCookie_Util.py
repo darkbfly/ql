@@ -2,10 +2,15 @@ import ctypes
 import json
 import pprint
 import time
+from enum import Enum
 from functools import wraps
 
 import requests
 
+
+class UpdateMode(Enum):
+    NEWENV = 1
+    MODIFY = 2
 
 def time_counts(fn):
     @wraps(fn)

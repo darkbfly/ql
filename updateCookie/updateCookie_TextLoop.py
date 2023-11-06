@@ -27,19 +27,18 @@ class MyHandler(FileSystemEventHandler):
             updateFlag = True
             with open(event.src_path, 'r') as f:
                 json_data = json.load(f)
-            if json_data['value'] != '':
-                data = searchEnvs(json_data['name'])
-                for y in data:
-                    if y['value'] == json_data['value']:
-                        updateFlag = False
+            data = searchEnvs(json_data['name'])
+            for y in data:
+                if y['value'] == json_data['value']:
+                    updateFlag = False
 
-                if updateFlag:
-                    if json_data['remark'] == '':
-                        json_data['remark'] = 电话号码列表[runDialog(dialogMsg)]
-                    for y in data:
-                        if json_data['remark'] == y['remarks']:
-                            deleteEnv(y['id'])
-                    postEnv(json_data['name'], json_data['value'], json_data['remark'])
+            if updateFlag:
+                if json_data['remark'] == '':
+                    json_data['remark'] = 电话号码列表[runDialog(dialogMsg)]
+                for y in data:
+                    if json_data['remark'] == y['remarks']:
+                        deleteEnv(y['id'])
+                postEnv(json_data['name'], json_data['value'], json_data['remark'])
 
 
 if __name__ == '__main__':
