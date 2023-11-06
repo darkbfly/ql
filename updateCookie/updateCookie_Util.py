@@ -43,8 +43,10 @@ def login_ql(client_id, client_secret):
     headers = {
         'Content-Type': 'application/json'
     }
-
-    rj = requests.request("GET", url, headers=headers).json()
+    sec = requests.session()
+    sec.verify = False
+    sec.trust_env = False
+    rj = sec.get(url, headers=headers).json()
     if rj['code'] == 200:
         return 'Bearer ' + rj['data']['token']
     else:
@@ -59,7 +61,10 @@ def searchEnvs(name):
         'Authorization': getToken(),
         'Content-Type': 'application/json'
     }
-    rj = requests.request("GET", url, headers=headers).json()
+    sec = requests.session()
+    sec.verify = False
+    sec.trust_env = False
+    rj = sec.get(url, headers=headers).json()
     if rj['code'] == 200:
         for i in rj['data']:
             if i['name'] == name:
@@ -81,7 +86,11 @@ def deleteEnv(id):
         'Authorization': getToken(),
         'Content-Type': 'application/json'
     }
-    rj = requests.request("DELETE", url, headers=headers, data=json.dumps([id], ensure_ascii=False)).json()
+
+    sec = requests.session()
+    sec.verify = False
+    sec.trust_env = False
+    rj = sec.delete(url, headers=headers, data=json.dumps([id], ensure_ascii=False)).json()
     if rj['code'] == 200:
         print("删除环境变量成功")
         return True
@@ -96,7 +105,10 @@ def postEnv(name, value, remark=''):
         'Authorization': getToken(),
         'Content-Type': 'application/json'
     }
-    rj = requests.request("POST", url, headers=headers,
+    sec = requests.session()
+    sec.verify = False
+    sec.trust_env = False
+    rj = sec.post(url, headers=headers,
                           data=json.dumps([{'value': value, 'name': name, 'remarks': remark}])).json()
     if rj['code'] == 200:
         print("新增环境变量成功")

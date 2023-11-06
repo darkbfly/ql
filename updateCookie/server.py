@@ -187,6 +187,11 @@ def 认养一头牛(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'ryytn_data', data.headers['X-Auth-Token'])
     return ""
 
+@app.post('/apis.folidaymall.com')
+def 托迈酷客(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'tmkk', data.headers['Authorization'].replace('Bearer ', ''))
+    return ""
+
 if __name__ == '__main__':
     with open('config.json', 'r') as f:
         config = json.load(f)
