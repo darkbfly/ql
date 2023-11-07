@@ -234,6 +234,10 @@ def 伊利会员福利社(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'ylhyencryptsessionid', data.queries['encryptsessionid'])
     return ""
 
+@app.post('/midend.icar-ecology.com')
+def 奇瑞EV(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'cheryev', data.headers['Authorization'].replace('Bearer ', ''))
+    return ""
 
 if __name__ == '__main__':
     with open('config.json', 'r') as f:

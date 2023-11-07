@@ -24,6 +24,7 @@ tokenName = 'wyyx_wxcookies'
 
 class wyyx_wxapp(ApiRequest.ApiRequest):
     def __init__(self, data):
+        super().__init__()
         self.sec.headers = {
             'Host': 'miniapp.you.163.com',
             'Connection': 'keep-alive',
@@ -40,7 +41,6 @@ class wyyx_wxapp(ApiRequest.ApiRequest):
             'Referer': 'https://servicewechat.com/wx5b768b801d27f022/517/page-frame.html',
             'Accept-Language': 'zh-CN,zh',
         }
-        pass
 
     def GET_EVERYDAY_FREE(self):
         """
