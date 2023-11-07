@@ -43,7 +43,7 @@ class huazhu(ApiRequest.ApiRequest):
             'day': str(datetime.date.today().day),
         }
         try:
-            rj = self.sec.post('https://hweb-mbf.huazhu.com/api/signIn', headers=self.headers, data=data).json()
+            rj = self.sec.post('https://hweb-mbf.huazhu.com/api/signIn', data=data).json()
             if rj['businessCode'] == "1000":
                 msg = f"签到成功, 获得{rj['content']['point']}积分!"
             else:
