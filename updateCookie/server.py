@@ -56,6 +56,7 @@ class Buffer(BaseModel):
     queries: dict
     context: dict
 
+
 @app.post("/xapi.weimob.com")
 def 统一快乐星球(data: Buffer):
     name = 'X-WX-Token'
@@ -122,21 +123,21 @@ def 引体向上(data: Buffer):
 @app.post("/consumer-api.quncrm.com")
 def 雀巢专业餐饮大厨精英荟(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'qczy_token',
-               f"{data.headers['X-Access-Token']}#{data.headers['X-Account-Id']}")
+           f"{data.headers['X-Access-Token']}#{data.headers['X-Account-Id']}")
     return ""
 
 
 @app.post("/smp-api.iyouke.com")
 def meiyang会员积分(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'my_auth',
-               data.headers['Authorization'])
+           data.headers['Authorization'])
     return ""
 
 
 @app.post('/app.fjxzj.com')
 def 康佰家(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'kbj_token',
-               data.headers['token'])
+           data.headers['token'])
     return ""
 
 
@@ -145,7 +146,7 @@ def 朵茜情调生活馆(data: Buffer):
     if 'Extra-Data' in data.headers:
         extra = json.loads(data.headers['Extra-Data'])
         addEnv(f"{data.headers['Host']}.txt", 'dqqdshgck',
-                   f"{data.queries['access_token']}#{extra['sid']}#{extra['sid']}")
+               f"{data.queries['access_token']}#{extra['sid']}#{extra['sid']}")
     return ""
 
 
@@ -153,7 +154,7 @@ def 朵茜情调生活馆(data: Buffer):
 def 高济健康(data: Buffer):
     if 'userId' in data.queries:
         addEnv(f"{data.headers['Host']}.txt", 'wx_gjjkpro_data',
-                   f"{data.queries['userId']}&{data.headers['Authorization']}")
+               f"{data.queries['userId']}&{data.headers['Authorization']}")
     return ""
 
 
@@ -162,20 +163,25 @@ def 好奇车生活(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'hqcshck', data.headers['accountId'])
     return data
 
+
 @app.post('/yx.jsh.com')
 def 卡萨帝(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'ksdck', data.headers['Authorization'])
     return ""
+
 
 @app.post('/fscrm.kraftheinz.net.cn')
 def 卡夫亨(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'kfh_data', data.headers['token'])
     return ""
 
+
 @app.post('/clubwx.hm.liby.com.cn')
 def 立白小白白会员(data: Buffer):
-    addEnv(f"{data.headers['Host']}.txt", 'lbvip', f"{data.headers['unionId']}#{data.headers['X-wxde54fd27cb59db51-Token']}")
+    addEnv(f"{data.headers['Host']}.txt", 'lbvip',
+           f"{data.headers['unionId']}#{data.headers['X-wxde54fd27cb59db51-Token']}")
     return ""
+
 
 @app.post('/mmembership.lenovo.com.cn')
 def 联想(data: Buffer):
@@ -183,20 +189,24 @@ def 联想(data: Buffer):
            f"{data.headers['accessToken']}#{data.headers['serviceToken']}#{data.headers['SERVICE-AUTHENTICATION']}#{data.headers['lenovoId']}")
     return ""
 
+
 @app.post('/www.milkcard.mall.ryytngroup.com')
 def 认养一头牛(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'ryytn_data', data.headers['X-Auth-Token'])
     return ""
+
 
 @app.post('/apis.folidaymall.com')
 def 托迈酷客(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'tmkk', data.headers['Authorization'].replace('Bearer ', ''))
     return ""
 
+
 @app.post('/fwdt.shengongshe.org')
 def 申工社(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'sgs', data.headers['Token'])
     return ""
+
 
 @app.post('/qualcomm.growthideadata.com')
 def 骁龙骁友会(data: Buffer):
@@ -204,10 +214,13 @@ def 骁龙骁友会(data: Buffer):
            f"{data.headers['sessionKey']}&{data.headers['userId']}")
     return ""
 
+
 @app.post('/customer.yueyequan.cn')
 def 悦野圈(data: Buffer):
-    addEnv(f"{data.headers['Host']}.txt", 'yyq_data', f"{data.headers['cookie']}&{data.headers['cookie'].split('userid=')[1].split(';')[0]}")
+    addEnv(f"{data.headers['Host']}.txt", 'yyq_data',
+           f"{data.headers['cookie']}&{data.headers['cookie'].split('userid=')[1].split(';')[0]}")
     return ""
+
 
 @app.post('/mystore-01api.watsonsvip.com.cn')
 def 屈臣氏(data: Buffer):
@@ -215,10 +228,12 @@ def 屈臣氏(data: Buffer):
     addEnv(f"{data.headers['Host']}2.txt", 'qcsunionId', data.headers['unionId'])
     return ""
 
+
 @app.post('/wx-fulishe.msx.digitalyili.com')
 def 伊利会员福利社(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'ylhyencryptsessionid', data.queries['encryptsessionid'])
     return ""
+
 
 if __name__ == '__main__':
     with open('config.json', 'r') as f:

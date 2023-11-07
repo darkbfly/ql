@@ -62,7 +62,7 @@ def 京东ck更新():
     for x in 电话号码列表:
         put_text(f'开始更新{x}')
         value = 京东登录(x)
-        if 'pt_pin=' in value:
+        if value is not None and 'pt_pin=' in value:
             USERID = value.split('pt_pin=')[1].split(";")
             for i in searchEnvs(name=ckname):
                 USERID2 = i['value'].split('pt_pin=')[1].split(";")
