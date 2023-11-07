@@ -35,8 +35,6 @@ class xk(ApiRequest.ApiRequest):
             'ASP.NET_SessionId': data,
             # 'Hm_lvt_d76458121a7604d3e55d998f66ef0be6': '1698978156,1699335435',
             # 'Hm_lpvt_d76458121a7604d3e55d998f66ef0be6': '1699335435',
-            # 'dt_cookie_user_name_remember': 'DTcms=13107644225',
-            # 'dt_cookie_user_pwd_remember': 'DTcms=wlwzzfz123',
         }
 
     def login(self):
@@ -51,6 +49,7 @@ class xk(ApiRequest.ApiRequest):
         )
         print(rj.text)
 
+
 if __name__ == "__main__":
 
     # DEBUG
@@ -61,6 +60,6 @@ if __name__ == "__main__":
     if mytool.getlistCk(f'{tokenName}') is None:
         print(f'请检查你的变量名称 {tokenName} 是否填写正确')
         exit(0)
-    else :
+    else:
         for i in mytool.getlistCk(f'{tokenName}'):
             xk(i).login()
