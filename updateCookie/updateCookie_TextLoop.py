@@ -38,7 +38,11 @@ class MyHandler(FileSystemEventHandler):
                 for y in data:
                     if json_data['remark'] == y['remarks']:
                         deleteEnv(y['id'])
-                postEnv(json_data['name'], json_data['value'], json_data['remark'])
+                if postEnv(json_data['name'], json_data['value'], json_data['remark']):
+                    if json_data['run']:
+                        # 执行脚本
+                        runTask(searchTask(json_data['taskName']))
+
 
 
 if __name__ == '__main__':

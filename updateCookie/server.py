@@ -24,13 +24,13 @@ def get_list_item_by_index(data_list):
     return (data_list[index])
 
 
-def addEnv(file_path, name, value):
+def addEnv(file_path, name, value, run=False, taskName=''):
     global 目前电话
     文件路径 = os.path.dirname(os.path.abspath(__file__)) + "\\" + 目前电话 + '-' + file_path
     if not os.path.exists(文件路径):
         # 文件不存在,创建文件并写入内容
         with open(文件路径, 'w') as f:
-            content = {'name': name, 'value': value, 'remark': 目前电话}
+            content = {'name': name, 'value': value, 'remark': 目前电话, 'run': run, 'taskName': taskName}
             json.dump(content, f)
 
     else:
@@ -41,6 +41,8 @@ def addEnv(file_path, name, value):
         if content['value'] != value:
             content['value'] = value
             content['remark'] = 目前电话
+            content['run'] = run
+            content['taskName'] = taskName
             # 内容不同,修改内容
             with open(文件路径, 'w') as f:
                 f.write(json.dumps(content, ensure_ascii=False))

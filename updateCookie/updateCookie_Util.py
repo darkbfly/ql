@@ -12,6 +12,7 @@ class UpdateMode(Enum):
     NEWENV = 1
     MODIFY = 2
 
+
 def time_counts(fn):
     @wraps(fn)
     def mesasure_time(*args, **kwargs):
@@ -58,7 +59,6 @@ def login_ql(client_id, client_secret):
         return None
 
 
-@time_counts
 def searchEnvs(name):
     data = []
     url = f"http://120.77.63.151:3041/open/envs"
@@ -114,7 +114,7 @@ def postEnv(name, value, remark=''):
     sec.verify = False
     sec.trust_env = False
     rj = sec.post(url, headers=headers,
-                          data=json.dumps([{'value': value, 'name': name, 'remarks': remark}])).json()
+                  data=json.dumps([{'value': value, 'name': name, 'remarks': remark}])).json()
     if rj['code'] == 200:
         print("新增环境变量成功")
         return True
@@ -122,12 +122,54 @@ def postEnv(name, value, remark=''):
         print("新增环境变量失败\n" + json.dumps(rj, ensure_ascii=False))
         return False
 
+
 def 隐藏cmd对话框():
     whnd = ctypes.windll.kernel32.GetConsoleWindow()
     if whnd != 0:
         ctypes.windll.user32.ShowWindow(whnd, 0)
         ctypes.windll.kernel32.CloseHandle(whnd)
 
+
+def searchTask(name):
+    url = f"http://120.77.63.151:3041/open/crons"
+    headers = {
+        'Authorization': getToken(),
+        'Content-Type': 'application/json'
+    }
+    sec = requests.session()
+    sec.verify = False
+    sec.trust_env = False
+    rj = sec.get(url, headers=headers).json()
+    if rj['code'] == 200:
+        for i in rj['data']['data']:
+            if i['name'] == name and i['isDisabled'] == 0:
+                return i['id']
+        return None
+    else:
+
+        return None
+
+
+def runTask(id):
+    if id is None:
+        return False
+    url = f"http://120.77.63.151:3041/open/crons/run"
+    headers = {
+        'Authorization': getToken(),
+        'Content-Type': 'application/json'
+    }
+    sec = requests.session()
+    sec.verify = False
+    sec.trust_env = False
+    rj = sec.put(url, headers=headers, data=json.dumps([id])).json()
+    if rj['code'] == 200:
+        print("执行成功")
+        return True
+    else:
+        print("执行失败\n" + json.dumps(rj, ensure_ascii=False))
+        return False
+
+
 if __name__ == '__main__':
-    print(getToken())
+    print(runTask(searchTask('植白说')))
     pass
