@@ -1,6 +1,7 @@
 import datetime
 import json
 import os
+import traceback
 
 from listDialog import runDialog
 from updateCookie_Util import *
@@ -10,6 +11,7 @@ from watchdog.events import FileSystemEventHandler
 with open('config.json', 'r') as f:
     config = json.load(f)
 电话号码列表 = config['phoneList']
+
 
 def find_txt(path):
     data = []
@@ -25,24 +27,27 @@ class MyHandler(FileSystemEventHandler):
         if not event.is_directory and event.src_path.endswith(".txt"):
             print(f'文件 {event.src_path} 已经被修改')
             updateFlag = True
-            with open(event.src_path, 'r') as f:
-                json_data = json.load(f)
-            data = searchEnvs(json_data['name'])
-            for y in data:
-                if y['value'] == json_data['value']:
-                    updateFlag = False
-
-            if updateFlag:
-                if json_data['remark'] == '':
-                    json_data['remark'] = 电话号码列表[runDialog(dialogMsg)]
+            try:
+                with open(event.src_path, 'r') as f:
+                    json_data = json.load(f)
+                data = searchEnvs(json_data['name'])
                 for y in data:
-                    if json_data['remark'] == y['remarks']:
-                        deleteEnv(y['id'])
-                if postEnv(json_data['name'], json_data['value'], json_data['remark']):
-                    if json_data['run']:
-                        # 执行脚本
-                        runTask(searchTask(json_data['taskName']))
+                    if y['value'] == json_data['value']:
+                        updateFlag = False
 
+                if updateFlag:
+                    if json_data['remark'] == '':
+                        json_data['remark'] = 电话号码列表[runDialog(dialogMsg)]
+                    for y in data:
+                        if json_data['remark'] == y['remarks']:
+                            deleteEnv(y['id'])
+                    if postEnv(json_data['name'], json_data['value'], json_data['remark']):
+                        if json_data['run']:
+                            # 执行脚本
+                            runTask(searchTask(json_data['taskName']))
+            except:
+                traceback.print_exc()
+                pass
 
 
 if __name__ == '__main__':
