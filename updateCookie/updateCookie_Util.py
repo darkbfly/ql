@@ -49,10 +49,6 @@ def login_ql(client_id, client_secret):
     headers = {
         'Content-Type': 'application/json'
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 948c339645ce97b9e453342147541c4611313b7a
     sec = requests.session()
     sec.verify = False
     sec.trust_env = False
@@ -95,10 +91,6 @@ def deleteEnv(id):
         'Authorization': getToken(),
         'Content-Type': 'application/json'
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> 948c339645ce97b9e453342147541c4611313b7a
     sec = requests.session()
     sec.verify = False
     sec.trust_env = False
@@ -121,11 +113,7 @@ def postEnv(name, value, remark=''):
     sec.verify = False
     sec.trust_env = False
     rj = sec.post(url, headers=headers,
-<<<<<<< HEAD
-                          data=json.dumps([{'value': value, 'name': name, 'remarks': remark}])).json()
-=======
                   data=json.dumps([{'value': value, 'name': name, 'remarks': remark}])).json()
->>>>>>> 948c339645ce97b9e453342147541c4611313b7a
     if rj['code'] == 200:
         print("新增环境变量成功")
         return True
