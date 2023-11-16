@@ -55,11 +55,8 @@ class yd(ApiRequest.ApiRequest):
             'activeId': '',
         }
 
-        rj = self.sec.get('https://miniapp.yaduo.com/atourlife/signIn/signIn', params=params, cookies=self.cookies).json()
-        if rj['retcode'] == 0:
-            print(f"登录成功\n{rj['result']['debrisDesc']}\n")
-        else:
-            print(f'登录失败\n' + json.dumps(rj, ensure_ascii=False))
+        res = self.sec.get('https://miniapp.yaduo.com/atourlife/signIn/signIn', params=params, cookies=self.cookies)
+        print(res.text)
 
 
 if __name__ == '__main__':

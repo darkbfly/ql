@@ -12,6 +12,7 @@ from updateCookie_Util import *
 
 电话号码列表 = []
 
+
 @config(title='饿了么ck更新')
 def 饿了么ck更新():
     ckname = 'elmck'
@@ -38,6 +39,7 @@ def 饿了么ck更新():
 
 
 def 京东登录(x):
+    pyperclip.copy("")
     cmd = 'python.exe JDLogin.py --account ' + x
     st = subprocess.STARTUPINFO()
     st.dwFlags |= subprocess.STARTF_USESHOWWINDOW
@@ -47,27 +49,32 @@ def 京东登录(x):
                          creationflags=subprocess.CREATE_NEW_CONSOLE,
                          startupinfo=st)
     p.wait()
-    put_text(f'运行结束 {x} {pyperclip.paste()}')
+    put_text(f'运行结束 {x}返回{pyperclip.paste()}')
     if len(pyperclip.paste()) != 0:
         return pyperclip.paste()
-    pass
+    else:
+        return None
 
 
 @config(title='京东ck更新')
 def 京东ck更新():
     ckname = 'JD_COOKIE'
     for x in 电话号码列表:
+        put_text(f'开始更新{x}')
         value = 京东登录(x)
-        USERID = value.split('pt_pin=')[1].split(";")
-        for i in searchEnvs(name=ckname):
-            USERID2 = i['value'].split('pt_pin=')[1].split(";")
-            if USERID2 == USERID:
-                put_text(f'已经存在 {i["id"]} {USERID}')
-                deleteEnv(i['id'])
-        if postEnv(ckname, value, x):
-            put_text(x + ' 更新成功')
+        if value is not None and 'pt_pin=' in value:
+            USERID = value.split('pt_pin=')[1].split(";")
+            for i in searchEnvs(name=ckname):
+                USERID2 = i['value'].split('pt_pin=')[1].split(";")
+                if USERID2 == USERID:
+                    put_text(f'已经存在 {i["id"]} {USERID}')
+                    deleteEnv(i['id'])
+            if postEnv(ckname, value, x):
+                put_text(x + ' 更新成功')
+            else:
+                put_text(x + '更新失败')
         else:
-            put_text(x + '更新失败')
+            continue
 
     # time.sleep(5)
     # go_app('京东ck更新', new_window=False)
@@ -86,6 +93,5 @@ if __name__ == '__main__':
             饿了么ck更新,
             京东ck更新
         ],
-        port=28989,
-        debug=True,
+        port=28989
     )
