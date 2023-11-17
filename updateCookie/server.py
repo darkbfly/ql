@@ -151,6 +151,13 @@ def 朵茜情调生活馆(data: Buffer):
                f"{data.queries['access_token']}#{extra['sid']}#{extra['sid']}", True, '微信小程序-朵茜情调生活馆')
     return ""
 
+@app.post("/h5.youzan.com")
+def xbox聚乐部(data: Buffer):
+    if 'Extra-Data' in data.headers:
+        extra = json.loads(data.headers['Extra-Data'])
+        addEnv(f"{data.headers['Host']}.txt", 'xbox_data',
+               extra['sid'], True, 'xbox俱乐部V2')
+    return ""
 
 @app.post('/api.gaojihealth.cn')
 def 高济健康(data: Buffer):
