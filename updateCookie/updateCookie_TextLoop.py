@@ -7,6 +7,7 @@ from listDialog import runDialog
 from updateCookie_Util import *
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+from plyer import notification
 
 with open('config.json', 'r') as f:
     config = json.load(f)
@@ -45,6 +46,11 @@ class MyHandler(FileSystemEventHandler):
                         if json_data['run']:
                             # 执行脚本
                             runTask(searchTask(json_data['taskName']))
+                    notification.notify(
+                        title=f'更新{json_data["taskName"]}',
+                        message="更新成功",
+                        timeout=5,
+                    )
             except:
                 traceback.print_exc()
                 pass

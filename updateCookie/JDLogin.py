@@ -17,9 +17,9 @@ def run(account):
         page = context.new_page()
 
         # Go to https://plogin.m.jd.com/login/login?appid=300&returnurl=https%3A%2F%2Fwq.jd.com%2Fpassport%2FLoginRedirect%3Fstate%3D2404625993%26returnurl%3Dhttps%253A%252F%252Fhome.m.jd.com%252FmyJd%252Fnewhome.action%253Fsceneval%253D2%2526ufc%253D%2526&source=wq_passport
-        page.goto("https://plogin.m.jd.com/login/login?appid=300&returnurl=https%3A%2F%2Fwq.jd.com%2Fpassport%2FLoginRedirect%3Fstate%3D3405740776%26returnurl%3Dhttps%253A%252F%252Fhome.m.jd.com%252FmyJd%252Fhome.action&source=wq_passport")
+        page.goto("https://home.m.jd.com/myJd/home.action")
         # page.wait_for_selector('//html/body/div[1]/div/div[3]/p[1]/input')
-        # page.wait_for_load_state('networkidle')
+        page.wait_for_load_state('networkidle')
         page.get_by_placeholder("请输入手机号").fill(account)
         # page.fill('//html/body/div[1]/div/div[3]/p[1]/input', account)
         page.check("input[type=\"checkbox\"]")

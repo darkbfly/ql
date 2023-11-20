@@ -254,6 +254,11 @@ def 华住(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'huazhu_cookies', data.headers['Cookie'], True, '微信小程序-华住签到')
     return ""
 
+@app.post('/mvip.midea.cn')
+def 美的会员(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'wx_midea', data.headers['Cookie'], True, '微信小程序 - 美的会员')
+    return ""
+
 if __name__ == '__main__':
     with open('config.json', 'r') as f:
         config = json.load(f)
