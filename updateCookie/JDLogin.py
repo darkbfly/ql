@@ -42,6 +42,9 @@ def run(account):
                 # iCount += 1
                 if browser.is_connected():
                     page.wait_for_timeout(1 * 1000)
+                    print(len(page.query_selector('//html/body/div[2]/div/div[3]/p[2]/input').input_value()))
+                    if len(page.query_selector('//html/body/div[2]/div/div[3]/p[2]/input').input_value()) == 6:
+                        page.get_by_text("登 录").click()
                 else:
                     break
 
