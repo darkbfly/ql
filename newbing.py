@@ -61,7 +61,7 @@ def getBalance(bingCK):
 # 搜索
 def bing_rewards(q_str, bingCK, isPc):
     try:
-        url = f'https://cn.bing.com/search?q={q_str}'
+        url = f'https://cn.bing.com/search?q={q_str}&form=QBLH'
         if isPc == 1:
             ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54"
         else:

@@ -60,9 +60,10 @@ class Buffer(BaseModel):
 
 
 @app.post("/xapi.weimob.com")
-def 统一快乐星球(data: Buffer):
+def 好人家美味生活馆(data: Buffer):
+    # return ;
     name = 'X-WX-Token'
-    addEnv(f"{data.headers['Host']}.txt", 'tyklxq_cookies', data.headers[name], True, '微信小程序-统一快乐星球')
+    addEnv(f"{data.headers['Host']}.txt", 'hrjmwshg', data.headers[name], True, '好人家美味生活馆')
     return data.headers[name]
 
 
@@ -257,6 +258,11 @@ def 华住(data: Buffer):
 @app.post('/mvip.midea.cn')
 def 美的会员(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'wx_midea', data.headers['Cookie'], True, '微信小程序 - 美的会员')
+    return ""
+
+@app.post('/durex.ixiliu.cn')
+def 杜蕾斯会员中心(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'dlshyzx', data.headers['Access-Token'], True, '杜蕾斯会员中心')
     return ""
 
 if __name__ == '__main__':
