@@ -70,6 +70,7 @@ def searchEnvs(name):
     sec.verify = False
     sec.trust_env = False
     rj = sec.get(url, headers=headers).json()
+    pprint.pprint(rj)
     if rj['code'] == 200:
         for i in rj['data']:
             if i['name'] == name:
@@ -170,5 +171,5 @@ def runTask(id):
 
 
 if __name__ == '__main__':
-    print(runTask(searchTask('植白说')))
+    print(searchEnvs('JD_COOKIE'))
     pass
