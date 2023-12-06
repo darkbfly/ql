@@ -265,6 +265,12 @@ def 杜蕾斯会员中心(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'dlshyzx', data.headers['Access-Token'], True, '杜蕾斯会员中心')
     return ""
 
+@app.post('/cps.hisense.com')
+def 海信爱家(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'HISENSE_CPS', data.headers['Cookie'], True, '海信爱家')
+    return ""
+
+
 if __name__ == '__main__':
     with open('config.json', 'r') as f:
         config = json.load(f)
