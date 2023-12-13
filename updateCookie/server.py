@@ -119,7 +119,7 @@ def 元气森林(data: Buffer):
 @app.post("/apichuanti.scleader.cn")
 def 引体向上(data: Buffer):
     name = 'Authorization'
-    addEnv(f"{data.headers['Host']}.txt", 'ytxs', data.headers[name].replace('Bearer ', ''), True, '引体向上')
+    addEnv(f"{data.headers['Host']}.txt", 'gfq', data.headers[name].replace('Bearer ', ''), True, '引体向上')
     return data.headers[name]
 
 
@@ -268,6 +268,46 @@ def 杜蕾斯会员中心(data: Buffer):
 @app.post('/cps.hisense.com')
 def 海信爱家(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'HISENSE_CPS', data.headers['Cookie'], True, '海信爱家')
+    return ""
+
+@app.post('/pepcoinnew.pepcoinbypepsico.com.cn')
+def 百事乐元(data: Buffer):
+    jsonBody = json.loads(data.body)
+    addEnv(f"{data.headers['Host']}.txt", 'lekebo_bsly_Cookie', jsonBody['token'], True, '百事乐元')
+    return ""
+
+@app.post('/ksfshopapp.2qrs.cn')
+def 康师傅饮品(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'lekebo_ksfyp_Cookie', data.headers['Authorization'], True, '康师傅饮品')
+    return ""
+
+@app.post('/member-api.mengniu.cn')
+def 蒙牛营养生活家(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'lekebo_mnflag_Cookie', f"{data.headers['X-Token'].replace('Bearer ', '')}&{data.queries['unionId']}", True, '蒙牛营养生活家')
+    return ""
+
+@app.post('/mc.kukahome.com')
+def 顾家家居会员俱乐部(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'lekebo_gjjjhyjlb_Cookie', f"{data.headers['X-Customer']}&{data.headers['AccessToken']}", True, '顾家家居会员俱乐部')
+    return ""
+
+@app.post('/www.jumpingcarp.cn')
+def 庙友之家(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'miaoyouHome', data.headers['Cookie'].replace('JSESSIONID=', ''), True, 'wx_庙友之家')
+    return ""
+
+@app.post('/jjw.jingjiu.com')
+def 劲友家(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'lekebo_jyj_Cookie', data.headers['Authorization'], True, '劲友家')
+    return ""
+
+@app.post('/member.kwwblcj.com')
+def 口味王(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'lekebo_kww_Cookie', f"{data.queries['memberId']}&{data.queries['kwwMember.unionid']}", True, '口味王')
+    return ""
+@app.post('/club.biqr.cn')
+def 康师傅畅饮社(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'ksfcys_data', data.headers['Token'], True, '微信小程序-康师傅畅饮社')
     return ""
 
 

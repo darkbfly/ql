@@ -59,7 +59,12 @@ def 京东登录(x):
 @config(title='京东ck更新')
 def 京东ck更新():
     ckname = 'JD_COOKIE'
-    for x in 电话号码列表:
+    info = input_group('',
+                       [
+                           checkbox('选择需要更新的账号', name='phoneList', options=电话号码列表, value=电话号码列表)
+                       ]
+                       )
+    for x in info['phoneList']:
         put_text(f'开始更新{x}')
         value = 京东登录(x)
         if value is not None and 'pt_pin=' in value:
