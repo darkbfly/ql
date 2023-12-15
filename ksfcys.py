@@ -33,7 +33,7 @@ class ksfcys(ApiRequest.ApiRequest):
         }
 
     def login(self):
-        response = requests.post('https://club.biqr.cn/api/signIn/integralSignIn', params='', data='{}')
+        response = self.sec.post('https://club.biqr.cn/api/signIn/integralSignIn', params='', data='{}')
         if response.status_code == 200:
             rj = response.json()
             if rj['code'] == 0:
