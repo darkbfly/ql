@@ -42,7 +42,7 @@ class ksfcys(ApiRequest.ApiRequest):
                 msg = f"签到失败\n" + json.dumps(rj, ensure_ascii=False)
         else:
             msg = f"签到失败\n" + json.dumps(response.text, ensure_ascii=False)
-
+        print(msg)
 
 if __name__ == '__main__':
     # DEBUG

@@ -297,6 +297,7 @@ def 劲友家(data: Buffer):
 def 口味王(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'lekebo_kww_Cookie', f"{data.queries['memberId']}&{data.queries['kwwMember.unionid']}", True, '口味王')
     return ""
+
 @app.post('/club.biqr.cn')
 def 康师傅畅饮社(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'ksfcys_data', data.headers['Token'], True, '微信小程序-康师傅畅饮社')
