@@ -303,6 +303,10 @@ def 康师傅畅饮社(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'ksfcys_data', data.headers['Token'], True, '微信小程序-康师傅畅饮社')
     return ""
 
+@app.post('/zm.t7a.cn')
+def 战马能量星球(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'zmnlxq', data.queries['safe'], True, '新战马能量星球.js')
+    return ""
 
 if __name__ == '__main__':
     with open('config.json', 'r') as f:

@@ -70,7 +70,6 @@ def searchEnvs(name):
     sec.verify = False
     sec.trust_env = False
     rj = sec.get(url, headers=headers).json()
-    pprint.pprint(rj)
     if rj['code'] == 200:
         for i in rj['data']:
             if i['name'] == name:
