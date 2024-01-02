@@ -308,6 +308,17 @@ def 战马能量星球(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'zmnlxq', data.queries['safe'], True, '新战马能量星球.js')
     return ""
 
+@app.post('/activity.yonghuivip.com')
+def 永辉生活(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'yhsh', f'{data.queries["deviceid"]}&{data.queries["access_token"]}', True, '永辉生活')
+    return ""
+
+@app.post('/tc.qzfwckj.com')
+def 青柳同城圈(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'qltcq', data.headers['token'], True, '青柳同城圈')
+    return ""
+
+
 if __name__ == '__main__':
     with open('config.json', 'r') as f:
         config = json.load(f)
