@@ -1,17 +1,20 @@
 import json
 import os
 import smtplib
+import time
 from email.header import Header
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
+
+import requests
 
 url = '127.0.0.1:5700'
 
 def getToken():
     if os.path.isfile('/ql/data/config/auth.json'):
         with open('/ql/data/config/auth.json', 'r') as f:
-        config = json.load(f)
-        return config['token']
+            config = json.load(f)
+            return config['token']
 
 
 def 保存文件(file, data):
