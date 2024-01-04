@@ -318,6 +318,14 @@ def 青柳同城圈(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'qltcq', data.headers['token'], True, '青柳同城圈')
     return ""
 
+@app.post('/miniapp.yaduo.com')
+def 亚朵(data: Buffer):
+    cookie = data.headers['Cookie'].split(';')
+    for x in cookie:
+        if 'user-valid=' in x :
+            addEnv(f"{data.headers['Host']}.txt", 'yd_wxcookies', f'{x.replace("user-valid=", "")}#{data.queries["token"]}', True, '微信小程序-亚朵')
+    return ""
+
 
 if __name__ == '__main__':
     with open('config.json', 'r') as f:
