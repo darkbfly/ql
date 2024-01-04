@@ -14,7 +14,7 @@ def getToken():
     if os.path.isfile('/ql/data/config/auth.json'):
         with open('/ql/data/config/auth.json', 'r') as f:
             config = json.load(f)
-            return config['token']
+            return 'Bearer ' + config['token']
 
 
 def 保存文件(file, data):
