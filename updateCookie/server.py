@@ -329,6 +329,39 @@ def 摩托范(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'mtf_data', f"{data.headers['token']}&{data.headers['uid']}", True, '摩托范')
     return ""
 
+@app.post('/activity.yonghuivip.com')
+def 永辉生活(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'yhsh', f'{data.queries["deviceid"]}&{data.queries["access_token"]}', True, '永辉生活')
+    return ""
+
+@app.post('/tc.qzfwckj.com')
+def 青柳同城圈(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'qltcq', data.headers['token'], True, '青柳同城圈')
+    return ""
+
+@app.post('/miniapp.yaduo.com')
+def 亚朵(data: Buffer):
+    cookie = data.headers['Cookie'].split(';')
+    for x in cookie:
+        if 'user-valid=' in x :
+            addEnv(f"{data.headers['Host']}.txt", 'yd_wxcookies', f'{x.replace("user-valid=", "")}#{data.queries["token"]}', True, '微信小程序-亚朵')
+    return ""
+
+@app.post('/wx-center.zippo.com.cn')
+def zippo(data: Buffer):
+    return ""
+
+@app.post('/123')
+def 统一茄皇二期(data: Buffer):
+    return ""
+
+@app.post('/gateway.jmhd8.com')
+def 农夫山泉2024(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'nfsqCookie', data.headers['apitoken'], True, '农夫山泉2024')
+    return ""
+
+
+
 if __name__ == '__main__':
     with open('config.json', 'r') as f:
         config = json.load(f)

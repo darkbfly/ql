@@ -30,14 +30,9 @@ def run(account):
         # iCount = 0
         while True:
             for x in context.cookies():
-                if x['name'] == 'pt_key':
-                    jsonData['PT_KEY'] = x['value']
-                    print("cookie.pt_key : " + x['value'])
-                if x['name'] == 'pt_pin':
-                    jsonData['PT_PIN'] = x['value']
-                    print("cookie.pt_pin : " + x['value'])
-            if 'PT_KEY' in jsonData and 'PT_PIN' in jsonData:
-                break
+                if x['name'] == 'wskey':
+                    print("cookie.wskey : " + x['wskey'])
+                    break
             else:
                 # iCount += 1
                 if browser.is_connected():
