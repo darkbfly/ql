@@ -10,7 +10,7 @@ from playwright.sync_api import sync_playwright
 def run(account):
     with sync_playwright() as playwright:
         pyperclip.copy("")
-        browser = playwright.chromium.launch(headless=False, proxy={'server': 'http://127.0.0.1:7890'})
+        browser = playwright.chromium.launch(headless=False)
         context = browser.new_context()
 
         # Open new page
@@ -25,7 +25,6 @@ def run(account):
         page.check("input[type=\"checkbox\"]")
         time.sleep(1)
         page.get_by_role("button", name="获取验证码").click()
-
 
         jsonData = {}
         # iCount = 0
@@ -43,11 +42,9 @@ def run(account):
                 # iCount += 1
                 if browser.is_connected():
                     page.wait_for_timeout(1 * 1000)
-                    try:
-                        if len(page.query_selector('//html/body/div[2]/div/div[3]/p[2]/input').input_value()) == 6:
-                            page.get_by_text("登 录").click()
-                    except:
-                        pass
+                    print(len(page.query_selector('//html/body/div[2]/div/div[3]/p[2]/input').input_value()))
+                    if len(page.query_selector('//html/body/div[2]/div/div[3]/p[2]/input').input_value()) == 6:
+                        page.get_by_text("登 录").click()
                 else:
                     break
 

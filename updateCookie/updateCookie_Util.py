@@ -114,6 +114,7 @@ def postEnv(name, value, remark=''):
     sec.trust_env = False
     rj = sec.post(url, headers=headers,
                   data=json.dumps([{'value': value, 'name': name, 'remarks': remark}])).json()
+    print(rj)
     if rj['code'] == 200:
         print("新增环境变量成功")
         return True

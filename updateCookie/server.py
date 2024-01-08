@@ -2,6 +2,8 @@ import ctypes
 import json
 import os
 import pprint
+import urllib.parse
+
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -306,6 +308,25 @@ def 康师傅畅饮社(data: Buffer):
 @app.post('/zm.t7a.cn')
 def 战马能量星球(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'zmnlxq', data.queries['safe'], True, '新战马能量星球.js')
+    return ""
+@app.post('/shopapi.yxtmart.cn')
+def 一心堂(data: Buffer):
+    UserGuid = urllib.parse.parse_qs(data.body).get('UserGuid', [])[0]
+    addEnv(f"{data.headers['Host']}.txt", 'yxtGUid', UserGuid, True, '微信小程序-一心堂')
+    return ""
+@app.post('/scrm-prod.shuyi.org.cn')
+def 书亦烧仙草(data:Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'sysxc_data', data.headers['auth'], True, '书亦烧仙草')
+    return ""
+
+@app.post('/bg-hardcore.ab-inbev.cn')
+def HAPI哈啤硬核街(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'wx_hapi_cookie', f"{data.headers['openId']}&{data.headers['sign']}&{data.headers['timestamp']}", True, 'HAPI哈啤硬核街')
+    return ""
+
+@app.post('/jsapi.58moto.com')
+def 摩托范(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'mtf_data', f"{data.headers['token']}&{data.headers['uid']}", True, '摩托范')
     return ""
 
 if __name__ == '__main__':
