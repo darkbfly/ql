@@ -28,9 +28,7 @@ class kbj(ApiRequest.ApiRequest):
         self.sec.headers = {
             'Host': 'app.fjxzj.com',
             'Connection': 'keep-alive',
-            # 'Content-Length': '2',
             'xweb_xhr': '1',
-            # 'We-Auth': 'wecom MDAzMGU4NTk2YzE4N2I3ZWY3NDQ0ZDIxOTdjMzE3MmE=',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309071d)XWEB/8461',
             'token': data,
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -53,7 +51,6 @@ if __name__ == '__main__':
     # DEBUG
     if os.path.exists('debug.py'):
         import debug
-
         debug.setDebugEnv()
 
     if mytool.getlistCk(f'{tokenName}') is None:

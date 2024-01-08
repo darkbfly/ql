@@ -326,6 +326,20 @@ def 亚朵(data: Buffer):
             addEnv(f"{data.headers['Host']}.txt", 'yd_wxcookies', f'{x.replace("user-valid=", "")}#{data.queries["token"]}', True, '微信小程序-亚朵')
     return ""
 
+@app.post('/wx-center.zippo.com.cn')
+def zippo(data: Buffer):
+    return ""
+
+@app.post('/123')
+def 统一茄皇二期(data: Buffer):
+    return ""
+
+@app.post('/gateway.jmhd8.com')
+def 农夫山泉2024(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'nfsqCookie', data.headers['apitoken'], True, '农夫山泉2024')
+    return ""
+
+
 
 if __name__ == '__main__':
     with open('config.json', 'r') as f:
