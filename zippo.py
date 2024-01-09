@@ -21,7 +21,6 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 title = '微信小程序-zippo'
 tokenName = 'zippo_auth'
 
-m
 
 class zippo(ApiRequest.ApiRequest):
     def __init__(self, data):
@@ -42,6 +41,8 @@ class zippo(ApiRequest.ApiRequest):
         }
 
     def login(self):
+        rj = self.sec.post('https://wx-center.zippo.com.cn/api/daily-signin', params='', json={}).json()
+        print(rj)
         pass
 
 

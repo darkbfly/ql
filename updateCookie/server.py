@@ -349,6 +349,7 @@ def 亚朵(data: Buffer):
 
 @app.post('/wx-center.zippo.com.cn')
 def zippo(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'zippo_auth', data.headers['Authorization'], True, '微信小程序-zippo')
     return ""
 
 @app.post('/123')
