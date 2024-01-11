@@ -235,7 +235,8 @@ def 屈臣氏(data: Buffer):
 
 @app.post('/wx-fulishe.msx.digitalyili.com')
 def 伊利会员福利社(data: Buffer):
-    addEnv(f"{data.headers['Host']}.txt", 'ylhyencryptsessionid', data.queries['encryptsessionid'], True, '伊利会员福利社')
+    encryptsessionid = urllib.parse.parse_qs(data.body).get('encryptsessionid', [])[0]
+    addEnv(f"{data.headers['Host']}.txt", 'ylhyencryptsessionid', encryptsessionid, True, '伊利会员福利社')
     return ""
 
 @app.post('/midend.icar-ecology.com')
@@ -359,6 +360,17 @@ def 统一茄皇二期(data: Buffer):
 @app.post('/gateway.jmhd8.com')
 def 农夫山泉2024(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'nfsqCookie', data.headers['apitoken'], True, '农夫山泉2024')
+    return ""
+
+@app.post('/m.tk.cn')
+def 泰康在线保险(data: Buffer):
+    jsonbody = json.loads(data.body)
+    addEnv(f"{data.headers['Host']}.txt", 'tkzxbxCookie', jsonbody['body']['unionId'], True, '泰康在线保险')
+    return ""
+
+@app.post('/msmarket.msx.digitalyili.com')
+def 伊利奶粉积分商城(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'yljf_token', data.headers['access-token'], True, '微信小程序-伊利积分')
     return ""
 
 
