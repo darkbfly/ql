@@ -1,6 +1,6 @@
 from wxpusher import WxPusher
 import re, sys, os
-
+from collections import deque
 
 def sendpush(arrayObject, msg):
     if arrayObject:
@@ -37,14 +37,23 @@ class checkObject:
         self.logfile_name = logfile_name
         self.keyword = keyword
 
-    def checkLogfile(self):
+    def checkLogfile(self, beforeLine=0):
+        queue = None;
+        if beforeLine > 0:
+            queue = deque(maxlen=beforeLine)
         file_name = get_ql_logfile(self.logfile_name)
         if file_name:
             with open(file_name, 'r') as file:
                 for line_number, line in enumerate(file, start=1):
+                    if queue is not None:
+                        queue.append(line)
                     # 使用正则表达式查找包含关键字的行
                     if re.search(self.keyword, line):
-                        self.err_list.append(line.strip())
+                        if queue is not None:
+                            self.err_list.append(''.join(queue))
+                            queue.clear()
+                        else:
+                            self.err_list.append(line.strip())
         else:
             self.msg += '\n未检测到日志文件'
         print(self.err_list)
@@ -56,10 +65,11 @@ def 检查京东():
 
 
 def 检查饿了么():
-    checkObject('饿了么', 'elm_842', '需要登录').checkLogfile()
+    checkObject('饿了么', 'elm_', '需要登录').checkLogfile(2)
 
 
 if __name__ == '__main__':
     检查京东()
     检查饿了么()
+    checkObject('植白说', '植白说_', 'undefined').checkLogfile(0)
 
