@@ -72,4 +72,5 @@ if __name__ == '__main__':
     检查京东()
     检查饿了么()
     checkObject('植白说', '植白说_', 'undefined').checkLogfile(0)
+    checkObject('百事乐元', '百事乐元_', '请重新登录').checkLogfile(0)
 
