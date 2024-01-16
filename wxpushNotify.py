@@ -59,18 +59,9 @@ class checkObject:
         print(self.err_list)
         sendpush(self.err_list, self.msg)
 
-
-def 检查京东():
-    checkObject('京东', 'jd_CheckCK', '已失效').checkLogfile()
-
-
-def 检查饿了么():
-    checkObject('饿了么', 'elm_', '需要登录').checkLogfile(2)
-
-
 if __name__ == '__main__':
-    检查京东()
-    检查饿了么()
+    checkObject('京东', 'jd_CheckCK', '已失效').checkLogfile()
+    checkObject('饿了么', 'elm_', '需要登录').checkLogfile(2)
     checkObject('植白说', '植白说_', 'undefined').checkLogfile(0)
     checkObject('百事乐元', '百事乐元_', '请重新登录').checkLogfile(0)
     checkObject('朵茜', '朵茜_', 'invalid session').checkLogfile(0)
