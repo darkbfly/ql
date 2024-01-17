@@ -57,11 +57,17 @@ def getBalance(bingCK):
     except Exception as e:
         return '调用接口出现异常' + str(e)
 
+def randomchar(length):
+    str = ''
+    for i in range(length):
+        str += random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+    return str
 
 # 搜索
 def bing_rewards(q_str, bingCK, isPc):
+
     try:
-        url = f'https://cn.bing.com/search?q={q_str}&form=QBLH'
+        url = f'https://cn.bing.com/search?q={q_str}&form={randomchar(4)}&cvid={randomchar(32)}'
         if isPc == 1:
             ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54"
         else:
@@ -131,8 +137,8 @@ def startMain(bingCK):
     old_Balance = start_Balance
     if activeLevel == 'Level1':
         # pc端搜索10次
-        for i in range(10):
-            q_str = urllib.parse.quote(get_random_char().encode('utf-8'))
+        for i, msg in enumerate(gethotwords(10), start=0):
+            q_str = urllib.parse.quote(msg.encode('utf-8'))
             printLog(f'电脑搜索第{i + 1}次', bing_rewards(q_str, bingCK, 1))
             new_Balance = getBalance(bingCK)
             printLog(f'积分', new_Balance)
@@ -145,8 +151,8 @@ def startMain(bingCK):
             time.sleep(rand)
     else:
         # pc端搜索35次
-        for i in range(35):
-            q_str = urllib.parse.quote(get_random_char().encode('utf-8'))
+        for i, msg in enumerate(gethotwords(35), start=0):
+            q_str = urllib.parse.quote(msg.encode('utf-8'))
             printLog(f'电脑搜索第{i + 1}次', bing_rewards(q_str, bingCK, 1))
             new_Balance = getBalance(bingCK)
             printLog(f'积分', new_Balance)
@@ -158,8 +164,8 @@ def startMain(bingCK):
             rand = random.randint(3, 5)
             time.sleep(rand)
             # 安卓端搜索20次
-        for i in range(20):
-            q_str = urllib.parse.quote(get_random_char().encode('utf-8'))
+        for i, msg in enumerate(gethotwords(20), start=0):
+            q_str = urllib.parse.quote(msg.encode('utf-8'))
             printLog(f'安卓搜索第{i + 1}次', bing_rewards(q_str, bingCK, 0))
             new_Balance = getBalance(bingCK)
             printLog(f'积分', new_Balance)
@@ -194,8 +200,19 @@ def printLog(title, msg):
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(now + f' [{title}]:' + nvl(msg))
 
+def gethotwords(length):
+    myset = set()
+    url = 'https://api.oioweb.cn/api/common/HotList'
+    rj = requests.get(url).json()
+    if rj['code'] == 200:
+        while len(myset) < length:
+            msglist = rj['result'][random.choice(list(rj['result'].keys()))]
+            myset.add(msglist[random.randint(0, len(msglist) - 1)]['title'])
+    return list(myset)
+
 
 if __name__ == '__main__':
+    # print(gethotwords(10))
     if bingDetectionStop == '':
         bingDetectionStop = 'true'
     bingCK = os.getenv("bingCK")
