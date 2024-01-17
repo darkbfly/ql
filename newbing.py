@@ -65,7 +65,7 @@ def randomchar(length):
 
 # 搜索
 def bing_rewards(q_str, bingCK, isPc):
-
+    print(urllib.parse.unquote(q_str))
     try:
         url = f'https://cn.bing.com/search?q={q_str}&form={randomchar(4)}&cvid={randomchar(32)}'
         if isPc == 1:
@@ -134,6 +134,7 @@ def startMain(bingCK):
     else:
         activeLevel = 'Level2'
         printLog('当前用户组', '第二阶段')
+        printLog(f'积分', getBalance(bingCK))
     old_Balance = start_Balance
     if activeLevel == 'Level1':
         # pc端搜索10次
@@ -161,9 +162,12 @@ def startMain(bingCK):
                     printLog('检测', '积分未变动，停止运行！')
                     break
                 old_Balance = new_Balance
-            rand = random.randint(3, 5)
+            rand = random.randint(10, 15)
             time.sleep(rand)
             # 安卓端搜索20次
+
+        rand = random.randint(10, 15)
+        time.sleep(rand)
         for i, msg in enumerate(gethotwords(20), start=0):
             q_str = urllib.parse.quote(msg.encode('utf-8'))
             printLog(f'安卓搜索第{i + 1}次', bing_rewards(q_str, bingCK, 0))
@@ -174,7 +178,7 @@ def startMain(bingCK):
                     printLog('检测', '积分未变动，停止运行！')
                     break
                 old_Balance = new_Balance
-            rand = random.randint(3, 5)
+            rand = random.randint(10, 15)
             time.sleep(rand)
     end_Balance = getBalance(bingCK)
     increase_Balance = getBalanceGap(start_Balance, end_Balance)
