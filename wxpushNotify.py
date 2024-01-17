@@ -66,3 +66,4 @@ if __name__ == '__main__':
     checkObject('百事乐元', '百事乐元_', '请重新登录').checkLogfile(0)
     checkObject('朵茜', '朵茜_', 'invalid session').checkLogfile(0)
     checkObject('康师傅畅饮社', 'ksfcys_', '未登录，请先登录').checkLogfile(0)
+    checkObject('zippo', 'zippo_', 'Unauthorized').checkLogfile(0)
