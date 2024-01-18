@@ -409,6 +409,13 @@ def 伊利奶粉积分商城(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'yljf_token', data.headers['access-token'], True, '微信小程序-伊利积分')
     return ""
 
+@app.post('/wechatec.brand.wljhealth.com')
+def 王老吉(data: Buffer):
+    possessor = urllib.parse.parse_qs(data.body).get('possessor', [])[0]
+    userCode = urllib.parse.parse_qs(data.body).get('userCode', [])[0]
+    addEnv(f"{data.headers['Host']}.txt", 'wljgfsc', f'{possessor}#{userCode}', True, '王老吉')
+    return ""
+
 
 @click.command()
 @click.option('--phone', default=None)

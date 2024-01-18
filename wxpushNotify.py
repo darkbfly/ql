@@ -67,3 +67,4 @@ if __name__ == '__main__':
     checkObject('朵茜', '朵茜_', 'invalid session').checkLogfile(0)
     checkObject('康师傅畅饮社', 'ksfcys_', '未登录，请先登录').checkLogfile(0)
     checkObject('zippo', 'zippo_', 'Unauthorized').checkLogfile(0)
+    checkObject('好人家美味生活馆', '好人家美味生活馆_', '获取登录信息失败,请重新登录').checkLogfile(0)
