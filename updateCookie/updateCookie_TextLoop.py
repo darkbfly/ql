@@ -27,6 +27,7 @@ class MyHandler(FileSystemEventHandler):
     def on_modified(self, event):
         if not event.is_directory and event.src_path.endswith(".txt"):
             print(f'文件 {event.src_path} 已经被修改')
+            changeenv(event.src_path)
 
 
 def changeenv(src_path):
@@ -69,7 +70,7 @@ if __name__ == '__main__':
         count += 1
 
     # 单次运行
-    # changeenv('13055789923-xapi.weimob.com.txt')
+    # changeenv('13055789923-pepcoinnew.pepcoinbypepsico.com.cn.txt')
 
     path_to_watch = os.path.dirname(os.path.abspath(__file__))
     event_handler = MyHandler()
