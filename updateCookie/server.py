@@ -209,7 +209,7 @@ def 托迈酷客(data: Buffer):
 
 @app.post('/fwdt.shengongshe.org')
 def 申工社(data: Buffer):
-    addEnv(f"{data.headers['Host']}.txt", 'sgs', data.headers['Token'], True, '申工社')
+    addEnv(f"{data.headers['Host']}.txt", 'sgs', data.headers['token'], True, '申工社')
     return ""
 
 
