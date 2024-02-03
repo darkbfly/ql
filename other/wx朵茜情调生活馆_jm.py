@@ -232,7 +232,7 @@ class tasks():  #
 
 
 if __name__ == '__main__':  #
-    if os.path.exists('debug.py'):
+    if os.path.exists('../debug.py'):
         import debug
 
         debug.setDebugEnv()

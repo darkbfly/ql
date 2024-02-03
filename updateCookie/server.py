@@ -1,12 +1,10 @@
-import ctypes
-import json
 import os
-import pprint
 import urllib.parse
-
+import click
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
+
 from updateCookie_Util import *
 
 app = FastAPI()
@@ -128,7 +126,8 @@ def 引体向上(data: Buffer):
 @app.post("/consumer-api.quncrm.com")
 def 雀巢专业餐饮大厨精英荟(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'qczy_token',
-           f"{data.headers['X-Access-Token']}#{data.headers['X-Account-Id']}", True, '微信小程序-雀巢专业餐饮大厨精英荟')
+           f"{data.headers['X-Access-Token']}#{data.headers['X-Account-Id']}", True,
+           '微信小程序-雀巢专业餐饮大厨精英荟')
     return ""
 
 
@@ -153,6 +152,7 @@ def 朵茜情调生活馆(data: Buffer):
         addEnv(f"{data.headers['Host']}.txt", 'dqqdshgck',
                f"{data.queries['access_token']}#{extra['sid']}#{extra['sid']}", True, '微信小程序-朵茜情调生活馆')
     return ""
+
 
 @app.post('/api.gaojihealth.cn')
 def 高济健康(data: Buffer):
@@ -202,13 +202,14 @@ def 认养一头牛(data: Buffer):
 
 @app.post('/apis.folidaymall.com')
 def 托迈酷客(data: Buffer):
-    addEnv(f"{data.headers['Host']}.txt", 'tmkk', data.headers['Authorization'].replace('Bearer ', ''), True, '托迈酷客')
+    addEnv(f"{data.headers['Host']}.txt", 'tmkk', data.headers['Authorization'].replace('Bearer ', ''), True,
+           '托迈酷客')
     return ""
 
 
 @app.post('/fwdt.shengongshe.org')
 def 申工社(data: Buffer):
-    addEnv(f"{data.headers['Host']}.txt", 'sgs', data.headers['Token'], True, '申工社')
+    addEnv(f"{data.headers['Host']}.txt", 'sgs', data.headers['token'], True, '申工社')
     return ""
 
 
@@ -239,10 +240,12 @@ def 伊利会员福利社(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'ylhyencryptsessionid', encryptsessionid, True, '伊利会员福利社')
     return ""
 
+
 @app.post('/midend.icar-ecology.com')
 def 奇瑞EV(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'cheryev', data.headers['Authorization'].replace('Bearer ', ''), True, 'V3')
     return ""
+
 
 @app.post('/hweb-mbf.huazhu.com')
 def 华住(data: Buffer):
@@ -250,20 +253,24 @@ def 华住(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'huazhu_cookies', data.headers['Cookie'], True, '微信小程序-华住签到')
     return ""
 
+
 @app.post('/mvip.midea.cn')
 def 美的会员(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'wx_midea', data.headers['Cookie'], True, '微信小程序 - 美的会员')
     return ""
+
 
 @app.post('/durex.ixiliu.cn')
 def 杜蕾斯会员中心(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'dlshyzx', data.headers['Access-Token'], True, '杜蕾斯会员中心')
     return ""
 
+
 @app.post('/cps.hisense.com')
 def 海信爱家(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'HISENSE_CPS', data.headers['Cookie'], True, '海信爱家')
     return ""
+
 
 @app.post('/pepcoinnew.pepcoinbypepsico.com.cn')
 def 百事乐元(data: Buffer):
@@ -271,96 +278,124 @@ def 百事乐元(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'lekebo_bsly_Cookie', jsonBody['token'], True, '百事乐元')
     return ""
 
+
 @app.post('/ksfshopapp.2qrs.cn')
 def 康师傅饮品(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'lekebo_ksfyp_Cookie', data.headers['Authorization'], True, '康师傅饮品')
     return ""
 
+
 @app.post('/member-api.mengniu.cn')
 def 蒙牛营养生活家(data: Buffer):
-    addEnv(f"{data.headers['Host']}.txt", 'lekebo_mnflag_Cookie', f"{data.headers['X-Token'].replace('Bearer ', '')}&{data.queries['unionId']}", True, '蒙牛营养生活家')
+    addEnv(f"{data.headers['Host']}.txt", 'lekebo_mnflag_Cookie',
+           f"{data.headers['X-Token'].replace('Bearer ', '')}&{data.queries['unionId']}", True, '蒙牛营养生活家')
     return ""
+
 
 @app.post('/mc.kukahome.com')
 def 顾家家居会员俱乐部(data: Buffer):
-    addEnv(f"{data.headers['Host']}.txt", 'lekebo_gjjjhyjlb_Cookie', f"{data.headers['X-Customer']}&{data.headers['AccessToken']}", True, '顾家家居会员俱乐部')
+    addEnv(f"{data.headers['Host']}.txt", 'lekebo_gjjjhyjlb_Cookie',
+           f"{data.headers['X-Customer']}&{data.headers['AccessToken']}", True, '顾家家居会员俱乐部')
     return ""
+
 
 @app.post('/www.jumpingcarp.cn')
 def 庙友之家(data: Buffer):
-    addEnv(f"{data.headers['Host']}.txt", 'miaoyouHome', data.headers['Cookie'].replace('JSESSIONID=', ''), True, 'wx_庙友之家')
+    addEnv(f"{data.headers['Host']}.txt", 'miaoyouHome', data.headers['Cookie'].replace('JSESSIONID=', ''), True,
+           'wx_庙友之家')
     return ""
+
 
 @app.post('/jjw.jingjiu.com')
 def 劲友家(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'lekebo_jyj_Cookie', data.headers['Authorization'], True, '劲友家')
     return ""
 
+
 @app.post('/member.kwwblcj.com')
 def 口味王(data: Buffer):
-    addEnv(f"{data.headers['Host']}.txt", 'lekebo_kww_Cookie', f"{data.queries['memberId']}&{data.queries['kwwMember.unionid']}", True, '口味王')
+    addEnv(f"{data.headers['Host']}.txt", 'lekebo_kww_Cookie',
+           f"{data.queries['memberId']}&{data.queries['kwwMember.unionid']}", True, '口味王')
     return ""
+
 
 @app.post('/club.biqr.cn')
 def 康师傅畅饮社(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'ksfcys_data', data.headers['Token'], True, '微信小程序-康师傅畅饮社')
     return ""
 
+
 @app.post('/zm.t7a.cn')
 def 战马能量星球(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'zmnlxq', data.queries['safe'], True, '新战马能量星球.js')
     return ""
+
+
 @app.post('/shopapi.yxtmart.cn')
 def 一心堂(data: Buffer):
     UserGuid = urllib.parse.parse_qs(data.body).get('UserGuid', [])[0]
     addEnv(f"{data.headers['Host']}.txt", 'yxtGUid', UserGuid, True, '微信小程序-一心堂')
     return ""
+
+
 @app.post('/scrm-prod.shuyi.org.cn')
-def 书亦烧仙草(data:Buffer):
+def 书亦烧仙草(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'sysxc_data', data.headers['auth'], True, '书亦烧仙草')
     return ""
 
+
 @app.post('/bg-hardcore.ab-inbev.cn')
 def HAPI哈啤硬核街(data: Buffer):
-    addEnv(f"{data.headers['Host']}.txt", 'wx_hapi_cookie', f"{data.headers['openId']}&{data.headers['sign']}&{data.headers['timestamp']}", True, 'HAPI哈啤硬核街')
+    addEnv(f"{data.headers['Host']}.txt", 'wx_hapi_cookie',
+           f"{data.headers['openId']}&{data.headers['sign']}&{data.headers['timestamp']}", True, 'HAPI哈啤硬核街')
     return ""
+
 
 @app.post('/jsapi.58moto.com')
 def 摩托范(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'mtf_data', f"{data.headers['token']}&{data.headers['uid']}", True, '摩托范')
     return ""
 
+
 @app.post('/activity.yonghuivip.com')
 def 永辉生活(data: Buffer):
-    addEnv(f"{data.headers['Host']}.txt", 'yhsh', f'{data.queries["deviceid"]}&{data.queries["access_token"]}', True, '永辉生活')
+    addEnv(f"{data.headers['Host']}.txt", 'yhsh', f'{data.queries["deviceid"]}&{data.queries["access_token"]}', True,
+           '永辉生活')
     return ""
+
 
 @app.post('/tc.qzfwckj.com')
 def 青柳同城圈(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'qltcq', data.headers['token'], True, '青柳同城圈')
     return ""
 
+
 @app.post('/miniapp.yaduo.com')
 def 亚朵(data: Buffer):
     cookie = data.headers['Cookie'].split(';')
     for x in cookie:
-        if 'user-valid=' in x :
-            addEnv(f"{data.headers['Host']}.txt", 'yd_wxcookies', f'{x.replace("user-valid=", "")}#{data.queries["token"]}', True, '微信小程序-亚朵')
+        if 'user-valid=' in x:
+            addEnv(f"{data.headers['Host']}.txt", 'yd_wxcookies',
+                   f'{x.replace("user-valid=", "")}#{data.queries["token"]}', True, '微信小程序-亚朵')
     return ""
+
 
 @app.post('/wx-center.zippo.com.cn')
 def zippo(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'zippo_auth', data.headers['Authorization'], True, '微信小程序-zippo')
     return ""
 
+
 @app.post('/123')
 def 统一茄皇二期(data: Buffer):
     return ""
+
 
 @app.post('/gateway.jmhd8.com')
 def 农夫山泉2024(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'nfsqCookie', data.headers['apitoken'], True, '农夫山泉2024')
     return ""
+
 
 @app.post('/m.tk.cn')
 def 泰康在线保险(data: Buffer):
@@ -368,16 +403,34 @@ def 泰康在线保险(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'tkzxbxCookie', jsonbody['body']['unionId'], True, '泰康在线保险')
     return ""
 
+
 @app.post('/msmarket.msx.digitalyili.com')
 def 伊利奶粉积分商城(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'yljf_token', data.headers['access-token'], True, '微信小程序-伊利积分')
     return ""
 
+@app.post('/wechatec.brand.wljhealth.com')
+def 王老吉(data: Buffer):
+    possessor = urllib.parse.parse_qs(data.body).get('possessor', [])[0]
+    userCode = urllib.parse.parse_qs(data.body).get('userCode', [])[0]
+    addEnv(f"{data.headers['Host']}.txt", 'wljgfsc', f'{possessor}#{userCode}', True, '王老吉')
+    return ""
 
 
-if __name__ == '__main__':
-    with open('config.json', 'r') as f:
-        config = json.load(f)
-    目前电话 = get_list_item_by_index(config['phoneList'])
+@click.command()
+@click.option('--phone', default=None)
+def loadPhone(phone: str):
+    global 目前电话
+    if phone is not None:
+        目前电话 = phone
+    else:
+        with open('config.json', 'r') as f:
+            config = json.load(f)
+        目前电话 = get_list_item_by_index(config['phoneList'])
+
+    print('目前电话:' + 目前电话)
     隐藏cmd对话框()
     uvicorn.run(app, host="0.0.0.0", port=8989)
+
+if __name__ == '__main__':
+    loadPhone()
