@@ -416,6 +416,11 @@ def 王老吉(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'wljgfsc', f'{possessor}#{userCode}', True, '王老吉')
     return ""
 
+@app.post('/qmwebapi.qmai.cn')
+def 霸王茶姬(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'bwcjCookie', data.headers['Qm-User-Token'], True, '霸王茶姬')
+    return ""
+
 
 @click.command()
 @click.option('--phone', default=None)
