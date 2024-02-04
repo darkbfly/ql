@@ -1,4 +1,5 @@
 import os
+import traceback
 
 import requests
 import urllib3
@@ -36,5 +37,8 @@ class ApiMain:
         else:
             for i in mytool.getlistCk(f'{envName}'):
                 for func in self.funcName:
-                    getattr(request(i), func)()
+                    try:
+                        getattr(request(i), func)()
+                    except:
+                        traceback.print_exc()
         pass
