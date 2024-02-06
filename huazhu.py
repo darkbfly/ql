@@ -57,9 +57,10 @@ class huazhu(ApiRequest.ApiRequest):
         pass
 
 if __name__ == "__main__":
-    if mytool.getlistCk(f'{tokenName}') == None:
-        print(f'请检查你的变量名称 {tokenName} 是否填写正确')
-        exit(0)
-    else :
-        for i in mytool.getlistCk(f'{tokenName}'):
-            huazhu(i).login()
+    # if mytool.getlistCk(f'{tokenName}') == None:
+    #     print(f'请检查你的变量名称 {tokenName} 是否填写正确')
+    #     exit(0)
+    # else :
+    #     for i in mytool.getlistCk(f'{tokenName}'):
+    #         (i).login()
+    ApiRequest.ApiMain(['login']).run(tokenName, huazhu)
