@@ -1,12 +1,15 @@
+import json
+import os
 import time
+import traceback
 
 import click
 import pyperclip
 from playwright.sync_api import sync_playwright
 
 
-@click.command()
-@click.option('--account', help='帐号', required=True)
+# @click.command()
+# @click.option('--account', help='帐号', required=True)
 def run(account):
     with sync_playwright() as playwright:
         pyperclip.copy("")
@@ -30,26 +33,42 @@ def run(account):
         # iCount = 0
         while True:
             for x in context.cookies():
-                if x['name'] == 'wskey':
-                    print("cookie.wskey : " + x['wskey'])
-                    break
+                if x['name'] == 'pt_key':
+                    jsonData['PT_KEY'] = x['value']
+                    print("cookie.pt_key : " + x['value'])
+                if x['name'] == 'pt_pin':
+                    jsonData['PT_PIN'] = x['value']
+                    print("cookie.pt_pin : " + x['value'])
+            if 'PT_KEY' in jsonData and 'PT_PIN' in jsonData:
+                break
             else:
                 # iCount += 1
-                if browser.is_connected():
-                    page.wait_for_timeout(1 * 1000)
-                    print(len(page.query_selector('//html/body/div[2]/div/div[3]/p[2]/input').input_value()))
-                    if len(page.query_selector('//html/body/div[2]/div/div[3]/p[2]/input').input_value()) == 6:
-                        page.get_by_text("登 录").click()
-                else:
-                    break
-
-        # pyperclip.copy(json.dumps(jsonData))
-        # pt_key=${ptKey};pt_pin=${ptPin}
-        # context.storage_state(path="auth.json")
+                try:
+                    if browser.is_connected():
+                        page.wait_for_timeout(1 * 1000)
+                        print(len(page.query_selector('//html/body/div[2]/div/div[3]/p[2]/input').input_value()))
+                        if len(page.query_selector('//html/body/div[2]/div/div[3]/p[2]/input').input_value()) == 6:
+                            page.get_by_text("登 录").click()
+                    else:
+                        break
+                except:
+                    pass
         context.close()
         browser.close()
-        pyperclip.copy(f"pt_key={jsonData['PT_KEY']};pt_pin={jsonData['PT_PIN']};")
+        # pyperclip.copy()
+        文件路径 = os.path.dirname(os.path.abspath(__file__)) + "\\" + account + '-' + "JD.txt"
+        with open(文件路径, 'w') as f:
+            content = {'name': 'JD_COOKIE', 'value': f"pt_key={jsonData['PT_KEY']};pt_pin={jsonData['PT_PIN']};", 'remark': account, 'run': False, 'taskName': ''}
+            json.dump(content, f)
         return 0
 
 if __name__ == '__main__':
-    run()
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+    电话号码列表 = config['phoneList']
+    for x in 电话号码列表:
+        try:
+            run(x)
+        except:
+            traceback.print_exc()
+    # run()
