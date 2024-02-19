@@ -421,6 +421,11 @@ def 霸王茶姬(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'bwcjCookie', data.headers['Qm-User-Token'], True, '霸王茶姬')
     return ""
 
+@app.post('/superapp.jmc.com.cn')
+def 江铃智行(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'jlzx', data.headers['Access-Token'], True, '江铃智行')
+    return ""
+
 
 @click.command()
 @click.option('--phone', default=None)
