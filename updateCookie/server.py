@@ -426,6 +426,12 @@ def 江铃智行(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'jlzx', data.headers['Access-Token'], True, '江铃智行')
     return ""
 
+@app.post('/mk-platform.haier.net')
+def 卡萨帝2(data: Buffer):
+    jsonbody = json.loads(data.body)
+    addEnv(f"{data.headers['Host']}.txt", 'ksd', f'{data.headers["MK-U-User-Token"]}#{jsonbody["openId"]}', True, '海尔-卡萨帝.js')
+    return ""
+
 
 @click.command()
 @click.option('--phone', default=None)

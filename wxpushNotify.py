@@ -71,3 +71,4 @@ if __name__ == '__main__':
     checkObject('申工社', 'sgs_', '签到结果:Token失效').checkLogfile(0)
     checkObject('拼多多果园', '拼多多果园_', '失效').checkLogfile(0)
     checkObject('Tank', 'Tank_', 'token已失效，请重新登录').checkLogfile(0)
+    checkObject('北京汽车', 'bjqc_', '登录失败').checkLogfile(0)
