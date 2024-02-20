@@ -8,3 +8,4 @@ test.py
 config.json
 *.log
 *.json
+decode/
