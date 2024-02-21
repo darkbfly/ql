@@ -58,18 +58,23 @@ class yd(ApiRequest.ApiRequest):
         res = self.sec.get('https://miniapp.yaduo.com/atourlife/signIn/signIn', params=params, cookies=self.cookies)
         print(res.text)
 
+    def lottery(self):
+        params = {
+            # 'r': '0.3972955364433912',
+            'token': self.token,
+            'platType': '6',
+            'appVer': '3.20.0',
+            'channelId': '300001',
+            'activitySource': '',
+            'activityId': '',
+            'activeId': '',
+            # 随机数0-5
+            'code': 0,
+        }
+
+        res = self.sec.get('https://miniapp.yaduo.com/atourlife/signIn/lottery', params=params, cookies=self.cookies)
+        print(res.text)
+
 
 if __name__ == '__main__':
-    # DEBUG
-    # if os.path.exists('debug.py'):
-    #     import debug
-    #
-    #     debug.setDebugEnv()
-    #
-    # if mytool.getlistCk(f'{tokenName}') is None:
-    #     print(f'请检查你的变量名称 {tokenName} 是否填写正确')
-    #     exit(0)
-    # else:
-    #     for i in mytool.getlistCk(f'{tokenName}'):
-    #         yd(i.split("#")).login()
-    ApiRequest.ApiMain(['login']).run(tokenName, yd)
+    ApiRequest.ApiMain(['lottery']).run(tokenName, yd)

@@ -9,3 +9,4 @@ config.json
 *.log
 *.json
 decode/
+android-ssl/

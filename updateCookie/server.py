@@ -432,6 +432,10 @@ def 卡萨帝2(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'ksd', f'{data.headers["MK-U-User-Token"]}#{jsonbody["openId"]}', True, '海尔-卡萨帝.js')
     return ""
 
+@app.post('/mxsa.mxbc.net')
+def 蜜雪冰城(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'mxbc_data', data.headers['Access-Token'], True, '蜜雪冰城')
+    return ""
 
 @click.command()
 @click.option('--phone', default=None)
