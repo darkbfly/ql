@@ -7,6 +7,7 @@ Edge必应自动搜索赚积分
 当前版本：v1.4
 
 变量名：bingCK  多账号换行
+URL后置参数变量名 bingUrlSuffix
 bingDetectionStop 是否检测到积分未增长自动停止任务  默认为true  不需要该功能则额外定义变量，值为false
 
 如果执行的发现积分不增长，且脚本上显示的积分跟实际不符，很有可能不是同一个账号的cookie，建议重新抓取。
@@ -15,6 +16,7 @@ bingDetectionStop 是否检测到积分未增长自动停止任务  默认为tru
 import datetime
 import os
 import random
+import re
 import time
 import urllib.parse
 
@@ -66,8 +68,16 @@ def randomchar(length):
 # 搜索
 def bing_rewards(q_str, bingCK, isPc):
     print(urllib.parse.unquote(q_str))
+    # 用户需要先手动在Bing搜索一下，在你的搜索结果返回的URL中，把搜索词后面 & 开始的所有部分复制过来。
+    # 原始脚本中没有附带这些参数，直接调用了搜索，不会记录 Reward 积分
+    if os.getenv("bingUrlSuffix") is None:
+        return '失败'
+    else :
+        q_suffix = os.getenv("bingUrlSuffix")
+        q_suffix = re.sub(r'cvid=[\w\d]+', f'cvid={randomchar(32)}', q_suffix)
     try:
-        url = f'https://cn.bing.com/search?q={q_str}&form={randomchar(4)}&cvid={randomchar(32)}'
+        url = f'https://cn.bing.com/search?q={q_str}{q_suffix}'
+        print(url)
         if isPc == 1:
             ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54"
         else:
