@@ -71,7 +71,7 @@ def bing_rewards(q_str, bingCK, isPc):
     # 用户需要先手动在Bing搜索一下，在你的搜索结果返回的URL中，把搜索词后面 & 开始的所有部分复制过来。
     # 原始脚本中没有附带这些参数，直接调用了搜索，不会记录 Reward 积分
     if os.getenv("bingUrlSuffix") is None:
-        return '失败'
+        return '没有参数'
     else :
         q_suffix = os.getenv("bingUrlSuffix")
         q_suffix = re.sub(r'cvid=[\w\d]+', f'cvid={randomchar(32)}', q_suffix)
@@ -215,13 +215,44 @@ def printLog(title, msg):
     print(now + f' [{title}]:' + nvl(msg))
 
 def gethotwords(length):
+    defaultset = {"游戏", "编程", "动漫", "射击游戏", "网游", "社交软件", "搜索引擎",
+        "论坛", "美食", "宠物", "工作", "编程", "视频网站", "短视频", "英雄",
+        "搜索引擎", "文学", "角色", "食物", "学习", "购物", "新闻", "音乐",
+        "电影", "股票", "旅游", "体育", "健身", "时尚", "汽车", "科技",
+        "健康", "房地产", "家具", "饮食", "美容", "婚恋", "育儿", "电子产品",
+        "手机", "数码", "电脑", "办公", "家电", "摄影", "导航", "邮箱", "地图",
+        "翻译", "天气", "购物", "图书", "校园", "问答", "职业", "视觉", "设计",
+        "棋牌", "经营", "安全", "网络", "效率", "日常", "社会", "法律", "投资",
+        "理财", "医疗", "心理", "辅导", "装修", "手工", "烘焙", "园艺", "运动",
+        "旅行", "摄影", "美食", "宠物", "电影", "绘画", "手账", "收集", "诗歌", "写作",
+        "吉他", "钢琴", "唱歌", "舞蹈", "机器人",
+        "物理", "化学", "生物", "数学", "考古", "历史", "哲学", "心理学", "社会学", "经济学",
+        "机械", "土木", "建筑", "电子", "通信", "计算机", "环境", "能源", "交通",
+        "创业", "投资", "财务", "银行", "证券", "保险", "市场", "销售", "人力", "运营",
+        "品牌", "传媒", "设计", "艺术", "策划", "整形", "影视", "广告", "公关", "法律",
+        "医学", "护理", "药学", "中医", "瑜伽", "跑步", "骑行", "游泳", "攀岩",
+        "电竞", "棋牌", "桌游", "卡牌", "探险", " Safari", "旅游", "摄影", "美食",
+        "动漫", "游戏", "电影", "电视剧", "小说", "音乐", "舞蹈", "手工", "美妆",
+        "服装", "宠物", "汽车", "科技", "体育", "健身", "家居", "育儿", "教育",
+        "职业", "金融", "环保", "公益", "政治", "军事", "历史", "哲学", "宗教",
+        "心理"}
     myset = set()
-    url = 'https://api.oioweb.cn/api/common/HotList'
-    rj = requests.get(url).json()
-    if rj['code'] == 200:
+    try:
+        url = 'https://api.oioweb.cn/api/common/HotList'
+        rj = requests.get(url, timeout=5).json()
+        if rj['code'] == 200:
+            print("返回成功")
+            while len(myset) < length:
+                msglist = rj['result'][random.choice(list(rj['result'].keys()))]
+                if len(msglist[random.randint(0, len(msglist) - 1)]['title']) > 0:
+                    myset.add(msglist[random.randint(0, len(msglist) - 1)]['title'])
+    except Exception:
+        pass
+    if len(myset) == 0:
+        # 从备用字典随机组合2个
         while len(myset) < length:
-            msglist = rj['result'][random.choice(list(rj['result'].keys()))]
-            myset.add(msglist[random.randint(0, len(msglist) - 1)]['title'])
+            myset.add(random.choice(list(defaultset)) + random.choice(list(defaultset)))
+    print(myset)
     return list(myset)
 
 
