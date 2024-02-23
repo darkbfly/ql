@@ -17,8 +17,6 @@ import mytool
 from notify import send
 import urllib3
 
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
 title = '微信小程序-亚朵'
 tokenName = 'yd_wxcookies'
 
@@ -29,11 +27,8 @@ class yd(ApiRequest.ApiRequest):
         self.sec.headers = {
             'Host': 'miniapp.yaduo.com',
             'Connection': 'keep-alive',
-            'sec-ch-ua': '"Chromium";v="107", "Not=A?Brand";v="24"',
             'Accept': 'application/json, text/plain, */*',
-            'Client-DF': 'pWPSN1697676214tDDRG3cqfj9',
-            'sec-ch-ua-mobile': '?0',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF XWEB/8447',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309092b) XWEB/8555',
             'Origin': 'https://wechat.yaduo.com',
             'Referer': 'https://wechat.yaduo.com/',
             'Accept-Language': 'zh-CN,zh;q=0.9',
@@ -45,10 +40,9 @@ class yd(ApiRequest.ApiRequest):
 
     def login(self):
         params = {
-            # 'r': '0.3972955364433912',
             'token': self.token,
             'platType': '6',
-            'appVer': '3.20.0',
+            'appVer': '3.24.2',
             'channelId': '300001',
             'activitySource': '',
             'activityId': '',
@@ -60,10 +54,9 @@ class yd(ApiRequest.ApiRequest):
 
     def lottery(self):
         params = {
-            # 'r': '0.3972955364433912',
             'token': self.token,
             'platType': '6',
-            'appVer': '3.20.0',
+            'appVer': '3.24.2',
             'channelId': '300001',
             'activitySource': '',
             'activityId': '',
@@ -77,4 +70,4 @@ class yd(ApiRequest.ApiRequest):
 
 
 if __name__ == '__main__':
-    ApiRequest.ApiMain(['lottery']).run(tokenName, yd)
+    ApiRequest.ApiMain(['login']).run(tokenName, yd)

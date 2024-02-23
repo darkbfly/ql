@@ -75,3 +75,4 @@ if __name__ == '__main__':
     checkObject('亚朵', 'yaduo_', '出了些小问题').checkLogfile(0)
     checkObject('立白', '立白VIP_', 'undefined').checkLogfile(0)
     checkObject('zhengjia', 'zhengjia_', '失败').checkLogfile(0)
+    checkObject('骁龙骁友会', 'wx_xlxyh_', '非法请求').checkLogfile(0)

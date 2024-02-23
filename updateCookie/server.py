@@ -133,8 +133,13 @@ def 雀巢专业餐饮大厨精英荟(data: Buffer):
 
 @app.post("/smp-api.iyouke.com")
 def meiyang会员积分(data: Buffer):
-    addEnv(f"{data.headers['Host']}.txt", 'my_auth',
-           data.headers['Authorization'], True, '微信小程序-meiyang会员积分')
+    if data.headers['appId'] == 'wxa20c0c10a072172e':
+        addEnv(f"{data.headers['Host']}_wxa20c0c10a072172e.txt", '',
+               data.headers['Authorization'].replace('Bearer ', ''), True, '微信小程序-向太的会客厅会员中心')
+        pass
+    else :
+        addEnv(f"{data.headers['Host']}.txt", 'my_auth',
+               data.headers['Authorization'], True, '微信小程序-meiyang会员积分')
     return ""
 
 
@@ -182,8 +187,16 @@ def 卡夫亨(data: Buffer):
 
 @app.post('/clubwx.hm.liby.com.cn')
 def 立白小白白会员(data: Buffer):
-    addEnv(f"{data.headers['Host']}.txt", 'lbvip',
-           f"{data.headers['unionId']}#{data.headers['X-wxde54fd27cb59db51-Token']}", True, '立白小白白会员俱乐部')
+    try:
+        addEnv(f"{data.headers['Host']}.txt", 'lbvip',
+               f"{data.headers['unionId']}#{data.headers['X-wxde54fd27cb59db51-Token']}", True, '立白小白白会员俱乐部')
+    except:
+        pass
+    try:
+        addEnv(f"{data.headers['Host']}_wx_miss.txt", 'wx_miss',
+               f"{data.headers['unionId']}#{data.headers['X-wx8465e1173d1e11b0-Token']}", True, '微信小程序-蜜丝miss')
+    except:
+        pass
     return ""
 
 
@@ -409,6 +422,7 @@ def 伊利奶粉积分商城(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'yljf_token', data.headers['access-token'], True, '微信小程序-伊利积分')
     return ""
 
+
 @app.post('/wechatec.brand.wljhealth.com')
 def 王老吉(data: Buffer):
     possessor = urllib.parse.parse_qs(data.body).get('possessor', [])[0]
@@ -416,26 +430,32 @@ def 王老吉(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'wljgfsc', f'{possessor}#{userCode}', True, '王老吉')
     return ""
 
+
 @app.post('/qmwebapi.qmai.cn')
 def 霸王茶姬(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'bwcjCookie', data.headers['Qm-User-Token'], True, '霸王茶姬')
     return ""
+
 
 @app.post('/superapp.jmc.com.cn')
 def 江铃智行(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'jlzx', data.headers['Access-Token'], True, '江铃智行')
     return ""
 
+
 @app.post('/mk-platform.haier.net')
 def 卡萨帝2(data: Buffer):
     jsonbody = json.loads(data.body)
-    addEnv(f"{data.headers['Host']}.txt", 'ksd', f'{data.headers["MK-U-User-Token"]}#{jsonbody["openId"]}', True, '海尔-卡萨帝.js')
+    addEnv(f"{data.headers['Host']}.txt", 'ksd', f'{data.headers["MK-U-User-Token"]}#{jsonbody["openId"]}', True,
+           '海尔-卡萨帝.js')
     return ""
+
 
 @app.post('/mxsa.mxbc.net')
 def 蜜雪冰城(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'mxbc_data', data.headers['Access-Token'], True, '蜜雪冰城')
     return ""
+
 
 @click.command()
 @click.option('--phone', default=None)
@@ -451,6 +471,7 @@ def loadPhone(phone: str):
     print('目前电话:' + 目前电话)
     隐藏cmd对话框()
     uvicorn.run(app, host="0.0.0.0", port=8989)
+
 
 if __name__ == '__main__':
     loadPhone()
