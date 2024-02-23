@@ -134,8 +134,8 @@ def 雀巢专业餐饮大厨精英荟(data: Buffer):
 @app.post("/smp-api.iyouke.com")
 def meiyang会员积分(data: Buffer):
     if data.headers['appId'] == 'wxa20c0c10a072172e':
-        addEnv(f"{data.headers['Host']}_wxa20c0c10a072172e.txt", '',
-               data.headers['Authorization'].replace('Bearer ', ''), True, '微信小程序-向太的会客厅会员中心')
+        addEnv(f"{data.headers['Host']}_wxa20c0c10a072172e.txt", 'wx_xt',
+               data.headers['Authorization'], True, '微信小程序-向太的会客厅会员中心')
         pass
     else :
         addEnv(f"{data.headers['Host']}.txt", 'my_auth',
@@ -389,7 +389,7 @@ def 亚朵(data: Buffer):
     for x in cookie:
         if 'user-valid=' in x:
             addEnv(f"{data.headers['Host']}.txt", 'yd_wxcookies',
-                   f'{x.replace("user-valid=", "")}#{data.queries["token"]}', True, '微信小程序-亚朵')
+                   f'{x.strip().replace("user-valid=", "")}#{data.queries["token"]}', True, '微信小程序-亚朵')
     return ""
 
 
