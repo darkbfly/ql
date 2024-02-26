@@ -4,16 +4,9 @@ new Env("微信小程序-东呈酒店")
 env add dcjd_data
 """
 import json
-import os
-import traceback
-import requests
-
 import ApiRequest
-import mytool
 from notify import send
-import urllib3
 
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 title = '微信小程序-东呈酒店'
 tokenName = 'dcjd_data'
 
@@ -52,16 +45,4 @@ class dcjd(ApiRequest.ApiRequest):
 
 
 if __name__ == '__main__':
-    # DEBUG
-    # if os.path.exists('debug.py'):
-    #     import debug
-    #
-    #     debug.setDebugEnv()
-    #
-    # if mytool.getlistCk(f'{tokenName}') is None:
-    #     print(f'请检查你的变量名称 {tokenName} 是否填写正确')
-    #     exit(0)
-    # else:
-    #     for i in mytool.getlistCk(f'{tokenName}'):
-    #         dcjd(i).login()
     ApiRequest.ApiMain(['login']).run(tokenName, dcjd)
