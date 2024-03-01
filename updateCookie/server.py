@@ -399,11 +399,6 @@ def zippo(data: Buffer):
     return ""
 
 
-@app.post('/123')
-def 统一茄皇二期(data: Buffer):
-    return ""
-
-
 @app.post('/gateway.jmhd8.com')
 def 农夫山泉2024(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'nfsqCookie', data.headers['apitoken'], True, '农夫山泉2024')

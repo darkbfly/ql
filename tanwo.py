@@ -30,6 +30,11 @@ class tanwo(ApiRequest.ApiRequest):
     def login(self):
         response = self.sec.get('https://tw.api.allture.vip/appApi/activity/blindBoxLuckDraw')
         print(response.text)
+        prize_id = response.json()['data']['prize_id']
+        response = self.sec.get('https://tw-api.tanwo.xyz/appApi/activity/receiveBlindBoxReward', params={
+            'prize_id': prize_id
+        })
+        print(response.text)
 
 if __name__ == '__main__':
     ApiRequest.ApiMain(['login']).run(tokenName, tanwo)
