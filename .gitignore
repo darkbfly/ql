@@ -10,3 +10,4 @@ config.json
 *.json
 decode/
 android-ssl/
+*.bat

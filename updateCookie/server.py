@@ -112,7 +112,7 @@ def 美团(data: Buffer):
 @app.post("/api.yqslmall.com")
 def 元气森林(data: Buffer):
     name = 'Authorization'
-    addEnv(f"{data.headers['Host']}.txt", 'yqsl', data.headers[name].replace('Bearer ', ''), True, '元气森林')
+    addEnv(f"{data.headers['Host']}.txt", 'yqsl', data.headers[name].replace('Bearer ', ''), True, '微信小程序-元气森林')
     return data.headers[name]
 
 
@@ -427,8 +427,10 @@ def 王老吉(data: Buffer):
 
 
 @app.post('/qmwebapi.qmai.cn')
+@app.post('/webapi.qmai.cn')
 def 霸王茶姬(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'bwcjCookie', data.headers['Qm-User-Token'], True, '霸王茶姬')
+    addEnv(f"{data.headers['Host']}_bwcjqq.txt", 'bwcjqq', data.headers['Qm-User-Token'], True, '霸王茶姬签到')
     return ""
 
 
@@ -451,6 +453,10 @@ def 蜜雪冰城(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'mxbc_data', data.headers['Access-Token'], True, '蜜雪冰城')
     return ""
 
+@app.post('/member-pro.zhengjiamax.com')
+def 正佳(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'wx_zj', data.headers['MemberSession'], True, '微信小程序-正佳')
+    return ""
 
 @click.command()
 @click.option('--phone', default=None)
