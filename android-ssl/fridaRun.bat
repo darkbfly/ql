@@ -1,1 +1,1 @@
-frida -U -f com.chaozh.iReader.dj -l./dejian/test.js
+frida -U -f com.ccb.longlife --no-pause -I 123.js

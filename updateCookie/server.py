@@ -458,6 +458,13 @@ def 正佳(data: Buffer):
     addEnv(f"{data.headers['Host']}.txt", 'wx_zj', data.headers['MemberSession'], True, '微信小程序-正佳')
     return ""
 
+@app.post('/api.pinduoduo.com')
+def pdd(data: Buffer):
+    addEnv(f"{data.headers['Host']}.txt", 'ddgyck', data.headers['AccessToken'], True, '拼多多果园')
+    return ""
+
+
+
 @click.command()
 @click.option('--phone', default=None)
 def loadPhone(phone: str):
