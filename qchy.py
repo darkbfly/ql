@@ -11,7 +11,7 @@ tokenName = 'wx_qchy'
 msg = ''
 
 
-class miss(ApiRequest.ApiRequest):
+class qchy(ApiRequest.ApiRequest):
     def __init__(self, data):
         super().__init__()
         self.sec.headers = {
@@ -43,4 +43,4 @@ class miss(ApiRequest.ApiRequest):
 
 
 if __name__ == '__main__':
-    ApiRequest.ApiMain(['login']).run(tokenName, miss)
+    ApiRequest.ApiMain(['login']).run(tokenName, qchy)
