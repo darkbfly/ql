@@ -1,3 +1,4 @@
+import hashlib
 import os
 import random
 import re
@@ -16,7 +17,6 @@ def getlistCk(ckname):
 # 获取北京时间 带时区
 def gettime():
     return datetime.now(tz=ZoneInfo('Asia/Shanghai'))
-
 
 def getSecTimestamp():
     return int(time.time())
@@ -68,6 +68,13 @@ def getJsonConfig(name):
     with open(os.path.dirname(os.path.abspath(__file__)) + f'\\config.json', 'r') as f:
         return json.load(f)[name]
 
+def randomint(len):
+    return random.randint(10 ** (len - 1), 10 ** len - 1)
+
+def calculate_md5(input_string):
+    md5_hash = hashlib.md5()
+    md5_hash.update(input_string.encode())
+    return md5_hash.hexdigest()
 
 if __name__ == '__main__':
-    print(os.getcwd())
+    print(gettime('%Y-%-m-%-d'))

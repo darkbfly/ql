@@ -42,17 +42,14 @@ def run(account):
             if 'PT_KEY' in jsonData and 'PT_PIN' in jsonData:
                 break
             else:
-                # iCount += 1
-                try:
-                    if browser.is_connected():
-                        page.wait_for_timeout(1 * 1000)
+                if browser.is_connected():
+                    page.wait_for_timeout(1 * 1000)
+                    try:
                         print(len(page.query_selector('//html/body/div[2]/div/div[3]/p[2]/input').input_value()))
                         if len(page.query_selector('//html/body/div[2]/div/div[3]/p[2]/input').input_value()) == 6:
                             page.get_by_text("登 录").click()
-                    else:
-                        break
-                except:
-                    pass
+                    except:
+                        pass
         context.close()
         browser.close()
         # pyperclip.copy()
