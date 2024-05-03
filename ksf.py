@@ -1,3 +1,9 @@
+"""
+cron: 0 7 * * *
+new Env("微信小程序-康师傅味道馆")
+env add wx_ksf = encryptsessionid
+"""
+
 import ApiRequest
 import mytool
 tokenName = 'wx_ksf'

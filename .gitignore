@@ -11,3 +11,4 @@ config.json
 decode/
 android-ssl/
 *.bat
+wxapp*
