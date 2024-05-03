@@ -1,3 +1,4 @@
+import uuid
 import hashlib
 import os
 import random
@@ -76,5 +77,8 @@ def calculate_md5(input_string):
     md5_hash.update(input_string.encode())
     return md5_hash.hexdigest()
 
+def getUUID():
+    return str(uuid.uuid4())
+
 if __name__ == '__main__':
-    print(gettime('%Y-%-m-%-d'))
+    print(getUUID())
