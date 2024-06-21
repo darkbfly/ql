@@ -47,16 +47,4 @@ class yljf(ApiRequest.ApiRequest):
 
 
 if __name__ == '__main__':
-    # DEBUG
-    # if os.path.exists('debug.py'):
-    #     import debug
-    #
-    #     debug.setDebugEnv()
-    #
-    # if mytool.getlistCk(f'{tokenName}') is None:
-    #     print(f'请检查你的变量名称 {tokenName} 是否填写正确')
-    #     exit(0)
-    # else:
-    #     for i in mytool.getlistCk(f'{tokenName}'):
-    #         yljf(i).login()
     ApiRequest.ApiMain(['login']).run(tokenName, yljf)
