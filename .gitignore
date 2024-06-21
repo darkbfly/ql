@@ -12,4 +12,4 @@ decode/
 android-ssl/
 *.bat
 wxapp*
-invalid/
+invalid/*
