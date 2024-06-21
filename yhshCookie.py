@@ -5,11 +5,12 @@ import requests
 
 url = '127.0.0.1:5700'
 
+
 def getToken():
     if os.path.isfile('/ql/data/config/auth.json'):
         with open('/ql/data/config/auth.json', 'r') as f:
             config = json.load(f)
-            return config['token']
+            return 'Bearer ' + config['token']
 
 
 if __name__ == '__main__':
@@ -18,9 +19,18 @@ if __name__ == '__main__':
         'Authorization': getToken(),
         'Content-Type': 'application/json'
     }
+    yhsh = []
     sec = requests.session()
     sec.verify = False
     sec.trust_env = False
     rj = sec.get(newUrl, headers=headers).json()
     if rj['code'] == 200:
+        for x in rj['data']:
+            if x['name'] == 'yhsh_cookies':
+                yhsh.append(f"{x['value']}#{x['remarks']}")
         pass
+
+    with open('/ql/data/scripts/leafTheFish_DeathNote/yhshCookie.txt', 'w') as f:
+        f.write('\n'.join(yhsh))
+
+
