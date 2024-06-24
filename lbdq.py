@@ -31,7 +31,7 @@ class lbdq(ApiRequest.ApiRequest):
         s = mytool.getMSecTimestamp()
         json_data = {
             'timestamp': s,
-            'token': mytool.calculate_md5(s + 'wqewq' + self.openid),
+            'token': mytool.calculate_md5(str(s) + 'wqewq' + self.openid),
             'openid': self.openid,
         }
 
