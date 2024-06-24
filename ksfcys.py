@@ -25,7 +25,7 @@ class ksfcys(ApiRequest.ApiRequest):
     def __init__(self, data):
         super().__init__()
         self.sec.headers = {
-            'Host': 'club.biqr.cn',
+            'Host': 'club.gdshcm.com',
             'Connection': 'keep-alive',
             'Accept': 'application/json, text/plain, */*',
             'xweb_xhr': '1',
@@ -36,7 +36,7 @@ class ksfcys(ApiRequest.ApiRequest):
         }
 
     def login(self):
-        response = self.sec.post('https://club.biqr.cn/api/signIn/integralSignIn', params='', data='{}')
+        response = self.sec.post('https://club.gdshcm.com/api/signIn/integralSignIn', params='', data='{}')
         if response.status_code == 200:
             rj = response.json()
             if rj['code'] == 0:
