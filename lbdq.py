@@ -26,12 +26,12 @@ class lbdq(ApiRequest.ApiRequest):
             'Referer': 'https://servicewechat.com/wxc8c90950cf4546f6/150/page-frame.html',
             'Accept-Language': 'zh-CN,zh;q=0.9',
         }
-        self.token = data.split('#')[0]
-        self.openid = data.split('#')[1]
+        self.openid = data
     def login(self):
+        s = mytool.getMSecTimestamp()
         json_data = {
-            'timestamp': mytool.getMSecTimestamp(),
-            'token': self.token,
+            'timestamp': s,
+            'token': mytool.calculate_md5(s + 'wqewq' + self.openid),
             'openid': self.openid,
         }
 
