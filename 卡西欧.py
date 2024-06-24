@@ -21,7 +21,7 @@ class kxo(ApiRequest.ApiRequest):
             'Host': 'api.casioonline.com.cn',
             'Connection': 'keep-alive',
             # 'Content-Length': '2',
-            'x-debug-trace': '1719210759792',
+            'x-debug-trace': str(mytool.getMSecTimestamp()),
             'xweb_xhr': '1',
             'Authorization': data,
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090a1b)XWEB/9185',
