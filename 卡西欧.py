@@ -6,6 +6,7 @@ cron 0 3 * * *
 仅用于测试和学习研究，禁止用于商业用途，不能保证其合法性，准确性，完整性和有效性，请根据情况自行判断；您必须在下载后的24小时内从计算机或手机中完全删除以上内容。
 如果任何单位或个人认为该项目的脚本可能涉嫌侵犯其权利，则应及时通知并提供身份证明，所有权证明，我们将在收到认证文件后删除相关脚本。
 """
+import json
 
 import ApiRequest
 import mytool
@@ -35,7 +36,7 @@ class kxo(ApiRequest.ApiRequest):
     def login(self):
         json_data = {}
         response = self.sec.post('https://api.casioonline.com.cn/miniprogram/fans-garden/user-sign', json=json_data)
-        print(response.text)
+        print(json.loads(response.text))
 
 
 if __name__ == '__main__':
