@@ -1,5 +1,5 @@
 """
-cron: 0 3 * * * ryytn.py
+cron: 0 3 * * *
 new Env("微信小程序-冷酸灵")
 env add wx_lsl
 
