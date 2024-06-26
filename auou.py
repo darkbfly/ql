@@ -29,7 +29,7 @@ class auou(ApiRequest.ApiRequest):
         }
 
     def login(self):
-        rj = self.sec.get('https://credit.app.tuiwe.com/api/v1/fan/sign').json
+        rj = self.sec.get('https://credit.app.tuiwe.com/api/v1/fan/sign').json()
         print(rj)
 
 
