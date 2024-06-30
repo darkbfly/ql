@@ -14,7 +14,7 @@ tokenName = 'wx_yyy'
 msg = ''
 
 
-class sdl(ApiRequest.ApiRequest):
+class yyy(ApiRequest.ApiRequest):
     def __init__(self, data):
         super().__init__()
         self.sec.headers = {
@@ -40,4 +40,4 @@ class sdl(ApiRequest.ApiRequest):
 
 
 if __name__ == '__main__':
-    ApiRequest.ApiMain(['login']).run(tokenName, sdl)
+    ApiRequest.ApiMain(['login']).run(tokenName, yyy)
