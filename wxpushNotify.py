@@ -76,3 +76,4 @@ if __name__ == '__main__':
     checkObject('立白', '立白VIP_', 'undefined').checkLogfile(0)
     checkObject('zhengjia', 'zhengjia_', '失败').checkLogfile(0)
     checkObject('骁龙骁友会', 'wx_xlxyh_', '非法请求').checkLogfile(0)
+    checkObject('海天美味馆', 'htmwg_', '登录状态已失效').checkLogfile(0)
