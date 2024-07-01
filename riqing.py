@@ -42,8 +42,8 @@ class riqing(ApiRequest.ApiRequest):
 
     def login(self):
         日期 = datetime.now().strftime("%Y-%m-") + str(datetime.now().day)
-        response = self.sec.get(f'https://prod-api.nissinfoodium.com.cn/gw-shop/app/v1/signs/sign?date={日期}&type=1&')
-        print(response.text)
+        response = self.sec.get(f'https://prod-api.nissinfoodium.com.cn/gw-shop/app/v1/signs/sign?date={日期}&type=1&').json()
+        print(response)
 
 
 if __name__ == '__main__':

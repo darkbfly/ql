@@ -77,3 +77,7 @@ if __name__ == '__main__':
     checkObject('zhengjia', 'zhengjia_', '失败').checkLogfile(0)
     checkObject('骁龙骁友会', 'wx_xlxyh_', '非法请求').checkLogfile(0)
     checkObject('海天美味馆', 'htmwg_', '登录状态已失效').checkLogfile(0)
+    checkObject('微信小程序-分分有礼滴滴赏', 'ffyl_', 'token失效').checkLogfile(0)
+    checkObject('微信小程序-正佳', 'zhengjia_', '过期').checkLogfile(0)
+    checkObject('微信小程序-正佳', 'zhengjia_', '过期').checkLogfile(0)
+    checkObject('微信小程序-向太的会客厅会员中心', '向太_', '失效').checkLogfile(0)

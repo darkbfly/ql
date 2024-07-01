@@ -20,13 +20,11 @@ class yyy(ApiRequest.ApiRequest):
         self.sec.headers = {
             'Host': 'hdyx.by-health.com',
             'Connection': 'keep-alive',
-            # 'Content-Length': '35',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090b11)XWEB/9185',
             'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
             'Accept': '*/*',
             'Origin': 'https://hdyx.by-health.com',
             'Referer': 'https://hdyx.by-health.com/web/byhealth-task-center/index.html',
-            # 'Accept-Encoding': 'gzip, deflate, br',
             'Accept-Language': 'zh-CN,zh;q=0.9',
         }
         self.data = data
