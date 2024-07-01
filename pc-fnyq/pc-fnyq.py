@@ -112,7 +112,7 @@ def run_taobao():
         win32gui.ShowWindow(x, win32con.SW_MAXIMIZE)
         if 寻找是否存在(path="", png="taobao-verify.png", timeout=1):
             print("找到 手工处理")
-        淘宝拖动()
+            淘宝拖动()
         win32gui.ShowWindow(x, win32con.SW_MINIMIZE)
 
 
