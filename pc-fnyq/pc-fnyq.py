@@ -1,10 +1,11 @@
 import os
 import time
+import traceback
 
 import win32con
 import win32gui
-
 import mytool
+
 
 
 def 点击图片中心(path="", png="", timeout=3):
@@ -49,18 +50,22 @@ def 淘宝拖动():
 
 def 寻找是否存在(path="", png="", timeout=3):
     import pyautogui
-    while timeout > 0:
-        if len(path) > 0:
-            filename = os.path.dirname(os.path.abspath(__file__)) + f'\\{path}\\{png}'
-        else:
-            filename = os.path.dirname(os.path.abspath(__file__)) + f'\\{png}'
-        if pyautogui.locateOnScreen(filename, confidence=0.8) is None:
-            timeout -= 1
-            time.sleep(1)
-            continue
-        else:
-            return True
-    return False
+    try:
+        while timeout > 0:
+            if len(path) > 0:
+                filename = os.path.dirname(os.path.abspath(__file__)) + f'\\{path}\\{png}'
+            else:
+                filename = os.path.dirname(os.path.abspath(__file__)) + f'\\{png}'
+            if pyautogui.locateOnScreen(filename, confidence=0.8) is None:
+                timeout -= 1
+                time.sleep(1)
+                continue
+            else:
+                return True
+        return False
+    except Exception:
+        traceback.print_exc()
+        return False
 
 
 def find_windows_by_title(title):
@@ -68,7 +73,6 @@ def find_windows_by_title(title):
         if win32gui.IsWindowVisible(hwnd) and title in win32gui.GetWindowText(hwnd):
             hwnds.append(hwnd)
         return True
-
     hwnds = []
     win32gui.EnumWindows(callback, hwnds)
     return hwnds
