@@ -13,3 +13,4 @@ android-ssl/
 *.bat
 wxapp*
 invalid/*
+other/node_modules/*
