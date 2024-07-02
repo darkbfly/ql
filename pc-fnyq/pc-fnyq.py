@@ -106,14 +106,18 @@ def run_taobao():
     print("开始查找淘宝窗口")
     for x in find_windows_by_title("淘宝"):
         time.sleep(1)
-        # 设置窗口状态为最前
-        win32gui.SetForegroundWindow(x)
-        # 最大化
-        win32gui.ShowWindow(x, win32con.SW_MAXIMIZE)
-        if 寻找是否存在(path="", png="taobao-verify.png", timeout=1) or 寻找是否存在(path="", png="taobao-do.png", timeout=1):
-            print("找到 手工处理")
-            淘宝拖动()
-        win32gui.ShowWindow(x, win32con.SW_MINIMIZE)
+        try:
+            # 设置窗口状态为最前
+            win32gui.SetForegroundWindow(x)
+            # 最大化
+            win32gui.ShowWindow(x, win32con.SW_MAXIMIZE)
+            if 寻找是否存在(path="", png="taobao-verify.png", timeout=1) or 寻找是否存在(path="", png="taobao-do.png",
+                                                                                         timeout=1):
+                print("找到 手工处理")
+                淘宝拖动()
+            win32gui.ShowWindow(x, win32con.SW_MINIMIZE)
+        except Exception:
+            pass
 
 
 
