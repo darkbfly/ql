@@ -9,10 +9,21 @@ env add wx_yyy
 # !/usr/bin/env python3
 # coding: utf-8
 import ApiRequest
+import requests
+import urllib3
+import ssl
 
 tokenName = 'wx_yyy'
 msg = ''
 
+# 创建自定义适配器
+class TLSAdapter(requests.adapters.HTTPAdapter):
+    def init_poolmanager(self, *args, **kwargs):
+        context = ssl.create_default_context()
+        context.check_hostname = False
+        context.set_ciphers("DEFAULT")
+        kwargs['ssl_context'] = context
+        return super().init_poolmanager(*args, **kwargs)
 
 class yyy(ApiRequest.ApiRequest):
     def __init__(self, data):
@@ -33,7 +44,9 @@ class yyy(ApiRequest.ApiRequest):
         data = {
             'openid': self.data,
         }
-        rj = self.sec.post('https://hdyx.by-health.com/taskCenter/api/sign/saveSign', data=data).json()
+        session = requests.Session()
+        session.mount('https://', TLSAdapter())
+        rj = session.post('https://hdyx.by-health.com/taskCenter/api/sign/saveSign', headers=self.sec.headers, data=data).json()
         print(rj)
 
 
