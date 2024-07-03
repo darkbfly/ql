@@ -16,9 +16,8 @@ import os
 import re
 import sys
 import time
-import urllib.parse
 import requests
-from Cryptodome.Cipher import AES
+from Crypto.Cipher import AES
 
 CK_LIST = []
 
