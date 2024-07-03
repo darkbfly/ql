@@ -11,13 +11,14 @@
 # https://t.me/q7q7q7q7q7q7q7_ziyou
 
 import base64
+import hashlib
 import os
 import re
 import sys
 import time
 import urllib.parse
 import requests
-import rsa
+from Cryptodome.Cipher import AES
 
 CK_LIST = []
 
@@ -25,23 +26,29 @@ CK_LIST = []
 # 加载环境变量
 def get_env():
     global CK_LIST
-    env_str = os.getenv("tuchong_ck")
+    env_str = os.getenv("Tcck")
     if env_str:
         CK_LIST += env_str.replace("&", "\n").split("\n")
 
+def encAccount(account):
+    key = '0tuchong'
+    # 计算md5
+    md5 = hashlib.md5()
+    md5.update(key.encode('utf-8'))
+    aesKey = md5.hexdigest()[:16].upper().encode()
+    cipher = AES.new(aesKey, AES.MODE_ECB)
+    block_size = 16
+    padding = block_size - len(account) % block_size
+    字节内容 = account.encode()
+    字节内容 += bytes([padding] * padding)
+    encrypted = cipher.encrypt(字节内容)  # 加密
+    return base64.b64encode(encrypted).decode('utf-8')
 
-# 用于加密密码
-def encrypted_password(t):
-    o = "D8CC0180AFCC72C9F5981BDB90A27928672F1D6EA8A57AF44EFFA7DAF6EFB17DAD9F643B9F9F7A1F05ACC2FEA8DE19F023200EFEE9224104627F1E680CE8F025AF44824A45EA4DDC321672D2DEAA91DB27418CFDD776848F27A76E747D53966683EFB00F7485F3ECF68365F5C10C69969AE3D665162D2EE3A5BA109D7DF6C7A5"
-    key = rsa.PublicKey(int(o, 16), 65537)
-    encrypted = rsa.encrypt(urllib.parse.quote(t).encode('utf-8'), key)
-    return encrypted.hex()
 
 
 class TuChong:
     def __init__(self, ck):
-        phone_number, password = ck.split('#')
-        self.user = {"account": phone_number, "password": password}
+        self.phone_number, self.password = ck.split('#')
         self.session = requests.Session()
         self.token = ''
         self.nonce = ''
@@ -50,19 +57,23 @@ class TuChong:
     # 登录
     def login(self):
         for _ in range(3):
-            response = self.session.post('https://tuchong.com/rest/captcha/image')
-            response_dict = response.json()
-            captcha_id = response_dict.get('captchaId')
             data = {
-                'zone': '0086',
-                'account': self.user.get('account'),
-                'password': encrypted_password(self.user.get('password')),
-                'remember': 'on',
-                'captcha_id': captcha_id,
+                'password': self.password,
+                'account': encAccount(self.phone_number),
             }
-            self.session.post('https://tuchong.com/rest/accounts/login', data=data)
+
+            rj = self.session.post('https://api.tuchong.com/accounts/login', data=data, headers={
+                'User-Agent': 'okhttp/3.12.2 com.ss.android.tuchong (Tuchong: 7541 7.54.1) (Android: 10 29)',
+                'device': '3406705071489976',
+                'version': '7541',
+                'channel': 'xiaomi',
+                'platform': 'android',
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Host': 'api.tuchong.com',
+                'Connection': 'Keep-Alive',
+            }).json()
             # print(response.json())
-            self.token = self.session.cookies.get('token')
+            self.token = rj['token']
             if self.token:
                 # print(self.token)
                 print(f'登录成功')
@@ -108,7 +119,7 @@ class TuChong:
         # print(response_dict)
         task_type_list = response_dict.get('other_point_list')
         for task_type in task_type_list:
-            if task_type.get('title') == '每日任务':
+            if task_type.get('title') == '每日福利':
                 return task_type.get('task_info_list'), response_dict
 
     # 开宝箱
@@ -133,7 +144,7 @@ class TuChong:
     def get_works_list(self):
         response = self.session.get('https://tuchong.com/rest/categories/%E6%9C%80%E6%96%B0/recommend')
         response_dict = response.json()
-        # print(response_dict)
+        print(response_dict)
         return response_dict.get('feedList')
 
     # 点赞
@@ -159,7 +170,7 @@ class TuChong:
     # 关注用户
     def follow_users(self):
         task_info_list, _ = self.get_daily_task_information()
-        # print(task_info_list)
+        print(task_info_list)
         for task in task_info_list:
             if task.get('text') != '关注摄影师':
                 continue
@@ -254,8 +265,8 @@ class TuChong:
         self.open_treasure_chest()
         print(f'{character}开始完成点赞任务')
         self.like()
-        print(f'{character}开始完成关注任务')
-        self.follow_users()
+        # print(f'{character}开始完成关注任务')
+        # self.follow_users()
         print(f'{character}开始完成分享任务')
         self.share()
         time.sleep(2)

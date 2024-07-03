@@ -14,3 +14,4 @@ android-ssl/
 wxapp*
 invalid/*
 other/node_modules/*
+demoTest.py
