@@ -184,10 +184,10 @@ class TuChong:
                 site_id = feed_list[index]['entry']['site']['site_id']
                 data = {'site_id': str(site_id),}
                 response = self.session.put(f'https://tuchong.com/gapi/interactive/follow', data=data)
-                # print("put: " + response.text)
-                time.sleep(1)
-                self.unfollow_user(site_id)
-                time.sleep(1)
+                print("put: " + response.text)
+                # time.sleep(1)
+                # self.unfollow_user(site_id)
+                # time.sleep(1)
 
     # 取关用户
     def unfollow_user(self, site_id):
