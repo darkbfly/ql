@@ -19,7 +19,7 @@ import time
 import requests
 from Crypto.Cipher import AES
 
-CK_LIST = []
+CK_LIST = ['13107644225#wlwzzfz123-']
 
 
 # 加载环境变量
@@ -56,23 +56,23 @@ class TuChong:
     # 登录
     def login(self):
         for _ in range(3):
-            data = {
-                'password': self.password,
-                'account': encAccount(self.phone_number),
-            }
-
-            rj = self.session.post('https://api.tuchong.com/accounts/login', data=data, headers={
-                'User-Agent': 'okhttp/3.12.2 com.ss.android.tuchong (Tuchong: 7541 7.54.1) (Android: 10 29)',
-                'device': '3406705071489976',
-                'version': '7541',
-                'channel': 'xiaomi',
-                'platform': 'android',
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Host': 'api.tuchong.com',
-                'Connection': 'Keep-Alive',
-            }).json()
-            # print(response.json())
-            self.token = rj['token']
+            # data = {
+            #     'password': self.password,
+            #     'account': encAccount(self.phone_number),
+            # }
+            #
+            # rj = self.session.post('https://api.tuchong.com/accounts/login', data=data, headers={
+            #     'User-Agent': 'okhttp/3.12.2 com.ss.android.tuchong (Tuchong: 7541 7.54.1) (Android: 10 29)',
+            #     'device': '3406705071489976',
+            #     'version': '7541',
+            #     'channel': 'xiaomi',
+            #     'platform': 'android',
+            #     'Content-Type': 'application/x-www-form-urlencoded',
+            #     'Host': 'api.tuchong.com',
+            #     'Connection': 'Keep-Alive',
+            # }).json()
+            # print(rj)
+            self.token = '38027b8b34c627e5'
             if self.token:
                 # print(self.token)
                 print(f'登录成功')
@@ -81,12 +81,12 @@ class TuChong:
                 self.headers = {
                     "accept": "application/json, text/plain, */*",
                     "token": self.token,
-                    "Host": "m.tuchong.com",
                     "platform": "android",
                     "content-type": "application/x-www-form-urlencoded",
                     "x-requested-with": "com.ss.android.tuchong",
                     "user-agent": "Mozilla/5.0 (Linux; Android 11; M2011K2C Build/RKQ1.200928.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/86.0.4240.185 Mobile Safari/537.36 Tuchong/7.39.1(android)"
                 }
+                self.session.headers = self.headers
                 return True
             print('登录失败')
             time.sleep(1)
@@ -141,9 +141,9 @@ class TuChong:
 
     # 获取作品列表  网页端的最新
     def get_works_list(self):
-        response = self.session.get('https://tuchong.com/rest/categories/%E6%9C%80%E6%96%B0/recommend')
+        response = self.session.get('https://tuchong.com/gapi/feed/app', headers=self.headers)
         response_dict = response.json()
-        print(response_dict)
+        # print(response_dict)
         return response_dict.get('feedList')
 
     # 点赞
@@ -160,8 +160,8 @@ class TuChong:
             day_finish_num = task.get('day_finish_num')
             feed_list = self.get_works_list()
             for index in range(day_limit - day_finish_num):
-                post_id = feed_list[index].get('post_id')
-                data = {'post_id': post_id, 'nonce': self.nonce, }
+                post_id = feed_list[index]['entry']['post_id']
+                data = {'post_id': str(post_id),}
                 response = self.session.put('https://tuchong.com/gapi/interactive/favorite', data=data)
                 print(response.json().get('message'))
                 time.sleep(1)
@@ -178,22 +178,21 @@ class TuChong:
                 break
             day_limit = task.get('day_limit')
             day_finish_num = task.get('day_finish_num')
+            print(f"day_limit={day_limit}, day_finish_num={day_finish_num}")
             feed_list = self.get_works_list()
             for index in range(day_limit - day_finish_num):
-                site_id = feed_list[index].get('site_id')
-                data = {'site_id': site_id, 'nonce': self.nonce, }
-                response = self.session.put('https://tuchong.com/gapi/interactive/follow', data=data)
-                print(response.json().get('message'))
+                site_id = feed_list[index]['entry']['site']['site_id']
+                data = {'site_id': str(site_id),}
+                response = self.session.put(f'https://tuchong.com/gapi/interactive/follow', data=data)
+                # print("put: " + response.text)
                 time.sleep(1)
                 self.unfollow_user(site_id)
                 time.sleep(1)
 
     # 取关用户
     def unfollow_user(self, site_id):
-        params = {'site_id': site_id, }
-        data = {'nonce': self.nonce, }
-        response = self.session.delete('https://tuchong.com/gapi/interactive/follow', params=params, data=data)
-        print(response.json().get('message'))
+        response = self.session.delete(f'https://tuchong.com/gapi/interactive/follow?site_id={site_id}')
+        # print("delete: " + response.text)
 
     # 分享
     def share(self):
@@ -264,14 +263,15 @@ class TuChong:
         self.open_treasure_chest()
         print(f'{character}开始完成点赞任务')
         self.like()
-        # print(f'{character}开始完成关注任务')
-        # self.follow_users()
+        print(f'{character}开始完成关注任务')
+        self.follow_users()
         print(f'{character}开始完成分享任务')
         self.share()
         time.sleep(2)
         self.get_coins_count()  # 获取金币数量
         self.check_balances()  # 查询余额
         # self.get_watching_videos_rewards()
+        # self.get_works_list()
 
 
 # 主程序
