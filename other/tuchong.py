@@ -73,6 +73,7 @@ class TuChong:
             }).json()
             print(rj)
             # self.token = '38027b8b34c627e5'
+            self.token = rj['token']
             if self.token:
                 print(self.token)
                 print(f'登录成功')
