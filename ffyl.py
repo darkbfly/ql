@@ -29,7 +29,7 @@ class yljf(ApiRequest.ApiRequest):
             'Content-Type': 'application/json',
             'xweb_xhr': '1',
             # 'serialId': data.split('#')[1],
-            'openId': data.split('#')[2],
+            'openId': data.split('#')[1],
             'appId': 'wx2da5d5ba2087726a',
             'version': '2.0.0',
             'Referer': 'https://servicewechat.com/wx2da5d5ba2087726a/183/page-frame.html',
