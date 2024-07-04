@@ -19,7 +19,7 @@ import time
 import requests
 from Crypto.Cipher import AES
 
-CK_LIST = ['13107644225#wlwzzfz123-']
+CK_LIST = []
 
 
 # 加载环境变量
@@ -56,25 +56,25 @@ class TuChong:
     # 登录
     def login(self):
         for _ in range(3):
-            # data = {
-            #     'password': self.password,
-            #     'account': encAccount(self.phone_number),
-            # }
-            #
-            # rj = self.session.post('https://api.tuchong.com/accounts/login', data=data, headers={
-            #     'User-Agent': 'okhttp/3.12.2 com.ss.android.tuchong (Tuchong: 7541 7.54.1) (Android: 10 29)',
-            #     'device': '3406705071489976',
-            #     'version': '7541',
-            #     'channel': 'xiaomi',
-            #     'platform': 'android',
-            #     'Content-Type': 'application/x-www-form-urlencoded',
-            #     'Host': 'api.tuchong.com',
-            #     'Connection': 'Keep-Alive',
-            # }).json()
-            # print(rj)
-            self.token = '38027b8b34c627e5'
+            data = {
+                'password': self.password,
+                'account': encAccount(self.phone_number),
+            }
+
+            rj = self.session.post('https://api.tuchong.com/accounts/login', data=data, headers={
+                'User-Agent': 'okhttp/3.12.2 com.ss.android.tuchong (Tuchong: 7541 7.54.1) (Android: 10 29)',
+                'device': '3406705071489976',
+                'version': '7541',
+                'channel': 'xiaomi',
+                'platform': 'android',
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Host': 'api.tuchong.com',
+                'Connection': 'Keep-Alive',
+            }).json()
+            print(rj)
+            # self.token = '38027b8b34c627e5'
             if self.token:
-                # print(self.token)
+                print(self.token)
                 print(f'登录成功')
                 response = self.session.get('https://tuchong.com')
                 self.nonce = re.findall(r"window.nonce = '(.*?)';", response.text)[0]
