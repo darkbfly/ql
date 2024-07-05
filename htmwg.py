@@ -36,7 +36,7 @@ class htmwg(ApiRequest.ApiRequest):
 
     def login(self):
         data = {
-            'activity_code': '202404',
+            'activity_code': '202407',
             'fill_date': '',
         }
         response = self.sec.post('https://cmallapi.haday.cn/buyer-api/sign/activity/sign', json=data)
