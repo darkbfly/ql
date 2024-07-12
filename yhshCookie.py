@@ -30,7 +30,23 @@ if __name__ == '__main__':
                 yhsh.append(f"{x['value']}#{x['remarks']}")
         pass
 
-    with open('/ql/data/scripts/leafTheFish_DeathNote/yhshCookie.txt', 'w') as f:
-        f.write('\n'.join(yhsh))
+    newUrl = f"http://{url}/open/envs"
+    headers = {
+        'Authorization': getToken(),
+        'Content-Type': 'application/json'
+    }
+    pupu = []
+    sec = requests.session()
+    sec.verify = False
+    sec.trust_env = False
+    rj = sec.get(newUrl, headers=headers).json()
+    if rj['code'] == 200:
+        for x in rj['data']:
+            if x['name'] == 'pupu_cookies':
+                pupu.append(f"{x['value']}#{x['remarks']}")
+        pass
+
+    with open('/ql/data/scripts/yang7758258_ohhh_QL-Script/pupuCookie.txt', 'w') as f:
+        f.write('\n'.join(pupu))
 
 
