@@ -1,11 +1,18 @@
+import datetime
 import os
 import time
 import traceback
 
+import keyboard
 import win32con
 import win32gui
 import mytool
 
+bPuase = False
+def toggle_pause():
+    global bPuase
+    bPuase = not bPuase
+    print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + "循环" + ("暂停" if bPuase else "恢复"))
 
 
 def 点击图片中心(path="", png="", timeout=3):
@@ -106,6 +113,8 @@ def run_taobao():
     print("开始查找淘宝窗口")
     for x in find_windows_by_title("淘宝"):
         time.sleep(1)
+        if bPuase:
+            continue
         try:
             # 设置窗口状态为最前
             win32gui.SetForegroundWindow(x)
@@ -115,12 +124,13 @@ def run_taobao():
                                                                                          timeout=1):
                 print("找到 手工处理")
                 淘宝拖动()
-            win32gui.ShowWindow(x, win32con.SW_MINIMIZE)
+            # win32gui.ShowWindow(x, win32con.SW_MINIMIZE)
         except Exception:
             pass
 
 
 
 if __name__ == '__main__':
+    keyboard.add_hotkey('p', toggle_pause)
     while True:
         run_taobao()
