@@ -84,6 +84,10 @@ def find_windows_by_title(title):
     win32gui.EnumWindows(callback, hwnds)
     return hwnds
 
+def 保存图片():
+    import pyautogui
+    filename = os.path.dirname(os.path.abspath(__file__)) + f'\\{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}.png'
+    pyautogui.screenshot(filename)
 
 def run_jd():
     print("开始查找京东窗口")
@@ -100,12 +104,11 @@ def run_jd():
                 点击图片中心(path="", png="do.png")
                 time.sleep(5)
                 点击图片中心(path="", png="jd-verify.png")
-        elif 寻找是否存在(path="", png="finish.png"):
-            print("找到 处理完成")
-            if 寻找是否存在(path="", png="jd-main.png"):
-                print("已经处理完成, 点击处理完成按钮")
-                点击图片中心(path="", png="finish.png")
-        time.sleep(3)
+                time.sleep(5)
+                if 寻找是否存在(path="", png="jd-start-verify.png"):
+
+                    保存图片()
+                    点击图片中心(path="", png="finish.png")
         win32gui.ShowWindow(x, win32con.SW_MINIMIZE)
 
 
