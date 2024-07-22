@@ -1,5 +1,5 @@
 """
-cron: 30 7 * * * dcjd.py
+cron: 30 7 * * *
 new Env("微信小程序-Cellcosmet")
 env add wx_cellcosmet
 
