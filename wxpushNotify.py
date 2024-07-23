@@ -81,3 +81,4 @@ if __name__ == '__main__':
     checkObject('微信小程序-正佳', 'zhengjia_', '过期').checkLogfile(0)
     checkObject('微信小程序-向太的会客厅会员中心', '向太_', '失效').checkLogfile(0)
     checkObject('xbox俱乐部V2', 'xbox_', 'xbox俱乐部V2').checkLogfile(0)
+    checkObject('荷叶健康小程序-果园[免费领水果]', 'hyjk_', 'xbox俱乐部V2').checkLogfile(0)
