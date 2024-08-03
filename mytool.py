@@ -19,6 +19,9 @@ def getlistCk(ckname):
 def gettime():
     return datetime.now(tz=ZoneInfo('Asia/Shanghai'))
 
+def getdate(strf = "%Y-%m-%d"):
+    return datetime.now(tz=ZoneInfo('Asia/Shanghai')).strftime(strf)
+
 def getSecTimestamp():
     return int(time.time())
 
@@ -84,4 +87,4 @@ def getUUID():
     return str(uuid.uuid4())
 
 if __name__ == '__main__':
-    print(gettime())
+    print(getdate())
