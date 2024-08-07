@@ -5,6 +5,7 @@ import time
 from email.header import Header
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 import requests
 
@@ -70,7 +71,7 @@ def 备份依赖():
 
 def 邮箱发送文件():
     # 邮件服务器的信息
-    smtp_server = os.getenv('SMTP_SERVER')
+    smtp_server = os.getenv("SMTP_SERVER")
     smtp_username = os.getenv('SMTP_USERNAME')
     smtp_password = os.getenv('SMTP_PASSWORD')
 
@@ -81,7 +82,7 @@ def 邮箱发送文件():
 
     # 创建一个带附件的邮件
     message = MIMEMultipart()
-    # message = MIMEText('123', 'html', 'utf-8')
+    message = MIMEText('123', 'html', 'utf-8')
 
     message["From"] = Header(from_email)
     message["To"] = Header(to_email)
