@@ -88,3 +88,5 @@ def getUUID():
 
 if __name__ == '__main__':
     print(getdate())
+    print(getSecTimestamp())
+    print(getMSecTimestamp())
