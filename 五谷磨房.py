@@ -37,9 +37,7 @@ class wgmf(ApiRequest.ApiRequest):
             'signedDate': mytool.getdate(),
         }
 
-        rj = self.sec.post('https://newapi.wgmf.com/crm/signed/save', json=json_data)
-
-
+        rj = self.sec.post('https://newapi.wgmf.com/crm/signed/save', json=json_data).json()
         print(rj)
 
 

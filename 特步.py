@@ -47,7 +47,7 @@ class tebu(ApiRequest.ApiRequest):
             'ActRemindStatus': True,
         }
 
-        rj = self.sec.post('https://wxa-tp.ezrpro.com/myvip/Vip/SignIn/SignIn', json=json_data)
+        rj = self.sec.post('https://wxa-tp.ezrpro.com/myvip/Vip/SignIn/SignIn', json=json_data).json()
 
         print(rj)
 

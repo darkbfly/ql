@@ -45,7 +45,7 @@ class gy(ApiRequest.ApiRequest):
             'access_token': self.access_token
         }
 
-        rj = self.sec.get('https://h5.youzan.com/wscump/checkin/checkinV2.json', params=params)
+        rj = self.sec.get('https://h5.youzan.com/wscump/checkin/checkinV2.json', params=params).json()
         print(rj)
 
 
