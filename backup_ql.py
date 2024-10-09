@@ -82,7 +82,6 @@ def 邮箱发送文件():
 
     # 创建一个带附件的邮件
     message = MIMEMultipart()
-    message = MIMEText('123', 'html', 'utf-8')
 
     message["From"] = Header(from_email)
     message["To"] = Header(to_email)
