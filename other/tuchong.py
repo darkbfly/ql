@@ -263,11 +263,20 @@ class TuChong:
         print(f'{character}开始开10次宝箱')
         self.open_treasure_chest()
         print(f'{character}开始完成点赞任务')
-        self.like()
+        try:
+            self.like()
+        except:
+            pass
         print(f'{character}开始完成关注任务')
-        self.follow_users()
+        try:
+            self.follow_users()
+        except:
+            pass
         print(f'{character}开始完成分享任务')
-        self.share()
+        try:
+            self.share()
+        except:
+            pass
         time.sleep(2)
         self.get_coins_count()  # 获取金币数量
         self.check_balances()  # 查询余额
