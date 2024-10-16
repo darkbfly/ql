@@ -12,8 +12,8 @@ import requests
 url = '127.0.0.1:5700'
 
 def getToken():
-    if os.path.isfile('/ql/data/config/auth.json'):
-        with open('/ql/data/config/auth.json', 'r') as f:
+    if os.path.isfile('/ql/config/auth.json'):
+        with open('/ql/config/auth.json', 'r') as f:
             config = json.load(f)
             return 'Bearer ' + config['token']
 
