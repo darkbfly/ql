@@ -1,0 +1,13 @@
+set ddgyck=33PODNGD76JSJOJ7BY37CEPSZYLU2RIZAGHTNF5UMM2AGPSLO7TA12341c0
+@echo off
+:: 获取当前日期和时间
+for /f "tokens=1-4 delims=/ " %%a in ('date /t') do (
+    set mydate=%%a-%%b-%%c
+)
+for /f "tokens=1-2 delims=:." %%a in ('time /t') do (
+    set mytime=%%a:%%b
+)
+
+:: 将日期和时间追加到文件中
+echo %mydate% %mytime% >> pdd.log
+node 拼多多果园.js >> pdd.log
