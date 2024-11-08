@@ -1,5 +1,5 @@
 """
-cron: 0 3 * * *
+cron: 30 3 * * *
 new Env("微信小程序-三只松鼠")
 env add wx_gy
 
