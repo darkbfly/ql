@@ -1,9 +1,7 @@
 import os
 import traceback
-
 import requests
 import urllib3
-
 import mytool
 import notify
 
@@ -26,6 +24,12 @@ class ApiMain:
         self.funcName = funcName
         pass
 
+    def sendWxPusher(self, msg):
+        from wxpusher import WxPusher
+        WxPusher.send_message(msg,
+                              topic_ids=[os.environ['wxpusherTopicId']],
+                              token=os.environ['wxpusherAppToken'])
+
     def run(self, envName, request):
         if os.path.exists('debug.py'):
             import debug
@@ -40,5 +44,6 @@ class ApiMain:
                     try:
                         getattr(request(i), func)()
                     except:
+                        self.sendWxPusher(traceback.format_exc())
                         traceback.print_exc()
         pass
