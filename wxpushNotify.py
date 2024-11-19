@@ -69,7 +69,7 @@ if __name__ == '__main__':
     checkObject('zippo', 'zippo_', 'Unauthorized').checkLogfile(0)
     checkObject('好人家美味生活馆', 'hrj_', '获取登录信息失败,请重新登录').checkLogfile(0)
     # checkObject('申工社', 'sgs_', '签到结果:Token失效').checkLogfile(0)
-    # checkObject('拼多多果园', '拼多多果园_', '失效').checkLogfile(0)
+    checkObject('拼多多果园', '拼多多果园_', '失效').checkLogfile(0)
     checkObject('Tank', 'Tank_', 'token已失效，请重新登录').checkLogfile(0)
     checkObject('北京汽车', 'bjqc_', '登录失败').checkLogfile(0)
     # checkObject('亚朵', 'yaduo_', '出了些小问题').checkLogfile(0)
