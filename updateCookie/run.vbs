@@ -1,1 +1,0 @@
-CreateObject("WScript.Shell").Run "C:\Python39\python.exe updateCookie_TextLoop.py",0

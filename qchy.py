@@ -50,11 +50,15 @@ class qchy(ApiRequest.ApiRequest):
         json_data = {
             'task_id': 17,
         }
-        session = requests.Session()
-        session.mount('https://', TLSAdapter())
-        session.verify = False
-        response = session.post('https://crm.nestlechinese.com/openapi/activityservice/api/task/add', headers=self.sec.headers, json=json_data).json()
-        print(response)
+        # session = requests.Session()
+        # session.mount('https://', TLSAdapter())
+        # session.verify = False
+        # response = session.post('https://crm.nestlechinese.com/openapi/activityservice/api/task/add', headers=self.sec.headers, json=json_data).text
+        response = self.sec.post('https://crm.nestlechinese.com/openapi/activityservice/api/task/add', json=json_data)
+        if response.status_code == 200:
+            print(response.json())
+        else:
+            print(response.status_code)
 
 
 if __name__ == '__main__':
