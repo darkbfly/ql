@@ -38,7 +38,7 @@ class syns(ApiRequest.ApiRequest):
     def login(self):
         url = "https://7.wawo.cc/api/activity/wx/task/sign/signIn"
         data = """{}"""
-        response = self.sec.postpost(url, data=data)
+        response = self.sec.post(url, data=data)
         print(response.text)
 
 
