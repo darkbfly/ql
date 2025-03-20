@@ -74,7 +74,6 @@ if __name__ == '__main__':
     checkObject('zhengjia', 'zhengjia_', '失败').checkLogfile(0)
     checkObject('骁龙骁友会', 'wx_xlxyh_', '非法请求').checkLogfile(0)
     checkObject('海天美味馆', 'htmwg_', '登录状态已失效').checkLogfile(0)
-    checkObject('微信小程序-分分有礼滴滴赏', 'ffyl_', 'token失效').checkLogfile(0)
     checkObject('三只松鼠', '三只松鼠_', 'invalid').checkLogfile(0)
     checkObject('蜜丝miss', 'Miss_', 'token无效').checkLogfile(0)
     checkObject('MAMMUT', 'MAMMUT_', 'invalid').checkLogfile(0)
