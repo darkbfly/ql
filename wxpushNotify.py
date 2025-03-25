@@ -29,6 +29,33 @@ def get_ql_logfile(name):
             # 返回最新的文件名
             return os.path.join(path, files[0])
 
+def split_file_by_delimiter(file_path, delimiter="----------------------------------------"):
+    """
+    读取文件并根据指定的分隔符分割内容。
+
+    :param file_path: 文件路径
+    :param delimiter: 分隔符，默认为 "-------------------"
+    :return: 分割后的字符串列表
+    """
+    try:
+        # 打开文件并读取内容
+        with open(file_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+
+        # 使用分隔符分割内容
+        parts = content.split(delimiter)
+
+        # 去除每部分的多余空白字符（如换行符、空格等）
+        parts = [part.strip() for part in parts if part.strip()]
+
+        return parts
+
+    except FileNotFoundError:
+        print(f"文件未找到: {file_path}")
+        return []
+    except Exception as e:
+        print(f"读取文件时发生错误: {e}")
+        return []
 
 class checkObject:
     def __init__(self, name, logfile_name, keyword):
@@ -79,3 +106,13 @@ if __name__ == '__main__':
     checkObject('MAMMUT', 'MAMMUT_', 'invalid').checkLogfile(0)
     checkObject('伊利积分', 'yljf_', 'Token已过期').checkLogfile(0)
     checkObject('爱依服', '爱依服_', 'invalid').checkLogfile(0)
+
+    # jd资产推送
+    file_name = get_ql_logfile('shufflewzc_faker3_main_jd_bean_change_')
+    if file_name:
+        for x in split_file_by_delimiter(file_name):
+            # print("内容为:\n" + x)
+            WxPusher.send_message(x,
+                                  topic_ids=[os.environ['wxpusherTopicId']],
+                                  token=os.environ['wxpusherAppToken'])
+
