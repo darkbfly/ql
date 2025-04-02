@@ -45,7 +45,7 @@ class zwxq(ApiRequest.ApiRequest):
 
         rj = self.sec.post(
             "https://api.pftp2012.com/api/Member/Login", data=data
-        ).json()
+        ).text()
         if rj["Status"] == 100:
             self.sec.headers["Authorization"] = (
                 "Bearer " + rj["Data"]["MemberInfo"]["Token"]
@@ -57,7 +57,7 @@ class zwxq(ApiRequest.ApiRequest):
         }
         rj = self.sec.post(
             "https://api.pftp2012.com/api/Member/SignIn", data=data
-        ).json()
+        ).text()
         print(rj)
 
     def completeMission(self):
@@ -69,7 +69,7 @@ class zwxq(ApiRequest.ApiRequest):
         rj = self.sec.post(
             "https://api.pftp2012.com/api/Member/CompleteMemberMission",
             data=data,
-        ).json()
+        ).text()
         print(rj)
 
 
