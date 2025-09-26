@@ -19,7 +19,10 @@ import time
 import requests
 from Crypto.Cipher import AES
 
-CK_LIST = []
+CK_LIST = [
+    "13107644225#wlwzzfz123-",
+    # "13055789923#wlwzzfz123."
+]
 
 
 # 加载环境变量
@@ -75,10 +78,8 @@ class TuChong:
             # self.token = '38027b8b34c627e5'
             self.token = rj['token']
             if self.token:
-                print(self.token)
+                # print(self.token)
                 print(f'登录成功')
-                response = self.session.get('https://tuchong.com')
-                self.nonce = re.findall(r"window.nonce = '(.*?)';", response.text)[0]
                 self.headers = {
                     "accept": "application/json, text/plain, */*",
                     "token": self.token,
@@ -87,6 +88,10 @@ class TuChong:
                     "x-requested-with": "com.ss.android.tuchong",
                     "user-agent": "Mozilla/5.0 (Linux; Android 11; M2011K2C Build/RKQ1.200928.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/86.0.4240.185 Mobile Safari/537.36 Tuchong/7.39.1(android)"
                 }
+                self.session.headers = self.headers
+                response = self.session.get('https://tuchong.com')
+                print("response.text=[" + response.text + "]")
+                self.nonce = re.findall(r"window.nonce = '(.*?)';", response.text)[0]
                 self.session.headers = self.headers
                 return True
             print('登录失败')
