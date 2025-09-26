@@ -19,10 +19,7 @@ import time
 import requests
 from Crypto.Cipher import AES
 
-CK_LIST = [
-    "13107644225#wlwzzfz123-",
-    # "13055789923#wlwzzfz123."
-]
+CK_LIST = []
 
 
 # 加载环境变量
