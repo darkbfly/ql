@@ -38,7 +38,7 @@ class lbhy(ApiRequest.ApiRequest):
 
     def login(self):
         params = {
-            'taskId': '262',
+            'taskId': '913',
         }
         response = self.sec.get(
             'https://clubwx.hm.liby.com.cn/miniprogram/benefits/activity/sign/execute.htm',
