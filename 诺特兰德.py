@@ -1,5 +1,5 @@
 """
-cron: 0 5 * * *
+cron: 0 7 * * *
 new Env("微信小程序-诺特兰德")
 env add wx_ntld
 
@@ -37,7 +37,7 @@ class ntld(ApiRequest.ApiRequest):
 
     def login(self):
         params = {
-            'checkinId': '5699606',
+            'checkinId': '4933536',
             'app_id': 'wxcabed1ea96561fd2',
             'kdt_id': '136343833',
             'access_token': self.access_token,
