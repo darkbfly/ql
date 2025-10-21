@@ -22,31 +22,33 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 title = '微信小程序-康佰家'
-tokenName = 'kbj_token'
+tokenName = 'kbj_token1'
 
 
 class kbj(ApiRequest.ApiRequest):
     def __init__(self, data):
         super().__init__()
         self.sec.headers = {
-            'Host': 'app.fjxzj.com',
+            'Host': 'vip-mall.kbjcn.com',
             'Connection': 'keep-alive',
+            # 'Content-Length': '2',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090a13) UnifiedPCWindowsWechat(0xf2541110) XWEB/16729',
             'xweb_xhr': '1',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309071d)XWEB/8461',
-            'token': data,
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'oldToken': data,
+            # Already added when you pass json=
+            # 'Content-Type': 'application/json',
             'Accept': '*/*',
-            'Referer': 'https://servicewechat.com/wxe727824701ee66d4/162/page-frame.html',
+            'Sec-Fetch-Site': 'cross-site',
+            'Sec-Fetch-Mode': 'cors',
+            'Sec-Fetch-Dest': 'empty',
+            'Referer': 'https://servicewechat.com/wxe727824701ee66d4/209/page-frame.html',
             # 'Accept-Encoding': 'gzip, deflate, br',
             'Accept-Language': 'zh-CN,zh;q=0.9',
         }
 
+
     def login(self):
-        params = {
-            'api': 'signin',
-        }
-        data = '{}'
-        rj = self.sec.post('https://app.fjxzj.com/wxscrm/api/member.php', params=params, data=data).json()
+        rj = self.sec.post('https://vip-mall.kbjcn.com/vip/integral/sign', json={}).json()
         print(rj)
 
 
