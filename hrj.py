@@ -10,6 +10,13 @@ env add hrjmwshg
 # coding: utf-8
 import ApiRequest
 import mytool
+from script_utils import (
+    log_event,
+    parse_response_content,
+    normalize_result,
+    parse_token_fields,
+    request_with_retry,
+)
 
 tokenName = 'hrjmwshg'
 msg = ''
@@ -18,6 +25,8 @@ msg = ''
 class hrj(ApiRequest.ApiRequest):
     def __init__(self, data):
         super().__init__()
+        self.title = '好人家签到'
+        (token,) = parse_token_fields(data, expected_fields=1, field_names=('X-WX-Token',))
         self.sec.headers = {
             'Accept': '*/*',
             'Accept-Language': 'zh-CN,zh;q=0.9',
@@ -26,7 +35,7 @@ class hrj(ApiRequest.ApiRequest):
             'Sec-Fetch-Mode': 'cors',
             'Sec-Fetch-Site': 'cross-site',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090a1b) XWEB/9129',
-            'X-WX-Token': data
+            'X-WX-Token': token,
         }
 
     def login(self):
@@ -48,53 +57,43 @@ class hrj(ApiRequest.ApiRequest):
                 'analysis': [],
                 'bosTemplateId': 1000001541,
                 'childTemplateIds': [
-                    {
-                        'customId': 90004,
-                        'version': 'crm@0.1.23',
-                    },
-                    {
-                        'customId': 90002,
-                        'version': 'ec@48.0',
-                    },
-                    {
-                        'customId': 90006,
-                        'version': 'hudong@0.0.209',
-                    },
-                    {
-                        'customId': 90008,
-                        'version': 'cms@0.0.440',
-                    },
-                    {
-                        'customId': 90060,
-                        'version': 'elearning@0.1.1',
-                    },
+                    {'customId': 90004, 'version': 'crm@0.1.23'},
+                    {'customId': 90002, 'version': 'ec@48.0'},
+                    {'customId': 90006, 'version': 'hudong@0.0.209'},
+                    {'customId': 90008, 'version': 'cms@0.0.440'},
+                    {'customId': 90060, 'version': 'elearning@0.1.1'},
                 ],
-                'quickdeliver': {
-                    'enable': False,
-                },
-                'youshu': {
-                    'enable': False,
-                },
+                'quickdeliver': {'enable': False},
+                'youshu': {'enable': False},
                 'source': 1,
                 'channelsource': 5,
                 'refer': 'onecrm-signgift',
                 'mpScene': 1053,
             },
             'queryParameter': None,
-            'i18n': {
-                'language': 'zh',
-                'timezone': '8',
-            },
+            'i18n': {'language': 'zh', 'timezone': '8'},
             'pid': '',
             'storeId': '',
-            'customInfo': {
-                'source': 0,
-                'wid': 11141551873,
-            },
+            'customInfo': {'source': 0, 'wid': 11141551873},
         }
-
-        rj = self.sec.post('https://xapi.weimob.com/api3/onecrm/mactivity/sign/misc/sign/activity/core/c/sign', json=json_data).json()
-        print(rj)
+        try:
+            resp = request_with_retry(
+                self.sec,
+                'POST',
+                'https://xapi.weimob.com/api3/onecrm/mactivity/sign/misc/sign/activity/core/c/sign',
+                json=json_data,
+            )
+            payload = parse_response_content(resp)
+            success, message = normalize_result(payload)
+            log_event('hrj_checkin_result', success=success, msg=message)
+            if success:
+                self.sendmsg += f'✅ 好人家签到成功：{message}\n'
+            else:
+                self.sendmsg += f'❌ 好人家签到失败：{message}\n'
+        except Exception as exc:  # noqa: BLE001
+            log_event('hrj_checkin_failed', reason=str(exc))
+            self.sendmsg += f'❌ 好人家签到失败：{exc}\n'
+            raise
 
 
 if __name__ == '__main__':

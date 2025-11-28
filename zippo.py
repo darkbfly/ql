@@ -7,17 +7,16 @@ env add zippo_auth
 """
 #!/usr/bin/env python3
 # coding: utf-8
-import json
-import os
-import time
-import traceback
-import requests
-
 import ApiRequest
-import mytool
-from notify import send
-import urllib3
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+from script_utils import (
+    build_weapp_headers,
+    log_event,
+    parse_response_content,
+    normalize_result,
+    parse_token_fields,
+    request_with_retry,
+)
+
 title = '微信小程序-zippo'
 tokenName = 'zippo_auth'
 
@@ -25,25 +24,42 @@ tokenName = 'zippo_auth'
 class zippo(ApiRequest.ApiRequest):
     def __init__(self, data):
         super().__init__()
-        self.sec.headers = {
-            'Host': 'wx-center.zippo.com.cn',
-            'Connection': 'keep-alive',
-            'x-app-id': 'zippo',
-            'x-platform-id': 'wxaa75ffd8c2d75da7',
-            'x-platform-env': 'release',
-            'x-platform': 'wxmp',
-            'Authorization': data,
-            'Content-Type': 'application/json;charset=UTF-8',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090819) XWEB/8531',
-            'xweb_xhr': '1',
-            'Referer': 'https://servicewechat.com/wxaa75ffd8c2d75da7/69/page-frame.html',
-            'Accept-Language': 'zh-CN,zh;q=0.9',
-        }
+        self.title = 'zippo签到'
+        (auth_token,) = parse_token_fields(data, expected_fields=1, field_names=('Authorization',))
+        self.sec.headers = build_weapp_headers(
+            host='wx-center.zippo.com.cn',
+            referer='https://servicewechat.com/wxaa75ffd8c2d75da7/69/page-frame.html',
+            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090819) XWEB/8531',
+            extra_headers={
+                'Authorization': auth_token,
+                'x-app-id': 'zippo',
+                'x-platform-id': 'wxaa75ffd8c2d75da7',
+                'x-platform-env': 'release',
+                'x-platform': 'wxmp',
+                'Content-Type': 'application/json;charset=UTF-8',
+            },
+        )
 
     def login(self):
-        rj = self.sec.post('https://wx-center.zippo.com.cn/api/daily-signin', params='', json={}).json()
-        print(rj)
-        pass
+        try:
+            resp = request_with_retry(
+                self.sec,
+                'POST',
+                'https://wx-center.zippo.com.cn/api/daily-signin',
+                params='',
+                json={},
+            )
+            payload = parse_response_content(resp)
+            success, message = normalize_result(payload)
+            log_event('zippo_checkin_result', success=success, msg=message)
+            if success:
+                self.sendmsg += f'✅ zippo签到成功：{message}\n'
+            else:
+                self.sendmsg += f'❌ zippo签到失败：{message}\n'
+        except Exception as exc:  # noqa: BLE001
+            log_event('zippo_checkin_failed', reason=str(exc))
+            self.sendmsg += f'❌ zippo签到失败：{exc}\n'
+            raise
 
     def favorited(self):
         jsonData = {

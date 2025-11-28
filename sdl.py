@@ -9,6 +9,14 @@ env add wx_sdl
 # !/usr/bin/env python3
 # coding: utf-8
 import ApiRequest
+from script_utils import (
+    build_weapp_headers,
+    log_event,
+    parse_response_content,
+    normalize_result,
+    parse_token_fields,
+    request_with_retry,
+)
 
 tokenName = 'wx_sdl'
 msg = ''
@@ -17,38 +25,43 @@ msg = ''
 class sdl(ApiRequest.ApiRequest):
     def __init__(self, data):
         super().__init__()
-        self.sec.headers = {
-            'Host': 'xiaodian.miyatech.com',
-            'Connection': 'keep-alive',
-            # 'Content-Length': '17',
-            'X-VERSION': '2.1.3',
-            'Authorization': data,
-            'HH-VERSION': '0.2.8',
-            'HH-FROM': '20230130307725',
-            'componentSend': '1',
-            'HH-APP': 'wxb33ed03c6c715482',
-            'appPublishType': '1',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090b11)XWEB/9185',
-            'Content-Type': 'application/json;charset=UTF-8',
-            'xweb_xhr': '1',
-            'store': ',:,',
-            'HH-CI': 'saas-wechat-app',
-            'Accept': '*/*',
-            'Sec-Fetch-Site': 'cross-site',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Dest': 'empty',
-            'Referer': 'https://servicewechat.com/wxb33ed03c6c715482/28/page-frame.html',
-            # 'Accept-Encoding': 'gzip, deflate, br',
-            'Accept-Language': 'zh-CN,zh;q=0.9',
-        }
+        self.title = '三得利签到'
+        (auth_token,) = parse_token_fields(data, expected_fields=1, field_names=('Authorization',))
+        self.sec.headers = build_weapp_headers(
+            host='xiaodian.miyatech.com',
+            referer='https://servicewechat.com/wxb33ed03c6c715482/28/page-frame.html',
+            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090b11)XWEB/9185',
+            extra_headers={
+                'Authorization': auth_token,
+                'X-VERSION': '2.1.3',
+                'HH-VERSION': '0.2.8',
+                'HH-FROM': '20230130307725',
+                'componentSend': '1',
+                'HH-APP': 'wxb33ed03c6c715482',
+                'appPublishType': '1',
+                'Content-Type': 'application/json;charset=UTF-8',
+                'store': ',:,',
+                'HH-CI': 'saas-wechat-app',
+            },
+        )
 
     def login(self):
-        json_data = {
-            'miniappId': 159,
-        }
-
-        rj = self.sec.post('https://xiaodian.miyatech.com/api/coupon/auth/signIn', json=json_data).json()
-        print(rj)
+        json_data = {'miniappId': 159}
+        try:
+            resp = request_with_retry(
+                self.sec, 'POST', 'https://xiaodian.miyatech.com/api/coupon/auth/signIn', json=json_data
+            )
+            payload = parse_response_content(resp)
+            success, message = normalize_result(payload)
+            log_event('sdl_checkin_result', success=success, msg=message)
+            if success:
+                self.sendmsg += f'✅ 三得利签到成功：{message}\n'
+            else:
+                self.sendmsg += f'❌ 三得利签到失败：{message}\n'
+        except Exception as exc:  # noqa: BLE001
+            log_event('sdl_checkin_failed', reason=str(exc))
+            self.sendmsg += f'❌ 三得利签到失败：{exc}\n'
+            raise
 
 
 if __name__ == '__main__':

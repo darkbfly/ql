@@ -9,6 +9,14 @@ env add wx_syns
 # !/usr/bin/env python3
 # coding: utf-8
 import ApiRequest
+from script_utils import (
+    build_weapp_headers,
+    log_event,
+    normalize_result,
+    parse_response_content,
+    parse_token_fields,
+    request_with_retry,
+)
 
 tokenName = 'wx_syns'
 msg = ''
@@ -17,29 +25,47 @@ msg = ''
 class syns(ApiRequest.ApiRequest):
     def __init__(self, data):
         super().__init__()
-        self.sec.headers = {
-            "Host": "7.wawo.cc",
-            "Connection": "keep-alive",
-            "activityCode": "D2L0T1T4",
-            "AccessToken": data.split("#")[0],
-            "xweb_xhr": "1",
-            "Authorization": data.split("#")[1],
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090c1f)XWEB/11581",
-            "Content-Type": "application/json",
-            "Accept": "*/*",
-            "Sec-Fetch-Site": "cross-site",
-            "Sec-Fetch-Mode": "cors",
-            "Sec-Fetch-Dest": "empty",
-            "Referer": "http",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Accept-Language": "zh-CN,zh;q=0.9"
+        self.title = "所有女生签到"
+        access_token, authorization = parse_token_fields(
+            data,
+            expected_fields=2,
+            field_names=("AccessToken", "Authorization"),
+        )
+        self.access_token = access_token
+        self.sec.headers = build_weapp_headers(
+            host="7.wawo.cc",
+            referer="http",
+            user_agent=("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                        "Chrome/122.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI "
+                        "MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090c1f)XWEB/11581"),
+            extra_headers={
+                "activityCode": "D2L0T1T4",
+                "AccessToken": access_token,
+                "Authorization": authorization,
+            },
         }
 
     def login(self):
         url = "https://7.wawo.cc/api/activity/wx/task/sign/signIn"
-        data = """{}"""
-        response = self.sec.post(url, data=data)
-        print(response.text)
+        try:
+            resp = request_with_retry(
+                self.sec,
+                "POST",
+                url,
+                data="{}",
+            )
+        except Exception as exc:  # noqa: BLE001
+            log_event("syns_checkin_failed", accessToken=self.access_token, reason=str(exc))
+            self.sendmsg += f"❌ 所有女生签到失败：{exc}\n"
+            raise
+
+        payload = parse_response_content(resp)
+        success, message = normalize_result(payload)
+        log_event("syns_checkin_result", accessToken=self.access_token, success=success, msg=message)
+        if success:
+            self.sendmsg += f"✅ 所有女生签到成功：{message}\n"
+        else:
+            self.sendmsg += f"❌ 所有女生签到失败：{message}\n"
 
 
 if __name__ == '__main__':

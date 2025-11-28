@@ -8,6 +8,14 @@ env add wx_五谷磨房
 """
 import ApiRequest
 import mytool
+from script_utils import (
+    build_weapp_headers,
+    log_event,
+    parse_response_content,
+    normalize_result,
+    parse_token_fields,
+    request_with_retry,
+)
 
 tokenName = 'wx_wgmf'
 msg = ''
@@ -16,29 +24,38 @@ msg = ''
 class wgmf(ApiRequest.ApiRequest):
     def __init__(self, data):
         super().__init__()
-        self.sec.headers = {
-            'Host': 'newapi.wgmf.com',
-            'Connection': 'keep-alive',
-            'xweb_xhr': '1',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090b19)XWEB/9193',
-            'Content-Type': 'application/json',
-            'Accept': '*/*',
-            'Sec-Fetch-Site': 'cross-site',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Dest': 'empty',
-            'Referer': 'https://servicewechat.com/wx29d1ac1fcd50aeb6/490/page-frame.html',
-            'Accept-Language': 'zh-CN,zh;q=0.9',
-        }
-        self.cusId = data
+        self.title = '五谷磨房签到'
+        (cus_id,) = parse_token_fields(data, expected_fields=1, field_names=('cusId',))
+        self.cusId = cus_id
+        self.sec.headers = build_weapp_headers(
+            host='newapi.wgmf.com',
+            referer='https://servicewechat.com/wx29d1ac1fcd50aeb6/490/page-frame.html',
+            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090b19)XWEB/9193',
+        )
 
     def login(self):
         json_data = {
             'cusId': self.cusId,
             'signedDate': mytool.getdate(),
         }
-
-        rj = self.sec.post('https://newapi.wgmf.com/crm/signed/save', json=json_data).json()
-        print(rj)
+        try:
+            resp = request_with_retry(
+                self.sec,
+                'POST',
+                'https://newapi.wgmf.com/crm/signed/save',
+                json=json_data,
+            )
+            payload = parse_response_content(resp)
+            success, message = normalize_result(payload)
+            log_event('wgmf_checkin_result', success=success, msg=message)
+            if success:
+                self.sendmsg += f'✅ 五谷磨房签到成功：{message}\n'
+            else:
+                self.sendmsg += f'❌ 五谷磨房签到失败：{message}\n'
+        except Exception as exc:  # noqa: BLE001
+            log_event('wgmf_checkin_failed', reason=str(exc))
+            self.sendmsg += f'❌ 五谷磨房签到失败：{exc}\n'
+            raise
 
 
 if __name__ == '__main__':

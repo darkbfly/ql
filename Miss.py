@@ -9,6 +9,14 @@ env add wx_miss = unionId#X-wx8465e1173d1e11b0-Token
 # !/usr/bin/env python3
 # coding: utf-8
 import ApiRequest
+from script_utils import (
+    build_weapp_headers,
+    log_event,
+    normalize_result,
+    parse_response_content,
+    parse_token_fields,
+    request_with_retry,
+)
 
 tokenName = 'wx_miss'
 msg = ''
@@ -17,30 +25,48 @@ msg = ''
 class miss(ApiRequest.ApiRequest):
     def __init__(self, data):
         super().__init__()
-        self.sec.headers = {
-            'Host': 'clubwx.hm.liby.com.cn',
-            'Connection': 'keep-alive',
-            'platformCode': 'Miss',
-            'xweb_xhr': '1',
-            'appId': 'wx8465e1173d1e11b0',
-            'unionId': data.split('#')[0],
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309092b) XWEB/8555',
-            'X-wx8465e1173d1e11b0-Token': data.split('#')[1],
-            'Content-Type': 'application/json',
-            'Referer': 'https://servicewechat.com/wx8465e1173d1e11b0/33/page-frame.html',
-            'Accept-Language': 'zh-CN,zh;q=0.9',
-        }
+        self.title = '蜜丝签到'
+        union_id, token = parse_token_fields(
+            data,
+            expected_fields=2,
+            field_names=('unionId', 'token'),
+        )
+        self.union_id = union_id
+        self.sec.headers = build_weapp_headers(
+            host='clubwx.hm.liby.com.cn',
+            referer='https://servicewechat.com/wx8465e1173d1e11b0/33/page-frame.html',
+            user_agent=('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                        'Chrome/107.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI '
+                        'MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309092b) XWEB/8555'),
+            extra_headers={
+                'platformCode': 'Miss',
+                'appId': 'wx8465e1173d1e11b0',
+                'unionId': union_id,
+                'X-wx8465e1173d1e11b0-Token': token,
+            },
+        )
 
 
     def login(self):
-        params = {
-            'taskId': '840',
-        }
-        response = self.sec.get(
-            'https://clubwx.hm.liby.com.cn/miniprogram/benefits/activity/sign/execute.htm',
-            params=params
-        )
-        print(response.text)
+        try:
+            resp = request_with_retry(
+                self.sec,
+                'GET',
+                'https://clubwx.hm.liby.com.cn/miniprogram/benefits/activity/sign/execute.htm',
+                params={'taskId': '840'},
+            )
+        except Exception as exc:  # noqa: BLE001
+            log_event('miss_checkin_failed', unionId=self.union_id, reason=str(exc))
+            self.sendmsg += f'❌ 蜜丝签到失败：{exc}\n'
+            raise
+
+        payload = parse_response_content(resp)
+        success, message = normalize_result(payload)
+        log_event('miss_checkin_result', unionId=self.union_id, success=success, msg=message)
+        if success:
+            self.sendmsg += f'✅ 蜜丝签到成功：{message}\n'
+        else:
+            self.sendmsg += f'❌ 蜜丝签到失败：{message}\n'
 
 if __name__ == '__main__':
     ApiRequest.ApiMain(['login']).run(tokenName, miss)

@@ -12,6 +12,14 @@ import datetime
 # coding: utf-8
 
 import ApiRequest
+from script_utils import (
+    build_weapp_headers,
+    log_event,
+    parse_response_content,
+    normalize_result,
+    parse_token_fields,
+    request_with_retry,
+)
 
 title = '微信小程序-分分有礼滴滴赏'
 tokenName = 'wx_ffyl'
@@ -21,28 +29,39 @@ msg = ''
 class yljf(ApiRequest.ApiRequest):
     def __init__(self, data):
         super().__init__()
-        self.sec.headers = {
-            'Host': 'ucode-openapi.aax6.cn',
-            'Connection': 'keep-alive',
-            'Authorization': data.split('#')[0],
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090a1b)XWEB/9185',
-            'Content-Type': 'application/json',
-            'xweb_xhr': '1',
-            # 'serialId': data.split('#')[1],
-            'openId': data.split('#')[1],
-            'appId': 'wx2da5d5ba2087726a',
-            'version': '2.0.0',
-            'Referer': 'https://servicewechat.com/wx2da5d5ba2087726a/183/page-frame.html',
-            'Accept-Language': 'zh-CN,zh;q=0.9',
-        }
+        self.title = '分分有礼滴滴赏签到'
+        auth_token, open_id = parse_token_fields(
+            data, expected_fields=2, field_names=('Authorization', 'openId')
+        )
+        self.sec.headers = build_weapp_headers(
+            host='ucode-openapi.aax6.cn',
+            referer='https://servicewechat.com/wx2da5d5ba2087726a/183/page-frame.html',
+            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090a1b)XWEB/9185',
+            extra_headers={
+                'Authorization': auth_token,
+                'openId': open_id,
+                'appId': 'wx2da5d5ba2087726a',
+                'version': '2.0.0',
+            },
+        )
 
     def login(self):
-        params = {
-            'promotionId': '107',
-            'days': str(datetime.datetime.now().day),
-        }
-        rj = self.sec.get('https://ucode-openapi.aax6.cn/user/checkIn', params=params).json()
-        print(rj)
+        params = {'promotionId': '107', 'days': str(datetime.datetime.now().day)}
+        try:
+            resp = request_with_retry(
+                self.sec, 'GET', 'https://ucode-openapi.aax6.cn/user/checkIn', params=params
+            )
+            payload = parse_response_content(resp)
+            success, message = normalize_result(payload)
+            log_event('ffyl_checkin_result', success=success, msg=message)
+            if success:
+                self.sendmsg += f'✅ 分分有礼滴滴赏签到成功：{message}\n'
+            else:
+                self.sendmsg += f'❌ 分分有礼滴滴赏签到失败：{message}\n'
+        except Exception as exc:  # noqa: BLE001
+            log_event('ffyl_checkin_failed', reason=str(exc))
+            self.sendmsg += f'❌ 分分有礼滴滴赏签到失败：{exc}\n'
+            raise
 
 
 

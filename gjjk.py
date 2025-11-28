@@ -7,15 +7,15 @@ cron 0 7 * * *
 如果任何单位或个人认为该项目的脚本可能涉嫌侵犯其权利，则应及时通知并提供身份证明，所有权证明，我们将在收到认证文件后删除相关脚本。
 """
 
-import datetime
-import json
-import os
-import traceback
-import requests
-
 import ApiRequest
 import mytool
-from notify import send
+from script_utils import (
+    log_event,
+    parse_response_content,
+    normalize_result,
+    parse_token_fields,
+    request_with_retry,
+)
 
 title = '微信小程序-高济健康'
 tokenName = 'wx_gjjkpro_data'
@@ -24,11 +24,15 @@ tokenName = 'wx_gjjkpro_data'
 class gjjk(ApiRequest.ApiRequest):
     def __init__(self, data):
         super().__init__()
+        self.title = '高济健康签到'
+        user_id, auth_token = parse_token_fields(
+            data, expected_fields=2, field_names=('userId', 'Authorization')
+        )
+        self.userId = user_id
         self.sec.headers = {
             'Host': 'api.gaojihealth.cn',
             'Connection': 'keep-alive',
-            # 'Content-Length': '61',
-            'Authorization': data.split('#')[1],
+            'Authorization': auth_token,
             'usign-group': 'bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiI0MDAzMDMwMDE5NDcxMTI5Iiwib3BlbklkIjpudWxsLCJyb2xlcyI6IltcIkdKX0FQUF9VU0VSXCJdIiwiYnVzaW5lc3NJZCI6IjcxMTI5IiwiaGVhZFVybCI6bnVsbCwiZ2pqRmxhZyI6dHJ1ZSwidHlwZSI6IjIiLCJwbGF0Zm9ybSI6ZmFsc2UsImNsaWVudF9pZCI6IndlYl9hcHAiLCJtaW5pT3BlbklkIjoib3B0eGQ1Yy0zS0dWaWd3ekNRV1JGOGM5Sk94ZyIsInBsYXRmb3JtQnVzaW5lc3NJZCI6IjIxMjc5OCIsInBsYXRmb3JtVXNlcklkIjoiNDAwMzAyNzI2MTAxMjc5OCIsInNjb3BlIjpbIm9wZW5pZCJdLCJsb2dpbk5hbWUiOjQwMDMwMzAwMTk0NzExMjksImV4cCI6MTY5OTI5MjU4NCwianRpIjoiYzI1YzdlOTYtZWYwMC00NzBiLThjZGMtMDE1YzA2MzA1ZTY1IiwidW5pb25JZCI6Im9XTXM0MU1OZFpkdFVRMzJ3elptRG1ibVZwYm8iLCJ1c2VySWQiOiI0MDAzMDMwMDE5NDcxMTI5IiwiYXV0aG9yaXRpZXMiOlsiR0pfQVBQX1VTRVIiXSwicGhvbmUiOiIxMzA1NTc4OTkyMyIsIm5hbWUiOm51bGwsImlzTmV3TWVtYmVyIjpmYWxzZSwiZW5jb2RlUGhvbmUiOiIxMzAqKioqOTkyMyIsInd4QmluZFN0YXR1cyI6dHJ1ZSwiZ3JhbnRUeXBlIjoiZ2pfYXBwX2F1dGgiLCJzdGF0dXMiOiIzIn0.a9ioxxm-uITw8Px2LfQmoV2JjCawiHp57287v99an5m5zkU8m5ZT6ALEbpEGdpIw7OOY_MID6ip3qw140PePvKOYGi3l-nqEQWvfaOzVpH2sxAHZjrmfPQaoa6IHFKJRbbx1gUR1pDys2anhFm2le9f6qVpt0MSd4eVagIhle6PiayBZ8DpJYStY5xQbkex5yEmuraaxfGt9YC0Ku5X5CjqtbNzRll4cqH_Sf8Y1WiWQT8QOyyNsc5prAcaSw9QfQ-1rrAWK82z2R6bicm8MY-YxJHGZbDrvKS0UpAbDNVkbLznxIz_mS6kHfR5V6nTOoNUjcSUJ9TxsNevH4-UlTQ',
             'siteId': 'miniprogram',
             'grantType': 'gj_app_auth',
@@ -45,22 +49,28 @@ class gjjk(ApiRequest.ApiRequest):
             'Referer': 'https://servicewechat.com/wx73ec617ea0a6c8e8/1069/page-frame.html',
             'Accept-Language': 'zh-CN,zh;q=0.9',
         }
-        self.userId = data.split('#')[0]
 
     def login(self):
-        params = ''
-
-        json_data = {
-            'businessId': 71129,
-            'userId': self.userId,
-            'taskId': 372,
-        }
-        rj = self.sec.post(
-            'https://api.gaojihealth.cn/gulosity/api/dkUserEvent/everyDaySign',
-            params=params,
-            json=json_data,
-        ).json()
-        print(json.dumps(rj, ensure_ascii=False))
+        json_data = {'businessId': 71129, 'userId': self.userId, 'taskId': 372}
+        try:
+            resp = request_with_retry(
+                self.sec,
+                'POST',
+                'https://api.gaojihealth.cn/gulosity/api/dkUserEvent/everyDaySign',
+                params='',
+                json=json_data,
+            )
+            payload = parse_response_content(resp)
+            success, message = normalize_result(payload)
+            log_event('gjjk_checkin_result', success=success, msg=message)
+            if success:
+                self.sendmsg += f'✅ 高济健康签到成功：{message}\n'
+            else:
+                self.sendmsg += f'❌ 高济健康签到失败：{message}\n'
+        except Exception as exc:  # noqa: BLE001
+            log_event('gjjk_checkin_failed', reason=str(exc))
+            self.sendmsg += f'❌ 高济健康签到失败：{exc}\n'
+            raise
 
 
 if __name__ == "__main__":

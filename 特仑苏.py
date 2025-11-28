@@ -10,6 +10,13 @@ env add wx_tls = openid
 # coding: utf-8
 import ApiRequest
 import mytool
+from script_utils import (
+    log_event,
+    parse_response_content,
+    normalize_result,
+    parse_token_fields,
+    request_with_retry,
+)
 
 tokenName = 'wx_tls'
 msg = ''
@@ -18,6 +25,9 @@ msg = ''
 class tls(ApiRequest.ApiRequest):
     def __init__(self, data):
         super().__init__()
+        self.title = '特仑苏签到'
+        (openid,) = parse_token_fields(data, expected_fields=1, field_names=('openid',))
+        self.openid = openid
         self.sec.headers = {
             'Host': 'mall.telunsu.net',
             'Connection': 'keep-alive',
@@ -31,28 +41,34 @@ class tls(ApiRequest.ApiRequest):
             'Referer': 'https://mall.telunsu.net/minlifeh5/himilk/vip/vipCommunityOld.html?navType=1',
             'Accept-Language': 'zh-CN,zh;q=0.9',
         }
-        self.openid = data
         self.cookies = {
             'HWWAFSESTIME': str(mytool.getMSecTimestamp()),
-            'MY_OPENID': data,
+            'MY_OPENID': self.openid,
             'sajssdk_2015_cross_new_user': '1',
         }
 
     def login(self):
-
-        params = ''
-
-        json_data = {
-            'openid': self.openid,
-        }
-
-        response = self.sec.post(
-            'https://mall.telunsu.net/wxapi/user/signIn',
-            params=params,
-            cookies=self.cookies,
-            json=json_data,
-        )
-        print(response.text)
+        json_data = {'openid': self.openid}
+        try:
+            resp = request_with_retry(
+                self.sec,
+                'POST',
+                'https://mall.telunsu.net/wxapi/user/signIn',
+                params='',
+                cookies=self.cookies,
+                json=json_data,
+            )
+            payload = parse_response_content(resp)
+            success, message = normalize_result(payload)
+            log_event('tls_checkin_result', success=success, msg=message)
+            if success:
+                self.sendmsg += f'✅ 特仑苏签到成功：{message}\n'
+            else:
+                self.sendmsg += f'❌ 特仑苏签到失败：{message}\n'
+        except Exception as exc:  # noqa: BLE001
+            log_event('tls_checkin_failed', reason=str(exc))
+            self.sendmsg += f'❌ 特仑苏签到失败：{exc}\n'
+            raise
 
 
 if __name__ == '__main__':

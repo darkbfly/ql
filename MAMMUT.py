@@ -8,6 +8,12 @@ env add wx_mammut
 """
 import ApiRequest
 import mytool
+from script_utils import (
+    build_weapp_headers,
+    log_event,
+    parse_token_fields,
+    request_json_with_retry,
+)
 
 tokenName = 'wx_mammut'
 msg = ''
@@ -16,26 +22,25 @@ msg = ''
 class mammut(ApiRequest.ApiRequest):
     def __init__(self, data):
         super().__init__()
-        self.sec.headers = {
-            'Host': 'h5.youzan.com',
-            'Connection': 'keep-alive',
-            'xweb_xhr': '1',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                          'Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI '
-                          'MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090b17)XWEB/9185',
-            'Content-Type': 'application/json',
-            'Accept': '*/*',
-            'Sec-Fetch-Site': 'cross-site',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Dest': 'empty',
-            'Referer': 'https://servicewechat.com/wxccbbf1b55ddaa627/30/page-frame.html',
-            # 'Accept-Encoding': 'gzip, deflate, br',
-            'Accept-Language': 'zh-CN,zh;q=0.9',
-        }
-        self.access_token = data.split("#")[0]
-        self.sid = data.split("#")[1]
-        self.uuid = data.split("#")[2]
-        self.sec.headers['Extra-Data'] = f'{{"is_weapp":1,"sid":"{self.sid}","version":"3.127.5.104001","client":"weapp","bizEnv":"retail","uuid":"{self.uuid}","ftime":{mytool.getMSecTimestamp()}}}'
+        self.title = 'MAMMUT 签到'
+        access_token, sid, uuid = parse_token_fields(
+            data,
+            expected_fields=3,
+            field_names=('access_token', 'sid', 'uuid'),
+        )
+        self.access_token = access_token
+        self.sid = sid
+        self.uuid = uuid
+        self.sec.headers = build_weapp_headers(
+            host='h5.youzan.com',
+            referer='https://servicewechat.com/wxccbbf1b55ddaa627/30/page-frame.html',
+            user_agent=('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                        'Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI '
+                        'MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090b17)XWEB/9185'),
+        )
+        self.sec.headers['Extra-Data'] = (
+            f'{{"is_weapp":1,"sid":"{self.sid}","version":"3.127.5.104001","client":"weapp","bizEnv":"retail","uuid":"{self.uuid}","ftime":{mytool.getMSecTimestamp()}}}'
+        )
 
     def login(self):
         params = {
@@ -45,8 +50,25 @@ class mammut(ApiRequest.ApiRequest):
             'access_token': self.access_token,
         }
 
-        rj = self.sec.get('https://h5.youzan.com/wscump/checkin/checkinV2.json', params=params).json()
-        print(rj)
+        try:
+            rj = request_json_with_retry(
+                self.sec,
+                'GET',
+                'https://h5.youzan.com/wscump/checkin/checkinV2.json',
+                params=params,
+            )
+        except Exception as exc:  # noqa: BLE001
+            log_event('mammut_checkin_failed', sid=self.sid, reason=str(exc))
+            self.sendmsg += f'❌ MAMMUT 签到失败：{exc}\n'
+            raise
+
+        success = bool(rj.get('success') or rj.get('code') in (0, '0'))
+        message = rj.get('msg') or rj.get('message') or rj
+        log_event('mammut_checkin_result', sid=self.sid, success=success, msg=message)
+        if success:
+            self.sendmsg += f'✅ MAMMUT 签到成功：{message}\n'
+        else:
+            self.sendmsg += f'❌ MAMMUT 签到失败：{message}\n'
 
 
 if __name__ == '__main__':

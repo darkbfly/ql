@@ -9,6 +9,14 @@ env add wx_hbb = unionId#X-wx8465e1173d1e11b0-Token
 # !/usr/bin/env python3
 # coding: utf-8
 import ApiRequest
+from script_utils import (
+    build_weapp_headers,
+    log_event,
+    normalize_result,
+    parse_response_content,
+    parse_token_fields,
+    request_with_retry,
+)
 
 tokenName = 'wx_hbb'
 msg = ''
@@ -17,34 +25,47 @@ msg = ''
 class hbb(ApiRequest.ApiRequest):
     def __init__(self, data):
         super().__init__()
-        self.sec.headers = {
-            'Host': 'clubwx.hm.liby.com.cn',
-            'Connection': 'keep-alive',
-            'platformCode': 'HaoBaBa',
-            'xweb_xhr': '1',
-            'X-wx872a12ca93eeba47-Token': data.split('#')[1],
-            'appId': 'wx872a12ca93eeba47',
-            'unionId': data.split('#')[0],
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090c33)XWEB/13639',
-            'Content-Type': 'application/json',
-            'Accept': '*/*',
-            'Sec-Fetch-Site': 'cross-site',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Dest': 'empty',
-            'Referer': 'https://servicewechat.com/wx872a12ca93eeba47/55/page-frame.html',
-            # 'Accept-Encoding': 'gzip, deflate, br',
-            'Accept-Language': 'zh-CN,zh;q=0.9',
-        }
+        self.title = '好爸爸签到'
+        union_id, token = parse_token_fields(
+            data,
+            expected_fields=2,
+            field_names=('unionId', 'token'),
+        )
+        self.union_id = union_id
+        self.sec.headers = build_weapp_headers(
+            host='clubwx.hm.liby.com.cn',
+            referer='https://servicewechat.com/wx872a12ca93eeba47/55/page-frame.html',
+            user_agent=('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                        'Chrome/126.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI '
+                        'MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090c33)XWEB/13639'),
+            extra_headers={
+                'platformCode': 'HaoBaBa',
+                'appId': 'wx872a12ca93eeba47',
+                'unionId': union_id,
+                'X-wx872a12ca93eeba47-Token': token,
+            },
+        )
 
     def login(self):
-        params = {
-            'taskId': '838',
-        }
-        response = self.sec.get(
-            'https://clubwx.hm.liby.com.cn/miniprogram/benefits/activity/sign/execute.htm',
-            params=params
-        )
-        print(response.text)
+        try:
+            resp = request_with_retry(
+                self.sec,
+                'GET',
+                'https://clubwx.hm.liby.com.cn/miniprogram/benefits/activity/sign/execute.htm',
+                params={'taskId': '838'},
+            )
+        except Exception as exc:  # noqa: BLE001
+            log_event('hbb_checkin_failed', unionId=self.union_id, reason=str(exc))
+            self.sendmsg += f'❌ 好爸爸签到失败：{exc}\n'
+            raise
+
+        payload = parse_response_content(resp)
+        success, message = normalize_result(payload)
+        log_event('hbb_checkin_result', unionId=self.union_id, success=success, msg=message)
+        if success:
+            self.sendmsg += f'✅ 好爸爸签到成功：{message}\n'
+        else:
+            self.sendmsg += f'❌ 好爸爸签到失败：{message}\n'
 
 
 if __name__ == '__main__':

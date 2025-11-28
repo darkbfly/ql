@@ -9,6 +9,13 @@ cron 0 7 * * *
 
 import ApiRequest
 import mytool
+from script_utils import (
+    log_event,
+    parse_response_content,
+    normalize_result,
+    parse_token_fields,
+    request_with_retry,
+)
 
 title = '微信小程序-华住签到'
 tokenName = 'huazhu_cookies'
@@ -17,6 +24,8 @@ tokenName = 'huazhu_cookies'
 class huazhu(ApiRequest.ApiRequest):
     def __init__(self, data):
         super().__init__()
+        self.title = '华住签到'
+        (cookie_str,) = parse_token_fields(data, expected_fields=1, field_names=('Cookie',))
         self.sec.headers = {
             "Host": "appgw.huazhu.com",
             "Connection": "keep-alive",
@@ -30,14 +39,24 @@ class huazhu(ApiRequest.ApiRequest):
             "Referer": "http",
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
-            "Cookie": data
+            "Cookie": cookie_str,
         }
-        pass
 
     def login(self):
         url = f"https://appgw.huazhu.com/game/sign_in?date={mytool.getSecTimestamp()}"
-        rj = self.sec.get(url)
-        print(rj.json())
+        try:
+            resp = request_with_retry(self.sec, 'GET', url)
+            payload = parse_response_content(resp)
+            success, message = normalize_result(payload)
+            log_event('huazhu_checkin_result', success=success, msg=message)
+            if success:
+                self.sendmsg += f'✅ 华住签到成功：{message}\n'
+            else:
+                self.sendmsg += f'❌ 华住签到失败：{message}\n'
+        except Exception as exc:  # noqa: BLE001
+            log_event('huazhu_checkin_failed', reason=str(exc))
+            self.sendmsg += f'❌ 华住签到失败：{exc}\n'
+            raise
 
 if __name__ == "__main__":
     ApiRequest.ApiMain(['login']).run(tokenName, huazhu)
