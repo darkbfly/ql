@@ -2,8 +2,8 @@ import os
 import re
 
 ENV_FILES = ['/ql/data/config/env.sh', '/ql/config/env.sh']
-OUTPUT_FILE = '/ql/data/scripts/darkbfly_ql/pupuCookie.txt'
-YHSH_OUTPUT_FILE = '/ql/data/scripts/darkbfly_ql/yhshCookie.txt'
+OUTPUT_FILE = '/ql/data/scripts/darkbfly_ql/js/pupuCookie.txt'
+YHSH_OUTPUT_FILE = '/ql/data/scripts/darkbfly_ql/js/yhshCookie.txt'
 
 
 def parse_env_values(env_name: str):
