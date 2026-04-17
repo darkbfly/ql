@@ -1,179 +1,101 @@
 # ql 项目文档
 
-> **初始化时间**: 2025-11-27 16:38:35  
-> **项目摘要**: 青龙（ql）自动化脚本集合，包含签到、抓包、通知等功能的 Python/JavaScript 脚本仓库
+## 变更记录 (Changelog)
+
+- 2026-04-16 18:56:57：执行 `/zcf/init-project` 增量初始化，重建根级索引、模块图、覆盖率与续跑建议。
 
 ## 项目愿景
 
-本项目是一个基于青龙（ql）框架的自动化脚本集合，主要用于：
-- **自动化签到任务**：各类电商、品牌、应用的每日签到脚本
-- **网络抓包工具**：Android SSL 抓包、PC 端抓包工具
-- **通知服务**：集成多种通知渠道（微信、Telegram、邮件等）
-- **Cookie 管理**：Cookie 更新、调试、备份工具
+`ql` 是面向青龙（QingLong）运行环境的自动化脚本仓库，聚焦以下能力：
+
+- 品牌/应用签到与任务自动化（Python 与 JavaScript 混合）
+- Cookie 抓取、更新、持久化与环境变量同步
+- 多通道通知与脚本执行结果反馈
+- PC 端图像识别自动化辅助
 
 ## 架构总览
 
-项目采用**扁平化 + 模块化**的混合架构：
-- **根目录**：核心工具库和大量业务脚本（签到脚本为主）
-- **模块目录**：按功能领域划分的独立模块（decode、android-ssl、other、js 等）
-- **工具层**：统一的请求封装（ApiRequest）、工具函数（mytool）、通知服务（notify/sendNotify）
+- **根目录脚本层**：大量独立业务脚本（按品牌命名）+ 通用工具库
+- **模块化目录层**：`updateCookie/`、`other/`、`js/`、`pc-fnyq/`、`pc-asm/`
+- **公共基础层**：`ApiRequest.py`、`mytool.py`、`notify.py`、`sendNotify.py`
 
-### 项目结构图
+## 模块结构图
 
 ```mermaid
-graph TB
-    Root[ql 项目根目录]
-    
-    Root --> Core[核心工具层]
-    Root --> Scripts[业务脚本层]
-    Root --> Modules[功能模块层]
-    
-    Core --> ApiRequest[ApiRequest.py<br/>统一请求封装]
-    Core --> MyTool[mytool.py<br/>工具函数库]
-    Core --> Notify[notify.py<br/>通知服务]
-    Core --> SendNotify[sendNotify.py<br/>通知发送]
-    
-    Scripts --> SignScripts[签到脚本<br/>100+ 个品牌脚本]
-    Scripts --> UtilScripts[工具脚本<br/>debug.py, test.py 等]
-    
-    Modules --> Decode[decode/<br/>解码工具模块]
-    Modules --> AndroidSSL[android-ssl/<br/>Android SSL 抓包]
-    Modules --> Other[other/<br/>其他脚本集合]
-    Modules --> JS[js/<br/>JavaScript 脚本]
-    Modules --> Invalid[invalid/<br/>废弃脚本归档]
-    Modules --> PC[pc-asm/<br/>pc-fnyq/<br/>PC 端工具]
-    Modules --> UpdateCookie[updateCookie/<br/>Cookie 更新工具]
-    
-    Decode --> DecodeDebug[debug.py]
-    Decode --> DecodeSrc[src.py]
-    
-    AndroidSSL --> FridaScripts[Frida 脚本集合]
-    AndroidSSL --> FridaServer[Frida Server 二进制]
-    
-    Other --> NodeJS[Node.js 项目<br/>package.json]
-    Other --> OtherScripts[其他 Python/JS 脚本]
-    
-    style Root fill:#e1f5ff
-    style Core fill:#fff4e1
-    style Scripts fill:#e8f5e9
-    style Modules fill:#f3e5f5
+graph TD
+    Root["(根) ql"] --> U["updateCookie"]
+    Root --> O["other"]
+    Root --> J["js"]
+    Root --> PF["pc-fnyq"]
+    Root --> PA["pc-asm"]
+
+    click U "./updateCookie/CLAUDE.md" "查看 updateCookie 模块文档"
+    click O "./other/CLAUDE.md" "查看 other 模块文档"
+    click J "./js/CLAUDE.md" "查看 js 模块文档"
+    click PF "./pc-fnyq/CLAUDE.md" "查看 pc-fnyq 模块文档"
+    click PA "./pc-asm/CLAUDE.md" "查看 pc-asm 模块文档"
 ```
 
 ## 模块索引
 
-### 核心工具模块（根目录）
+| 模块路径 | 职责 | 入口/关键文件 | 测试信号 |
+|---|---|---|---|
+| [`updateCookie/`](./updateCookie/CLAUDE.md) | Cookie 抓包落盘、QL 环境变量写入、Web 接口汇聚 | `server.py`, `updateCookie_Util.py`, `JDLogin.py` | `test.py`（历史存在，当前扫描未读取） |
+| [`other/`](./other/CLAUDE.md) | 混合脚本集合（活动任务、抽奖、签到） | `tuchong.py`, `yuyun.py`, `七猫抽奖领宝箱.py` | 未发现标准化测试目录 |
+| [`js/`](./js/CLAUDE.md) | 独立 JS 活动脚本（Env 模式） | `bsd.js`, `媓钻.js`, `悦秀会.js` | 未发现标准化测试目录 |
+| [`pc-fnyq/`](./pc-fnyq/CLAUDE.md) | Windows 图像识别自动化（京东/淘宝） | `pc-fnyq.py`, `mytool.py` | `test.py`（历史存在，当前扫描未读取） |
+| [`pc-asm/`](./pc-asm/CLAUDE.md) | PC 自动化图片资源库 | `*.png`, `CLAUDE.md` | 不适用（资源型模块） |
 
-| 模块/文件 | 说明 | 关键接口 |
-|---------|------|---------|
-| `ApiRequest.py` | 统一 HTTP 请求封装类 | `ApiRequest`, `ApiMain` |
-| `mytool.py` | 通用工具函数库 | `getlistCk()`, `gettime()`, `sleep()` |
-| `notify.py` | 通知服务封装 | `send()` 方法 |
-| `sendNotify.py` | 多通道通知发送 | 支持 Bark、Server酱、Telegram、邮件等 |
+## 运行与开发
 
-### 功能模块
+- Python 脚本：直接 `python xxx.py`，依赖以脚本内 import 与项目约定为准
+- JS 脚本：青龙/Node 环境执行，常见 Env 模式读取环境变量
+- Cookie 更新服务：`updateCookie/server.py` 基于 FastAPI，支持多 host token 提取落盘
 
-| 模块路径 | 说明 | 主要文件 |
-|---------|------|---------|
-| [`decode/`](./decode/CLAUDE.md) | 解码工具模块 | `debug.py`, `src.py` |
-| [`android-ssl/`](./android-ssl/CLAUDE.md) | Android SSL 抓包工具 | `frida-android-repinning.js`, `X509TrustManager.js` |
-| [`other/`](./other/CLAUDE.md) | 其他脚本集合 | Node.js 项目、各类脚本 |
-| [`js/`](./js/CLAUDE.md) | JavaScript 脚本 | `bsd.js`, `媓钻.js`, `悦秀会.js` |
-| [`pc-asm/`](./pc-asm/CLAUDE.md) | PC 端自动化工具（ASM） | 图片资源、自动化脚本 |
-| [`pc-fnyq/`](./pc-fnyq/CLAUDE.md) | PC 端自动化工具（FNYQ） | `pc-fnyq.py`, `mytool.py` |
-| [`updateCookie/`](./updateCookie/CLAUDE.md) | Cookie 更新工具 | `updateCookie_JD.py`, `JDLogin.py` |
-| [`invalid/`](./invalid/) | 废弃脚本归档 | 已失效的脚本集合 |
+## 测试策略
 
-### 业务脚本（根目录，部分示例）
+- 当前仓库以“脚本可执行验证 + 目标平台实测”作为主路径
+- 仅在部分目录可见 `test.py`，缺少统一测试框架与覆盖率基线
+- 建议逐模块补“最小可回归用例”（参数解析、签名算法、关键请求构造）
 
-- **品牌签到脚本**：`三养.py`, `三只松鼠.py`, `五谷磨房.py`, `卡西欧.py`, `李宁CLUB.py`, `诺特兰德.py` 等
-- **工具脚本**：`debug.py`, `test.py`, `cookiesDebug.py`, `backup_ql.py`, `changeEnv.py` 等
+## 编码规范
 
-## 全局规范
+- Python/JS 混合仓库，优先保持现有脚本风格兼容
+- 减少跨脚本耦合：公共能力优先复用 `ApiRequest.py`、`mytool.py`、`notify.py`
+- 对 Cookie、Token、手机号等敏感字段，避免日志明文扩散
 
-### 代码规范
+## AI 使用指引
 
-1. **Python 编码**：
-   - 使用 UTF-8 编码
-   - 遵循 PEP 8 风格（部分脚本可能不一致）
-   - 脚本头部建议包含 `#!/usr/bin/env python3` 和编码声明
+- 新增脚本优先采用最小实现（KISS/YAGNI）
+- 复用优先级：根工具层 > 模块内工具 > 本地重复实现
+- 文档变更需同步更新模块 `CLAUDE.md` 与 `.claude/index.json`
 
-2. **依赖管理**：
-   - 核心依赖：`requests`, `urllib3`
-   - 通知相关：`wxpusher`, `smtplib`
-   - 工具库：`pyautogui`, `pyperclip`（GUI 自动化）
-   - 加密解密：`Crypto`（部分脚本使用）
+## 覆盖率与缺口（本次初始化）
 
-3. **环境变量**：
-   - Cookie 通过环境变量传递（格式：`CK_NAME=value1@value2` 或换行分隔）
-   - 通知配置通过环境变量设置（如 `wxpusherTopicId`, `wxpusherAppToken`）
+- 估算总文件数：`92`（基于阶段 A 可见文件清单）
+- 已扫描文件数（路径级清点）：`92/92`（100%）
+- 已深读文件数（内容级抽样）：`12/92`（13.0%）
+- 模块覆盖占比（内容级，按模块估算）：
+  - `updateCookie/`：高（入口+工具+登录路径）
+  - `other/`：中（核心大脚本抽样）
+  - `js/`：中（入口脚本与函数结构）
+  - `pc-fnyq/`：高（主脚本+工具函数）
+  - `pc-asm/`：低（资源型目录，仅文档可见）
+- 忽略/跳过原因：
+  - `.gitignore` 命中：`decode/`, `android-ssl/`, `invalid/*`, `other/node_modules/*`
+  - 二进制与大资源：仅记录路径，不读取内容
+  - 历史文档提及但本次未见可扫描文件：`decode/`, `android-ssl/`
 
-4. **错误处理**：
-   - 使用 `try-except` 捕获异常
-   - 通过 `traceback` 记录详细错误信息
-   - 错误信息通过通知服务发送
+## 下一步建议（可续跑）
 
-### 项目约定
+建议优先补扫以下子路径以提升“内容级覆盖率”：
 
-1. **脚本命名**：
-   - 业务脚本：使用品牌/应用名称（如 `三养.py`, `李宁CLUB.py`）
-   - 工具脚本：使用功能描述（如 `mytool.py`, `notify.py`）
-
-2. **模块组织**：
-   - 核心工具放在根目录
-   - 功能模块放在独立目录
-   - 废弃脚本移至 `invalid/` 目录
-
-3. **配置管理**：
-   - 全局配置：`config.json`
-   - 环境变量：通过青龙面板或 `.env` 文件管理
-
-### 开发流程
-
-1. **新增脚本**：
-   - 继承 `ApiRequest` 或使用 `ApiMain` 框架
-   - 使用 `mytool.getlistCk()` 获取 Cookie
-   - 使用 `notify.send()` 发送通知
-
-2. **测试**：
-   - 使用 `debug.py` 设置调试环境
-   - 通过 `test.py` 进行单元测试
-
-3. **部署**：
-   - 脚本上传至青龙面板
-   - 配置环境变量和定时任务
-
-## 技术栈
-
-- **语言**：Python 3.x, JavaScript (Node.js)
-- **HTTP 客户端**：`requests` (Python), `got`/`request` (Node.js)
-- **自动化工具**：Frida (Android), PyAutoGUI (PC)
-- **通知服务**：微信推送、Telegram、邮件、Bark、Server酱
-
-## 统计信息
-
-- **总文件数**：约 449 个 Python/JavaScript 文件
-- **核心模块**：8 个功能模块
-- **业务脚本**：100+ 个签到/自动化脚本
-- **工具脚本**：10+ 个通用工具脚本
-
-## 下一步建议
-
-1. **深度扫描**：
-   - 分析 `updateCookie/` 模块的完整实现
-   - 梳理各业务脚本的依赖关系
-   - 识别可复用的公共组件
-
-2. **文档完善**：
-   - 为常用脚本添加使用说明
-   - 补充环境变量配置文档
-   - 编写开发指南
-
-3. **代码优化**：
-   - 统一错误处理机制
-   - 提取公共请求逻辑
-   - 优化通知服务集成
+1. `updateCookie/server.py`（剩余路由段与参数差异）
+2. `updateCookie/updateCookie_Util.py`（QL API 写入链路）
+3. `other/wx朵茜情调生活馆_jm.py` 与 `other/xj.js`（高复杂度脚本）
+4. `js/悦秀会.js`（打包/混淆逻辑解构）
+5. `pc-asm/` 图片资源与调用脚本的映射关系
 
 ---
 
-*本文档由 `/zcf/init-project` 命令自动生成，最后更新时间：2025-11-27 16:38:35*
-
+*本文档由 `/zcf/init-project` 于 2026-04-16 18:56:57 更新。*
