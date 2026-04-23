@@ -68,6 +68,7 @@ graph TD
 
 - 新增脚本优先采用最小实现（KISS/YAGNI）
 - 复用优先级：根工具层 > 模块内工具 > 本地重复实现
+- Python 脚本优先参考技能：`.cursor/skills/python-apirequest-style/SKILL.md`
 - 文档变更需同步更新模块 `CLAUDE.md` 与 `.claude/index.json`
 
 ## 覆盖率与缺口（本次初始化）
