@@ -1,0 +1,81 @@
+---
+description: 修改 ql 签到/自动化 Python 脚本后，同步 netProxy fiddler 抓包配置
+globs: *.py
+alwaysApply: false
+---
+
+# 同步 netProxy Fiddler 配置
+
+修改 `ql` 仓库中的业务自动化脚本（签到、任务类）后，**同一轮改动内**同步维护：
+
+`D:\MyGit\netProxy\Python\fiddler\`
+
+跳过工具脚本：`ApiRequest.py`、`mytool.py`、`notify.py`、`sendNotify.py`、`script_utils.py`、`debug.py`，以及 `updateCookie/`、`pc-fnyq/`、`pc-asm/` 下的非业务脚本。
+
+## 何时需要同步
+
+脚本出现以下任一变化时必须更新或新建 fiddler 配置：
+
+- API `host`、请求路径、请求方法
+- 环境变量名（`tokenName` / `new Env` 注释里的 `env add`）
+- 凭证格式（`#` 分隔字段、`Authorization`、`Bearer` 等）
+- 微信小程序 `appid`（`Referer` 中的 `wx...`）
+
+## 配置文件定位
+
+1. 优先在 `fiddler/` 搜索已有配置：`envName`、`taskName`、`host`、脚本名
+2. 文件名通常用中文品牌名（如 `riqing.py` → `日清食品.json`），找不到则新建 `.json`
+3. 旧项目可能仍是 `.ini`，优先迁移/对齐为 `.json`（与现有新配置保持一致）
+
+## 从 Python 脚本提取字段
+
+| fiddler 字段 | 来源 |
+|---|---|
+| `envName` | `tokenName = 'wx_xxx'` |
+| `taskName` | `new Env("微信小程序-xxx")` 或脚本标题 |
+| `host` | `build_weapp_headers(host=...)` 或请求 URL 的域名 |
+| `env` | 凭证拼接规则，见下方语法 |
+| `regexReplace` | 脚本里会自行加 `Bearer ` 时，填 `\\bBearer\\s+` |
+| `checkValue` | `header=wx<appid>`（从 `Referer` 提取） |
+| `runEnable` | 默认 `1` |
+| `checkEnable` | 有 appid 校验时 `1`，否则 `0` |
+
+### `env` 常见写法
+
+- 单字段 Bearer：`^header[Authorization]^`
+- 多字段 `#` 拼接：`^header[a]^#^header[b]^`
+- 查询参数：`^query[token]^`
+- JSON 请求头嵌套：`^jsonheader[Extra-Data][sid]^`
+
+脚本用 `parse_token_fields(..., expected_fields=N)` 时，`env` 中 `#` 分隔段数须与 `N` 一致。
+
+## JSON 模板
+
+```json
+{
+    "host": "api.example.com",
+    "env": "^header[Authorization]^",
+    "runEnable": 1,
+    "taskName": "微信小程序-品牌名",
+    "envName": "wx_brand",
+    "regexReplace": "\\bBearer\\s+",
+    "regexReplaceValue": "",
+    "checkEnable": 1,
+    "checkValue": "header=wx_appid_here",
+    "memo": "",
+    "canManual": 0
+}
+```
+
+## 自检清单
+
+- [ ] `envName` 与脚本 `tokenName` 一致
+- [ ] `taskName` 与 `new Env(...)` 一致
+- [ ] `host` 与脚本实际请求域名一致
+- [ ] `env` 提取结果与脚本 `parse_token_fields` / 凭证解析一致
+- [ ] 脚本自行拼接 `Bearer` 时，fiddler 已配置 `regexReplace` 去前缀
+- [ ] 未把 token/cookie 明文写入 `memo` 或规则说明
+
+## 完成说明
+
+向用户汇报时，简要列出同步了哪个 fiddler 文件及关键字段变更（`host`、`envName`、`env`、`checkValue`）。
